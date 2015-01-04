@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Source code: gen_formatter.py
-# @author: Nils F. Karlsson
-#
 # requires Python 3.3.x+
 class GenFormatter(object):
     def __init__(self):
