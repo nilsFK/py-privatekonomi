@@ -2,10 +2,17 @@ py-privatekonomi
 ================
 Parsar, formatterar och sparar undan transaktionsloggar från diverse källor, däribland Swedbank. Ytterligare stöd kan tillkomma.
 
+Användning
+----------
+> genparse.py source
+
+där source är sökvägen till filen som innehåller transaktionerna. Transaktionerna kopieras helt enkelt in i en fil som vi därefter läser in via source.
+
 Status
 ------
 * Total refaktorisering kommer genomföras.
 * För närvarande endast stöd för Swedbank.
+* Lägg till stöd för exporterade Swedbankfiler (kontohistorik).
 
 Att göra
 --------
