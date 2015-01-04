@@ -13,6 +13,8 @@ Status
 * Total refaktorisering kommer genomföras.
 * För närvarande endast stöd för Swedbank.
 * Lägg till stöd för exporterade Swedbankfiler (kontohistorik).
+* Modeller
+* Annat gott och blandat!
 
 Att göra
 --------
