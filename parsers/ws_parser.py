@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import gen_parser
+from account_parser import AccountParser
 import re
 
-class WhitespaceParser(gen_parser.GenParser):
+class WhitespaceParser(AccountParser):
     def __init__(self):
         pass
 
