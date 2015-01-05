@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-class GenParser:
+class AccountParser:
     def __init__(self):
         self.lines = []

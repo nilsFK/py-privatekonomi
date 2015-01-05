@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-class GenMapper:
+class AccountMapper:
     def __init__(self):
         self.mapper = {}
 

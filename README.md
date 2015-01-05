@@ -4,9 +4,17 @@ Parsar, formatterar och sparar undan transaktionsloggar från diverse källor, d
 
 Användning
 ----------
-> genparse.py source
+> privatekonomi.py source
 
 där source är sökvägen till filen som innehåller transaktionerna. Transaktionerna kopieras helt enkelt in i en fil som vi därefter läser in via source.
+
+För ytterligare instruktioner, kör:
+
+> privatekonomi.py -h
+
+Exempel
+-------
+> privatekonomi.py samples/sample1
 
 Status
 ------
@@ -22,4 +30,4 @@ Att göra
 
 Stöd
 ----
-Siktar på stöd för Python 2.6.x+
+Siktar på stöd för Python 2.7.x+
