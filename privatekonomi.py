@@ -5,7 +5,7 @@ import argparse
 import factories.account_formatter_factory
 import factories.account_parser_factory
 import models.account
-import db
+import lib.db
 
 def read_content(source):
     with open(source, 'r') as f:
@@ -34,7 +34,7 @@ def execute(source, parser = None, formatter = None):
     return format_content(formatter, parsed)
 
 def persist(output):
-    db.DB().connect()
+    lib.db.DB().connect()
     models.account.Account().create()
 
 if __name__ == '__main__':
