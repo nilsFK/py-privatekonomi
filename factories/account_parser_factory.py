@@ -12,3 +12,6 @@ class AccountParserFactory(object):
         if acc_type not in self.parsers.keys():
             assert 0, ("Invalid acc_type: ", acc_type)
         return self.parsers[acc_type]()
+
+    def getTypes():
+        return self.parsers.keys()

@@ -12,3 +12,6 @@ class AccountFormatterFactory(object):
         if acc_type not in self.formatters.keys():
             assert 0, ("Invalid acc_type: ", acc_type)
         return self.formatters[acc_type]()
+
+    def getTypes():
+        return self.formatters.keys()

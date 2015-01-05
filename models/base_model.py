@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-class BaseModel(object):
+# Use BaseModel for common functionality
+from model import Model
+class BaseModel(Model):
     def __init__(self):
-        pass
+        super(BaseModel, self).__init__()
