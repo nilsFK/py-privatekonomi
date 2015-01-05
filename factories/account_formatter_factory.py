@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import formatters
+import formatters.swedbank_formatter
 
 class AccountFormatterFactory(object):
     def __init__(self):

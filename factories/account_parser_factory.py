@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import parsers
+import parsers.ws_parser
 
 class AccountParserFactory(object):
     def __init__(self):
