@@ -2,6 +2,10 @@ py-privatekonomi
 ================
 Parsar, formatterar och sparar undan transaktionsloggar från diverse källor, däribland Swedbank. Ytterligare stöd kan tillkomma.
 
+Installation
+------------
+**TODO**
+
 Användning
 ----------
 > privatekonomi.py source
@@ -14,7 +18,7 @@ För ytterligare instruktioner, kör:
 
 Exempel
 -------
-> privatekonomi.py samples/sample1
+> privatekonomi.py samples/sample1 -f swedbank -p whitespace
 
 Status
 ------

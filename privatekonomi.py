@@ -4,20 +4,22 @@
 import argparse
 import parsers.ws_parser as ws_parser
 import formatters.swedbank_formatter as swedbank_formatter
+import factories.account_formatter_factory
+import factories.account_parser_factory
 
 def read_content(source):
     with open(source, 'r') as f:
         content = f.readlines()
     return content
 
-def get_parser():
-    return ws_parser.WhitespaceParser()
+def get_parser(acc_type):
+    return factories.account_parser_factory.AccountParserFactory().createAccountParser(acc_type)
 
 def parse_content(parser, content):
     return parser.parse(content, r'\t+')
 
-def get_formatter():
-    return swedbank_formatter.SwedbankFormatter()
+def get_formatter(acc_type):
+    return factories.account_formatter_factory.AccountFormatterFactory().createAccountFormatter(acc_type)
 
 def format_content(formatter, content):
     return formatter.format(content)
@@ -38,9 +40,9 @@ args = argparser.parse_args()
 
 content = read_content(args.source)
 
-parser = get_parser()
+parser = get_parser(args.parser)
 parsed = parse_content(parser, content)
 
-formatter = get_formatter()
+formatter = get_formatter(args.formatter)
 formatted = format_content(formatter, parsed)
 print formatted
