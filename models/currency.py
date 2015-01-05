@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 from lib.base_model import BaseModel
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
-class Account(BaseModel):
+class Currency(BaseModel):
     def __init__(self):
         self.metadata = MetaData()
-        super(Account, self).__init__(
-            Table('account', self.metadata,
+        super(Currency, self).__init__(
+            Table('currency', self.metadata,
             Column('id', Integer, primary_key = True)
         ))

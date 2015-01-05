@@ -4,7 +4,9 @@
 import argparse
 import factories.account_formatter_factory
 import factories.account_parser_factory
-import models.account
+from models.account import Account
+from models.transaction import Transaction
+from models.currency import Currency
 import lib.db
 
 def read_content(source):
@@ -35,7 +37,9 @@ def execute(source, parser = None, formatter = None):
 
 def persist(output):
     lib.db.DB().connect()
-    models.account.Account().create()
+    Account().generate()
+    Transaction().generate()
+    Currency().generate()
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(description='Process source (for example, a file) that will be parsed for content into a data structure',
