@@ -14,7 +14,7 @@ class Model(object):
         return self.ref
 
     def obliterate(self):
-        self.ref.drop(db.DB().getEngine())
+        self.ref.drop(db.DB().getEngine(), checkfirst=True)
         return self
 
     def execute(self, stmt):
