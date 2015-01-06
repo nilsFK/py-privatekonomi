@@ -7,7 +7,7 @@ import factories.account_parser_factory
 from models.account import Account
 from models.transaction import Transaction
 from models.currency import Currency
-import lib.db
+import core.db
 
 def read_content(source):
     with open(source, 'r') as f:
@@ -36,7 +36,7 @@ def execute(source, parser = None, formatter = None):
     return format_content(formatter, parsed)
 
 def persist(output):
-    lib.db.DB().connect()
+    core.db.DB().connect()
     account = Account().generate()
     transaction = Transaction().generate()
     currency = Currency().generate()
