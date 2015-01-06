@@ -4,8 +4,9 @@
 # Formats input to a data structure according to the
 # input acquired from Swedbank transactions
 import sys
+import formatters.account_formatter
 import core.formatter
-class SwedbankFormatter(core.formatter.Formatter):
+class SwedbankFormatter(formatters.account_formatter.AccountFormatter):
     def __init__(self):
         core.formatter.Formatter.formatters = [
             "accounting_date",

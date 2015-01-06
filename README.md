@@ -40,7 +40,7 @@ För ytterligare instruktioner, kör:
 
 Exempel
 -------
-> privatekonomi.py samples/sample1 -f swedbank -p whitespace
+> privatekonomi.py samples/swedbank/sample1 -f swedbank -p whitespace
 
 Projektstatus
 -------------
