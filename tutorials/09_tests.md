@@ -1,0 +1,1 @@
+Katalogen tests/ innehåller enhetstester och försäkrar om att koden är fullt fungerande.

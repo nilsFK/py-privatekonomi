@@ -1,0 +1,3 @@
+Parsers är den huvudsakliga konstruktionen i py-privatekonomi. Den ansvarar för att transformera rå text till en datastruktur som är grunden för att formateras vidare. Parsern ger alltså den råa texten semantik genom att mappa ett meningsfullt namn till data.
+
+För att parsningen skall genomföras behöver vi veta vad det är vi parsar. Denna omfattning av olika uppbyggnader av rå text ger upphov till olika parsers som parsar på olika sätt.

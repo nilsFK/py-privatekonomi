@@ -1,0 +1,1 @@
+För att underlätta skapandet av formaterare och parsers finns det en katalog factories/ med factories som ansvarar för att skapa särskilda typer av parsers och formaterare.
