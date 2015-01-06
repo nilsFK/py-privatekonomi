@@ -20,9 +20,13 @@ class DB(object):
             'port' : db_config.port,
             'database' : db_config.database
         })
+        self.__connection = self.__engine.connect()
 
     def getEngine(self):
         return self.__engine
+
+    def getConnection(self):
+        return self.__connection
 
 if __name__ == '__main__':
     db = DB()

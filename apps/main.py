@@ -36,6 +36,12 @@ def execute(source, parser, formatter):
 
 def persist(output):
     core.db.DB().connect()
-    account = Account().generate()
-    transaction = Transaction().generate()
-    currency = Currency().generate()
+    account = Account().obliterate().generate()
+    transaction = Transaction().obliterate().generate()
+    currency = Currency().obliterate().generate()
+    id1 = currency.insertCode("SEK")
+    id2 = currency.insertCode("USD")
+    code = currency.getCode(id1[0])
+    print(id1)
+    print(id2)
+    print(code)

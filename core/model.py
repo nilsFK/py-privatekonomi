@@ -8,7 +8,14 @@ class Model(object):
 
     def generate(self):
         self.metadata.create_all(db.DB().getEngine())
-        return self.ref
+        return self
 
     def getRef(self):
         return self.ref
+
+    def obliterate(self):
+        self.ref.drop(db.DB().getEngine())
+        return self
+
+    def execute(self, stmt):
+        return db.DB().getConnection().execute(stmt)
