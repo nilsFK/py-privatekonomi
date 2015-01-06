@@ -37,9 +37,9 @@ def execute(source, parser = None, formatter = None):
 
 def persist(output):
     lib.db.DB().connect()
-    Account().generate()
-    Transaction().generate()
-    Currency().generate()
+    account = Account().generate()
+    transaction = Transaction().generate()
+    currency = Currency().generate()
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(description='Process source (for example, a file) that will be parsed for content into a data structure',

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from lib.base_model import BaseModel
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
+
 class Account(BaseModel):
     def __init__(self):
         self.metadata = MetaData()
