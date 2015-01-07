@@ -4,10 +4,9 @@ from models.base_model import BaseModel
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
 from sqlalchemy.types import Numeric
 class Account(BaseModel):
-    def __init__(self):
-        self.metadata = MetaData()
+    def __init__(self, context):
         super(Account, self).__init__(
-            Table('account', self.metadata,
+            Table('account', context.metadata,
                 Column('id', Integer, primary_key = True),
                 Column('name', String(255), nullable=False),
                 Column('account_code', String(16), nullable=False),
@@ -16,4 +15,4 @@ class Account(BaseModel):
                     nullable=False),
                 Column('future_balance', Numeric(precision=16, scale=2),
                     nullable=True)
-        ))
+        ), context)

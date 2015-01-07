@@ -1,20 +1,48 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from sqlalchemy.engine import reflection
+# from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
+from sqlalchemy.schema import (
+    MetaData,
+    Table,
+    DropTable,
+    ForeignKeyConstraint,
+    DropConstraint
+)
 import db
 class Model(object):
-    def __init__(self):
-        pass
-
-    def generate(self):
-        self.metadata.create_all(db.DB().getEngine())
-        return self
+    def __init__(self, context):
+        self.context = context
 
     def getRef(self):
         return self.ref
 
+    def getMetadata(self):
+        return self.context.metadata
+
+    def generate(self):
+        if not db.DB().getEngine().has_table(self.ref.name):
+            self.getMetadata().create_all(db.DB().getEngine())
+        return self
+
     def obliterate(self):
+        if not db.DB().getEngine().has_table(self.ref.name):
+            return self
+        trans = db.DB().getConnection().begin()
+        inspector = reflection.Inspector.from_engine(db.DB().getEngine())
+        fks = []
+        for fk in inspector.get_foreign_keys(self.ref.name):
+            if not fk['name']:
+                continue
+            fks.append(ForeignKeyConstraint((), (), name=fk['name']))
+        t = Table(self.ref.name, MetaData(), *fks)
+
+        for fk in fks:
+            self.execute(DropConstraint(fk))
+
         self.ref.drop(db.DB().getEngine(), checkfirst=True)
+        trans.commit()
         return self
 
     def execute(self, stmt):

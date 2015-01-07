@@ -13,6 +13,8 @@ from models.transaction import Transaction
 
 import core.db
 from utilities import helper
+from sqlalchemy import MetaData
+from core.model_context import ModelContext
 
 def execute(source, parser, formatter):
     content = helper.read_file(source)
@@ -25,16 +27,16 @@ def execute(source, parser, formatter):
 
 def persist(output):
     core.db.DB().connect()
-
-    account = Account().obliterate().generate()
-    account_category = AccountCategory().obliterate().generate()
-    account_event = AccountEvent().obliterate().generate()
-    account_event_type = AccountEventType().obliterate().generate()
-    currency = Currency().obliterate().generate()
-    organization = Organization().obliterate().generate()
-    provider = Provider().obliterate().generate()
-    transaction = Transaction().obliterate().generate()
-
+    context = ModelContext()
+    transaction = Transaction(context).obliterate()
+    account = Account(context).obliterate().generate()
+    transaction.generate()
+    account_category = AccountCategory(context).obliterate().generate()
+    account_event = AccountEvent(context).obliterate().generate()
+    account_event_type = AccountEventType(context).obliterate().generate()
+    currency = Currency(context).obliterate().generate()
+    organization = Organization(context).obliterate().generate()
+    provider = Provider(context).obliterate().generate()
 
     id1 = currency.insertCurrency(code="SEK",symbol="kr",country="SE")
     id2 = currency.insertCurrency(code="USD",symbol="$",country="US")
