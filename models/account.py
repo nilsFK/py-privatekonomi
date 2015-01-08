@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from models.base_model import BaseModel
-from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
+from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, ForeignKeyConstraint
 from sqlalchemy.types import Numeric
 class Account(BaseModel):
     def __init__(self, context):
@@ -14,5 +14,32 @@ class Account(BaseModel):
                 Column('current_balance', Numeric(precision=16, scale=2),
                     nullable=False),
                 Column('future_balance', Numeric(precision=16, scale=2),
-                    nullable=True)
+                    nullable=True),
+                Column('account_category_id', Integer),
+                Column('organization_id', Integer),
+                Column('provider_id', Integer),
+                ForeignKeyConstraint(
+                    ['account_category_id'],
+                    ['account_category.id'],
+                    use_alter=False,
+                    name='fk_account_account_category',
+                    onupdate='CASCADE',
+                    ondelete='CASCADE'
+                ),
+                ForeignKeyConstraint(
+                    ['organization_id'],
+                    ['organization.id'],
+                    use_alter=False,
+                    name='fk_account_organization',
+                    onupdate='CASCADE',
+                    ondelete='CASCADE'
+                ),
+                ForeignKeyConstraint(
+                    ['provider_id'],
+                    ['provider.id'],
+                    use_alter=False,
+                    name='fk_account_provider',
+                    onupdate='CASCADE',
+                    ondelete='CASCADE'
+                ),
         ), context)

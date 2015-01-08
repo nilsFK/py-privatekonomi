@@ -22,14 +22,12 @@ class Model(object):
         return self.context.metadata
 
     def generate(self):
-        if not db.DB().getEngine().has_table(self.ref.name):
-            self.getMetadata().create_all(db.DB().getEngine())
+        self.ref.create(db.DB().getEngine(), checkfirst=True)
         return self
 
     def obliterate(self):
         if not db.DB().getEngine().has_table(self.ref.name):
             return self
-        trans = db.DB().getConnection().begin()
         inspector = reflection.Inspector.from_engine(db.DB().getEngine())
         fks = []
         for fk in inspector.get_foreign_keys(self.ref.name):
@@ -42,7 +40,6 @@ class Model(object):
             self.execute(DropConstraint(fk))
 
         self.ref.drop(db.DB().getEngine(), checkfirst=True)
-        trans.commit()
         return self
 
     def execute(self, stmt):

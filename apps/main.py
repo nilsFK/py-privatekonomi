@@ -4,8 +4,8 @@
 import os
 from models.account import Account
 from models.account_category import AccountCategory
-from models.account_event import AccountEvent
-from models.account_event_type import AccountEventType
+from models.transaction_event import TransactionEvent
+from models.transaction_event_type import TransactionEventType
 from models.currency import Currency
 from models.organization import Organization
 from models.provider import Provider
@@ -28,15 +28,18 @@ def execute(source, parser, formatter):
 def persist(output):
     core.db.DB().connect()
     context = ModelContext()
+
     transaction = Transaction(context).obliterate()
-    account = Account(context).obliterate().generate()
-    transaction.generate()
+    account = Account(context).obliterate()
     account_category = AccountCategory(context).obliterate().generate()
-    account_event = AccountEvent(context).obliterate().generate()
-    account_event_type = AccountEventType(context).obliterate().generate()
+    transaction_event = TransactionEvent(context).obliterate().generate()
+    transaction_event_type = TransactionEventType(context).obliterate().generate()
     currency = Currency(context).obliterate().generate()
     organization = Organization(context).obliterate().generate()
     provider = Provider(context).obliterate().generate()
+    account.generate()
+    transaction.generate()
+
 
     id1 = currency.insertCurrency(code="SEK",symbol="kr",country="SE")
     id2 = currency.insertCurrency(code="USD",symbol="$",country="US")
