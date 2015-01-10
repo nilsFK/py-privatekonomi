@@ -15,13 +15,7 @@ from sqlalchemy import MetaData
 from core.model_context import ModelContext
 
 def execute(source, parser, formatter):
-    content = common.read_file(source)
-
-    parser = helper.get_parser(parser)
-    parsed, formatters = parser.parse(content)
-
-    formatter = helper.get_formatter(formatter, formatters)
-    return formatter.format(parsed)
+    return helper.execute(source, parser, formatter)
 
 def persist(output):
     core.db.DB().connect()
