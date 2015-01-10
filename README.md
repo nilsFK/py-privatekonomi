@@ -1,6 +1,6 @@
 py-privatekonomi
 ================
-Parsar, formatterar och sparar undan transaktionsloggar från diverse källor, däribland Swedbank. Ytterligare stöd kan tillkomma.
+Parsar, formatterar och sparar undan transaktionsloggar från diverse källor, däribland Swedbank.
 
 Installation
 ------------
@@ -26,21 +26,22 @@ Notera att dessa kan installeras via **requirements.txt**
 
 Användning
 ----------
-> privatekonomi.py source -f formatter -p parser --persist=true|false
+> python privatekonomi.py source -f formatter -p parser -a app --persist=true|false
 
 där
-* source: obligatorisk. sökvägen till filen som innehåller transaktionerna.
-* formatter: obligatorisk. formaterar innehållet från source
-* parser: obligatorisk. parsar det formaterade innehållet från source
-* persist: valfri. sparar undan resultatet i databas, förutsätter att db.ini är konfigurerad
+* **source**: obligatorisk. sökvägen till filen som innehåller transaktionerna.
+* **formatter**: obligatorisk. formaterar innehållet från source
+* **parser**: obligatorisk. parsar det formaterade innehållet från source
+* **app**: obligatorisk. den app som används för att ta emot det parsade och formatterade innehållet.
+* **persist**: valfri. sparar undan resultatet i databas; förutsätter att db.ini är konfigurerad
 
 För ytterligare instruktioner, kör:
 
-> privatekonomi.py -h
+> python privatekonomi.py -h
 
 Exempel
 -------
-> privatekonomi.py samples/swedbank/sample1 -f swedbank -p whitespace
+> python privatekonomi.py samples/swedbank/sample1 -f swedbank -p swedbank -a main
 
 Projektstatus
 -------------

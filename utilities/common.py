@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import ntpath
 class Struct:
     def __init__(self, **entries):
         self.__dict__.update(entries)
@@ -17,3 +18,7 @@ def singleton(cls):
     except AttributeError:
         pass
     return cls
+
+def path_leaf(path):
+    head, tail = ntpath.split(path)
+    return tail or ntpath.basename(head)
