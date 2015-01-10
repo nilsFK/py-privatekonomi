@@ -27,13 +27,29 @@ class SwedbankParser(core.parser.Parser):
         return ret
 
     def __parse_clnr(self, contents):
-        ret = []
         regex_parser = RegexParser()
         parsed = regex_parser.parse(contents, r'\s{2,}')
-        # print parsed
+        formatters = [
+            "clearing_number",
+            "account_number",
+            "account_name",
+            "currency_code",
+            "accounting_date",
+            "transaction_date",
+            "account_reference",
+            "account_event",
+            "amount"
+        ]
+        return (parsed, formatters)
 
     def __parse_simple(self, contents):
-        ret = []
         regex_parser = RegexParser()
         parsed = regex_parser.parse(contents, r'\t+')
-        return parsed
+        formatters = [
+            "accounting_date",
+            "transaction_date",
+            "account_reference",
+            "amount",
+            "balance"
+        ]
+        return (parsed, formatters)

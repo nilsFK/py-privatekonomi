@@ -3,62 +3,50 @@
 
 import sys
 import re
-import formatters.account_formatter
+from formatters.account_formatter import AccountFormatter
 import core.formatter
-class SwedbankFormatter(formatters.account_formatter.AccountFormatter):
-    def __init__(self):
-        # pass
-        core.formatter.Formatter.formatters = [
-            "accounting_date",
-            "transaction_date",
-            "account_event",
-            "amount",
-            "balance"
-        ]
+class SwedbankFormatter(AccountFormatter):
+    def __init__(self, formatters):
+        super(SwedbankFormatter, self).__init__(formatters)
 
-    @classmethod
     def format_accounting_date(self, content):
         """ Bokföringsdatum """
         content = content.strip()
         return super(SwedbankFormatter, self)._format_date(content, "%y-%m-%d")
 
-    @classmethod
     def format_transaction_date(self, content):
         """ Transaktionsdatum """
         content = content.strip()
         return super(SwedbankFormatter, self)._format_date(content, "%y-%m-%d")
 
-    @classmethod
     def format_account_event(self, content):
         """ Kontohändelse """
         return content.strip()
 
-    @classmethod
     def format_account_reference(self, content):
         """ Referens """
         return content.strip()
 
-    @classmethod
     def format_amount(self, content):
         """ Summa """
         return super(SwedbankFormatter, self)._format_currency(content)
 
-    @classmethod
     def format_balance(self, content):
         """ Belopp """
         return super(SwedbankFormatter, self)._format_currency(content)
 
-    @classmethod
     def format_clearing_number(self, content):
-        """ Clnr """
+        """ Clearing-nummer """
         return content.strip()
 
-    @classmethod
     def format_account_number(self, content):
         """ Kontonr """
         return content.strip()
 
-    @classmethod
-    def format_currency(self, content):
-        """ Valuta """
+    def format_currency_code(self, content):
+        """ Typ av valuta """
+        return content.strip()
+
+    def format_account_name(self, content):
+        """ Kontonamn """
         return content.strip()

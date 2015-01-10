@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os
 from models.account import Account
 from models.account_category import AccountCategory
 from models.transaction_event import TransactionEvent
@@ -19,9 +18,9 @@ def execute(source, parser, formatter):
     content = common.read_file(source)
 
     parser = helper.get_parser(parser)
-    parsed = parser.parse(content)
+    parsed, formatters = parser.parse(content)
 
-    formatter = helper.get_formatter(formatter)
+    formatter = helper.get_formatter(formatter, formatters)
     return formatter.format(parsed)
 
 def persist(output):

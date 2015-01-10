@@ -3,18 +3,15 @@
 from collections import deque
 import time
 class Formatter(object):
-    def __init__(self):
-        pass
-        # self._formatters = None
+    def __init__(self, formatters):
+        self.formatters = formatters
 
-    @classmethod
     def format(self, rows):
         rows  = self.__before_format(rows)
         output = self.__process_rows(rows)
         output = self.__after_format(output)
         return output
 
-    @classmethod
     def __process_rows(self, rows):
         output = []
         items = {}
@@ -22,15 +19,13 @@ class Formatter(object):
             row = self.__callback("before_process_line", row)
             items = {}
             tokens = self.__process_row(row)
-            print tokens
             items.update(tokens)
             self.__callback("after_process_line")
             output.append(items)
         return output
 
-    @classmethod
+
     def __process_row(self, row):
-        print self.formatters
         tokens = {}
         formatter_deq = deque(self.formatters)
         for token in row:
@@ -44,17 +39,15 @@ class Formatter(object):
             self.__callback("after_process_token", formatted_token)
         return tokens
 
-    @classmethod
+
     def __before_format(self, lines):
         lines = self.__callback("before_format", lines)
         return lines
 
-    @classmethod
     def __after_format(self, output):
         output = self.__callback("after_format", output)
         return output
 
-    @classmethod
     def __callback(self, name, args = []):
         attr = getattr(self, name, None)
         if callable(attr):

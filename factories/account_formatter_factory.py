@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import formatters.swedbank_formatter
+from core.factory import Factory
 
-class AccountFormatterFactory(object):
+class AccountFormatterFactory(Factory):
     def __init__(self):
-        self.formatters = {
+        super(AccountFormatterFactory, self).__init__({
             'swedbank' : formatters.swedbank_formatter.SwedbankFormatter
-        }
+        })
 
-    def createAccountFormatter(self, acc_type):
-        if acc_type not in self.formatters.keys():
+    def createAccountFormatter(self, acc_type, formatters):
+        formatter = self.get(acc_type)
+        if formatter:
+            return formatter(formatters)
+        else:
             assert 0, ("Invalid acc_type: ", acc_type)
-        return self.formatters[acc_type]()
-
-    def getTypes():
-        return self.formatters.keys()

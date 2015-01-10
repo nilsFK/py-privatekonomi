@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import ntpath
+import ntpath, time
 class Struct:
     def __init__(self, **entries):
         self.__dict__.update(entries)
@@ -27,3 +27,6 @@ def read_file(file_path):
     with open(file_path, 'r') as f:
         content = f.readlines()
     return content
+
+def format_time_struct(time_struct, format='%Y-%m-%d'):
+    return time.strftime(format, time_struct)

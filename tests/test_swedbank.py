@@ -3,48 +3,39 @@
 
 import unittest
 import apps.main
-import time
+from utilities.common import format_time_struct
 class TestSwedbank(unittest.TestCase):
     def setUp(self):
         pass
-
-    # def test_sample2(self):
-    #     r = apps.main.execute('samples/swedbank/sample2',
-    #         parser='swedbank',
-    #         formatter='swedbank')
-    #     print(r)
 
     def test_sample1(self):
         r = apps.main.execute('samples/swedbank/sample1',
             parser='swedbank',
             formatter='swedbank')
-        print(r)
 
-        print self.format_time_struct(r[0]["transaction_date"])
+        self.assertEquals(format_time_struct(r[0]["accounting_date"]), '2015-01-05')
+        self.assertEquals(format_time_struct(r[1]["accounting_date"]), '2015-01-02')
+        self.assertEquals(format_time_struct(r[2]["accounting_date"]), '2015-01-02')
+        self.assertEquals(format_time_struct(r[3]["accounting_date"]), '2015-01-02')
+        self.assertEquals(format_time_struct(r[4]["accounting_date"]), '2015-01-02')
+        self.assertEquals(format_time_struct(r[5]["accounting_date"]), '2014-12-29')
+        self.assertEquals(format_time_struct(r[6]["accounting_date"]), '2014-12-29')
 
-        self.assertEquals(self.format_time_struct(r[0]["accounting_date"]), '2015-01-05')
-        self.assertEquals(self.format_time_struct(r[1]["accounting_date"]), '2015-01-02')
-        self.assertEquals(self.format_time_struct(r[2]["accounting_date"]), '2015-01-02')
-        self.assertEquals(self.format_time_struct(r[3]["accounting_date"]), '2015-01-02')
-        self.assertEquals(self.format_time_struct(r[4]["accounting_date"]), '2015-01-02')
-        self.assertEquals(self.format_time_struct(r[5]["accounting_date"]), '2014-12-29')
-        self.assertEquals(self.format_time_struct(r[6]["accounting_date"]), '2014-12-29')
+        self.assertEquals(format_time_struct(r[0]["transaction_date"]), '2015-01-03')
+        self.assertEquals(format_time_struct(r[1]["transaction_date"]), '2015-01-02')
+        self.assertEquals(format_time_struct(r[2]["transaction_date"]), '2015-01-02')
+        self.assertEquals(format_time_struct(r[3]["transaction_date"]), '2015-01-02')
+        self.assertEquals(format_time_struct(r[4]["transaction_date"]), '2015-01-01')
+        self.assertEquals(format_time_struct(r[5]["transaction_date"]), '2014-12-28')
+        self.assertEquals(format_time_struct(r[6]["transaction_date"]), '2014-12-27')
 
-        self.assertEquals(self.format_time_struct(r[0]["transaction_date"]), '2015-01-03')
-        self.assertEquals(self.format_time_struct(r[1]["transaction_date"]), '2015-01-02')
-        self.assertEquals(self.format_time_struct(r[2]["transaction_date"]), '2015-01-02')
-        self.assertEquals(self.format_time_struct(r[3]["transaction_date"]), '2015-01-02')
-        self.assertEquals(self.format_time_struct(r[4]["transaction_date"]), '2015-01-01')
-        self.assertEquals(self.format_time_struct(r[5]["transaction_date"]), '2014-12-28')
-        self.assertEquals(self.format_time_struct(r[6]["transaction_date"]), '2014-12-27')
-
-        self.assertEquals(r[0]["account_event"], "PATREON.COM")
-        self.assertEquals(r[1]["account_event"], "PATREON.COM")
-        self.assertEquals(r[2]["account_event"], "BURGER KING")
-        self.assertEquals(r[3]["account_event"], "ICA SUPERMARKET")
-        self.assertEquals(r[4]["account_event"], "ICA SUPERMARKET")
-        self.assertEquals(r[5]["account_event"], "McDonalds")
-        self.assertEquals(r[6]["account_event"], "SPOTIFY Spotify")
+        self.assertEquals(r[0]["account_reference"], "PATREON.COM")
+        self.assertEquals(r[1]["account_reference"], "PATREON.COM")
+        self.assertEquals(r[2]["account_reference"], "BURGER KING")
+        self.assertEquals(r[3]["account_reference"], "ICA SUPERMARKET")
+        self.assertEquals(r[4]["account_reference"], "ICA SUPERMARKET")
+        self.assertEquals(r[5]["account_reference"], "McDonalds")
+        self.assertEquals(r[6]["account_reference"], "SPOTIFY Spotify")
 
         self.assertEquals(r[0]["amount"], -8.02)
         self.assertEquals(r[1]["amount"], -7.96)
@@ -62,9 +53,86 @@ class TestSwedbank(unittest.TestCase):
         self.assertEquals(r[5]["balance"], 17066.54)
         self.assertEquals(r[6]["balance"], 17141.54)
 
+    def test_sample2(self):
+        r = apps.main.execute('samples/swedbank/sample2',
+            parser='swedbank',
+            formatter='swedbank')
 
-    def format_time_struct(self, time_struct, format='%Y-%m-%d'):
-        return time.strftime(format, time_struct)
+        self.assertEquals(r[0]["clearing_number"], '12345')
+        self.assertEquals(r[1]["clearing_number"], '12345')
+        self.assertEquals(r[3]["clearing_number"], '12345')
+        self.assertEquals(r[4]["clearing_number"], '12345')
+        self.assertEquals(r[5]["clearing_number"], '12345')
+        self.assertEquals(r[6]["clearing_number"], '12345')
+        self.assertEquals(r[7]["clearing_number"], '12345')
+        self.assertEquals(r[8]["clearing_number"], '12345')
+        self.assertEquals(r[9]["clearing_number"], '12345')
+
+        self.assertEquals(r[0]["account_number"], '1234567890')
+        self.assertEquals(r[1]["account_number"], '1234567890')
+        self.assertEquals(r[2]["account_number"], '1234567890')
+        self.assertEquals(r[3]["account_number"], '1234567890')
+        self.assertEquals(r[4]["account_number"], '1234567890')
+        self.assertEquals(r[5]["account_number"], '1234567890')
+        self.assertEquals(r[6]["account_number"], '1234567890')
+        self.assertEquals(r[7]["account_number"], '1234567890')
+        self.assertEquals(r[8]["account_number"], '1234567890')
+        self.assertEquals(r[9]["account_number"], '1234567890')
+
+        self.assertEquals(r[0]["account_name"], 'Mitt vanliga konto')
+        self.assertEquals(r[1]["account_name"], 'Mitt vanliga konto')
+        self.assertEquals(r[2]["account_name"], 'Mitt vanliga konto')
+        self.assertEquals(r[3]["account_name"], 'Mitt vanliga konto')
+        self.assertEquals(r[4]["account_name"], 'Mitt vanliga konto')
+        self.assertEquals(r[5]["account_name"], 'Mitt vanliga konto')
+        self.assertEquals(r[6]["account_name"], 'Mitt vanliga konto')
+        self.assertEquals(r[7]["account_name"], 'Mitt vanliga konto')
+        self.assertEquals(r[8]["account_name"], 'Mitt vanliga konto')
+        self.assertEquals(r[9]["account_name"], 'Mitt vanliga konto')
+
+        self.assertEquals(r[0]["currency_code"], 'SEK')
+        self.assertEquals(r[1]["currency_code"], 'SEK')
+        self.assertEquals(r[2]["currency_code"], 'SEK')
+        self.assertEquals(r[3]["currency_code"], 'SEK')
+        self.assertEquals(r[4]["currency_code"], 'SEK')
+        self.assertEquals(r[5]["currency_code"], 'SEK')
+        self.assertEquals(r[6]["currency_code"], 'SEK')
+        self.assertEquals(r[7]["currency_code"], 'SEK')
+        self.assertEquals(r[8]["currency_code"], 'SEK')
+        self.assertEquals(r[9]["currency_code"], 'SEK')
+
+        self.assertEquals(format_time_struct(r[0]["accounting_date"]), '2015-01-05')
+        self.assertEquals(format_time_struct(r[1]["accounting_date"]), '2015-01-02')
+        self.assertEquals(format_time_struct(r[2]["accounting_date"]), '2015-01-02')
+        self.assertEquals(format_time_struct(r[3]["accounting_date"]), '2015-01-02')
+        self.assertEquals(format_time_struct(r[4]["accounting_date"]), '2015-01-02')
+        self.assertEquals(format_time_struct(r[5]["accounting_date"]), '2014-12-29')
+        self.assertEquals(format_time_struct(r[6]["accounting_date"]), '2014-12-29')
+        self.assertEquals(format_time_struct(r[7]["accounting_date"]), '2014-12-23')
+        self.assertEquals(format_time_struct(r[8]["accounting_date"]), '2014-12-23')
+        self.assertEquals(format_time_struct(r[9]["accounting_date"]), '2014-12-23')
+
+        self.assertEquals(format_time_struct(r[0]["transaction_date"]), '2015-01-03')
+        self.assertEquals(format_time_struct(r[1]["transaction_date"]), '2015-01-02')
+        self.assertEquals(format_time_struct(r[2]["transaction_date"]), '2015-01-02')
+        self.assertEquals(format_time_struct(r[3]["transaction_date"]), '2015-01-01')
+        self.assertEquals(format_time_struct(r[4]["transaction_date"]), '2014-12-31')
+        self.assertEquals(format_time_struct(r[5]["transaction_date"]), '2014-12-27')
+        self.assertEquals(format_time_struct(r[6]["transaction_date"]), '2014-12-24')
+        self.assertEquals(format_time_struct(r[7]["transaction_date"]), '2014-12-23')
+        self.assertEquals(format_time_struct(r[8]["transaction_date"]), '2014-12-23')
+        self.assertEquals(format_time_struct(r[9]["transaction_date"]), '2014-12-23')
+
+        self.assertEquals(r[0]["account_reference"], 'PATREON.COM')
+        self.assertEquals(r[1]["account_reference"], 'PATREON.COM')
+        self.assertEquals(r[2]["account_reference"], 'ICA SUPERMARKET')
+        self.assertEquals(r[3]["account_reference"], 'ICA SUPERMARKET')
+        self.assertEquals(r[4]["account_reference"], 'ICA SUPERMARKET')
+        self.assertEquals(r[5]["account_reference"], 'SPOTIFY Spotify')
+        self.assertEquals(r[6]["account_reference"], 'ELGIGANTEN STOC')
+        self.assertEquals(r[7]["account_reference"], 'HBONORDIC.COM')
+        self.assertEquals(r[8]["account_reference"], 'BAR BQ BAR & GRI')
+        self.assertEquals(r[9]["account_reference"], 'COOP KONSUM')
 
 if __name__ == '__main__':
     unittest.main()

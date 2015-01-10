@@ -2,18 +2,18 @@
 # -*- coding: utf-8 -*-
 import parsers.regex_parser
 import parsers.swedbank_parser
+from core.factory import Factory
 
-class AccountParserFactory(object):
+class AccountParserFactory(Factory):
     def __init__(self):
-        self.parsers = {
+        super(AccountParserFactory, self).__init__({
             'regex' : parsers.regex_parser.RegexParser,
             'swedbank' : parsers.swedbank_parser.SwedbankParser
-        }
+        })
 
     def createAccountParser(self, acc_type):
-        if acc_type not in self.parsers.keys():
+        parser = self.get(acc_type)
+        if parser:
+            return parser()
+        else:
             assert 0, ("Invalid acc_type: ", acc_type)
-        return self.parsers[acc_type]()
-
-    def getTypes():
-        return self.parsers.keys()

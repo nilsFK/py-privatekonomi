@@ -1,8 +1,8 @@
-import factories.account_formatter_factory
-import factories.account_parser_factory
+from factories.account_formatter_factory import AccountFormatterFactory
+from factories.account_parser_factory import AccountParserFactory
 
 def get_parser(acc_type):
-    return factories.account_parser_factory.AccountParserFactory().createAccountParser(acc_type)
+    return AccountParserFactory().createAccountParser(acc_type)
 
-def get_formatter(acc_type):
-    return factories.account_formatter_factory.AccountFormatterFactory().createAccountFormatter(acc_type)
+def get_formatter(acc_type, formatters):
+    return AccountFormatterFactory().createAccountFormatter(acc_type, formatters)
