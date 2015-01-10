@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import parsers.ws_parser
+import parsers.regex_parser
+import parsers.swedbank_parser
 
 class AccountParserFactory(object):
     def __init__(self):
         self.parsers = {
-            'whitespace' : parsers.ws_parser.WhitespaceParser
+            'regex' : parsers.regex_parser.RegexParser,
+            'swedbank' : parsers.swedbank_parser.SwedbankParser
         }
 
     def createAccountParser(self, acc_type):

@@ -4,7 +4,7 @@
 import core.parser
 import re
 
-class WhitespaceParser(core.parser.Parser):
+class RegexParser(core.parser.Parser):
     def __init__(self):
         pass
 

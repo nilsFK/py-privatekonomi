@@ -7,9 +7,10 @@ class AccountFormatter(core.formatter.Formatter):
         pass
 
     @classmethod
-    def format_currency(self, content):
+    def _format_currency(self, content):
         ret_content = content
         ret_content = ret_content.strip()
         ret_content = ret_content.replace(",", ".")
         ret_content = ret_content.replace(" ", "")
         return float(ret_content)
+

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 import os
 from models.account import Account
 from models.account_category import AccountCategory
@@ -20,7 +19,7 @@ def execute(source, parser, formatter):
     content = helper.read_file(source)
 
     parser = helper.get_parser(parser)
-    parsed = parser.parse(content, r'\t+')
+    parsed = parser.parse(content)
 
     formatter = helper.get_formatter(formatter)
     return formatter.format(parsed)
@@ -39,7 +38,6 @@ def persist(output):
     provider = Provider(context).obliterate().generate()
     account.generate()
     transaction.generate()
-
 
     id1 = currency.insertCurrency(code="SEK",symbol="kr",country="SE")
     id2 = currency.insertCurrency(code="USD",symbol="$",country="US")

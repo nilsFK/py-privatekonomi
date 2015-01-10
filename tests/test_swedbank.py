@@ -5,12 +5,19 @@ import unittest
 import apps.main
 import time
 class TestSwedbank(unittest.TestCase):
-
     def setUp(self):
         pass
 
+    # def test_sample2(self):
+    #     r = apps.main.execute('samples/swedbank/sample2',
+    #         parser='swedbank',
+    #         formatter='swedbank')
+    #     print(r)
+
     def test_sample1(self):
-        r = apps.main.execute('samples/swedbank/sample1', 'whitespace', 'swedbank')
+        r = apps.main.execute('samples/swedbank/sample1',
+            parser='swedbank',
+            formatter='swedbank')
         print(r)
 
         print self.format_time_struct(r[0]["transaction_date"])
