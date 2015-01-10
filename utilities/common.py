@@ -22,3 +22,8 @@ def singleton(cls):
 def path_leaf(path):
     head, tail = ntpath.split(path)
     return tail or ntpath.basename(head)
+
+def read_file(file_path):
+    with open(file_path, 'r') as f:
+        content = f.readlines()
+    return content

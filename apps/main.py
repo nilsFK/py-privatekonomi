@@ -11,12 +11,12 @@ from models.provider import Provider
 from models.transaction import Transaction
 
 import core.db
-from utilities import helper
+from utilities import helper, common
 from sqlalchemy import MetaData
 from core.model_context import ModelContext
 
 def execute(source, parser, formatter):
-    content = helper.read_file(source)
+    content = common.read_file(source)
 
     parser = helper.get_parser(parser)
     parsed = parser.parse(content)
