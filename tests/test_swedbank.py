@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import apps.main
+import core.apps.example1
 from utilities.common import format_time_struct
 class TestSwedbank(unittest.TestCase):
     def setUp(self):
         pass
 
     def test_sample1(self):
-        r = apps.main.execute('samples/swedbank/sample1',
+        r = core.apps.example1.execute('samples/swedbank/sample1',
             parser='swedbank',
             formatter='swedbank')
 
@@ -54,7 +54,7 @@ class TestSwedbank(unittest.TestCase):
         self.assertEquals(r[6]["balance"], 17141.54)
 
     def test_sample2(self):
-        r = apps.main.execute('samples/swedbank/sample2',
+        r = core.apps.example1.execute('samples/swedbank/sample2',
             parser='swedbank',
             formatter='swedbank')
 

@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 import argparse
-import importlib
-from utilities import common
-
+import loader
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(description='Process source (for example, a file) that will be parsed for content into a data structure')
     argparser.add_argument('source',
@@ -28,12 +25,14 @@ if __name__ == '__main__':
         default=False,
         help='Persists results of parsing/formatting to database. Requires a valid dialect.')
     args = argparser.parse_args()
-    safe_module = common.path_leaf(args.app)
-    if not safe_module.startswith("core.apps"):
-        safe_module.replace(".", "")
-        safe_module = "apps.%s" % safe_module
 
-    app = importlib.import_module("%s" % safe_module)
-    output = getattr(app, 'execute')(args.source, args.parser, args.formatter)
-    if args.persist:
-        getattr(app, 'persist')(output)
+    loader.load_app(args.app, args.source, args.parser, args.formatter, args.persist)
+    # safe_module = common.path_leaf(args.app)
+    # if not safe_module.startswith("core.apps"):
+    #     safe_module.replace(".", "")
+    #     safe_module = "apps.%s" % safe_module
+
+    # app = importlib.import_module("%s" % safe_module)
+    # output = getattr(app, 'execute')(args.source, args.parser, args.formatter)
+    # if args.persist:
+    #     getattr(app, 'persist')(output)
