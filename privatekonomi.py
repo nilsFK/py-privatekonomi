@@ -27,12 +27,3 @@ if __name__ == '__main__':
     args = argparser.parse_args()
 
     loader.load_app(args.app, args.source, args.parser, args.formatter, args.persist)
-    # safe_module = common.path_leaf(args.app)
-    # if not safe_module.startswith("core.apps"):
-    #     safe_module.replace(".", "")
-    #     safe_module = "apps.%s" % safe_module
-
-    # app = importlib.import_module("%s" % safe_module)
-    # output = getattr(app, 'execute')(args.source, args.parser, args.formatter)
-    # if args.persist:
-    #     getattr(app, 'persist')(output)
