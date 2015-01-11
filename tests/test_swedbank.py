@@ -134,5 +134,27 @@ class TestSwedbank(unittest.TestCase):
         self.assertEquals(r[8]["account_reference"], 'BAR BQ BAR & GRI')
         self.assertEquals(r[9]["account_reference"], 'COOP KONSUM')
 
+        self.assertEquals(r[0]["account_event"], 'Kortköp/uttag')
+        self.assertEquals(r[1]["account_event"], 'Kortköp/uttag')
+        self.assertEquals(r[2]["account_event"], 'Kortköp/uttag')
+        self.assertEquals(r[3]["account_event"], 'Kortköp/uttag')
+        self.assertEquals(r[4]["account_event"], 'Kortköp/uttag')
+        self.assertEquals(r[5]["account_event"], 'Kortköp/uttag')
+        self.assertEquals(r[6]["account_event"], 'Kortköp/uttag')
+        self.assertEquals(r[7]["account_event"], 'Kortköp/uttag')
+        self.assertEquals(r[8]["account_event"], 'Kortköp/uttag')
+        self.assertEquals(r[9]["account_event"], 'Kortköp/uttag')
+
+        self.assertEquals(r[0]["amount"], -8.02)
+        self.assertEquals(r[1]["amount"], -7.96)
+        self.assertEquals(r[2]["amount"], -93.97)
+        self.assertEquals(r[3]["amount"], -88.60)
+        self.assertEquals(r[4]["amount"], -315.29)
+        self.assertEquals(r[5]["amount"], -49.0)
+        self.assertEquals(r[6]["amount"], -1490.0)
+        self.assertEquals(r[7]["amount"], -79.0)
+        self.assertEquals(r[8]["amount"], -72.0)
+        self.assertEquals(r[9]["amount"], -103.94)
+
 if __name__ == '__main__':
     unittest.main()

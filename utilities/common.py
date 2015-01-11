@@ -28,5 +28,14 @@ def read_file(file_path):
         content = f.readlines()
     return content
 
+def write_file(file_path, content, create_if_missing=False):
+    options = "w+" if create_if_missing else "w"
+    with open(file_path, options) as f:
+        f.write(content)
+
+def append_file(file_path, content):
+    with open(file_path, "a") as f:
+        f.write(content)
+
 def format_time_struct(time_struct, format='%Y-%m-%d'):
     return time.strftime(format, time_struct)
