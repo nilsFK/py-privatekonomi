@@ -54,4 +54,4 @@ docs/_build/
 target/
 
 # Customized gitignores
-configs/
+configs/*.ini

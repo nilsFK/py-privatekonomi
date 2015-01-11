@@ -24,8 +24,9 @@ if __name__ == '__main__':
         help='The app which will accept the parsed and formatted content',
         required=True)
     argparser.add_argument('-pe', '--persist',
-        type=bool,
-        help='Persist results of parsing/formatting to database. Requires a valid dialect.')
+        action='store_true',
+        default=False,
+        help='Persists results of parsing/formatting to database. Requires a valid dialect.')
     args = argparser.parse_args()
 
     app = importlib.import_module("apps.%s" % common.path_leaf(args.app))

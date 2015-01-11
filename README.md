@@ -26,14 +26,14 @@ Notera att dessa kan installeras via **requirements.txt**
 
 Användning
 ----------
-> python privatekonomi.py source -f formatter -p parser -a app --persist=true|false
+> python privatekonomi.py [-h] source -f FORMATTER -p PARSER -a APP [--persist]
 
 där
 * **source**: obligatorisk. sökvägen till filen som innehåller transaktionerna.
-* **formatter**: obligatorisk. formaterar innehållet från source
-* **parser**: obligatorisk. parsar det formaterade innehållet från source
-* **app**: obligatorisk. den app som används för att ta emot det parsade och formatterade innehållet.
-* **persist**: valfri. sparar undan resultatet i databas; förutsätter att db.ini är konfigurerad
+* **FORMATTER**: obligatorisk. formaterar innehållet från source
+* **PARSER**: obligatorisk. parsar det formaterade innehållet från source
+* **APP**: obligatorisk. den app som används för att ta emot det parsade och formatterade innehållet.
+* **persist**: valfri. sparar undan resultatet i databas; förutsätter att db.ini är korrekt konfigurerad.
 
 För ytterligare instruktioner, kör:
 
@@ -41,7 +41,7 @@ För ytterligare instruktioner, kör:
 
 Exempel
 -------
-> python privatekonomi.py samples/swedbank/sample1 -f swedbank -p swedbank -a main
+> python privatekonomi.py samples/swedbank/sample1 -f swedbank -p swedbank -a main --persist
 
 Projektstatus
 -------------
