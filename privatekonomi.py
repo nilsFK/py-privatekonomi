@@ -28,9 +28,12 @@ if __name__ == '__main__':
         default=False,
         help='Persists results of parsing/formatting to database. Requires a valid dialect.')
     args = argparser.parse_args()
+    safe_module = common.path_leaf(args.app)
+    if not safe_module.startswith("core.apps"):
+        safe_module.replace(".", "")
+        safe_module = "apps.%s" % safe_module
 
-    app = importlib.import_module("apps.%s" % common.path_leaf(args.app))
+    app = importlib.import_module("%s" % safe_module)
     output = getattr(app, 'execute')(args.source, args.parser, args.formatter)
-    print(output)
     if args.persist:
         getattr(app, 'persist')(output)
