@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import argparse
 import loader
+from utilities import helper
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(description='Process source (for example, a file) that will be parsed for content into a data structure')
     argparser.add_argument('source',
@@ -26,4 +27,5 @@ if __name__ == '__main__':
         help='Persists results of parsing/formatting to database. Requires a valid dialect.')
     args = argparser.parse_args()
 
-    loader.load_app(args.app, args.source, args.parser, args.formatter, args.persist)
+    app = loader.load_app(args.app, args.source, args.parser, args.formatter, args.persist)
+    result = helper.execute_app(app)

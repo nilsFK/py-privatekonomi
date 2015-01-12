@@ -2,16 +2,20 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import core.apps.example1
+import loader
 from utilities.common import format_time_struct
+from utilities import helper
 class TestSwedbank(unittest.TestCase):
     def setUp(self):
         pass
 
     def test_sample1(self):
-        r = core.apps.example1.execute('samples/swedbank/sample1',
-            parser='swedbank',
-            formatter='swedbank')
+        app = loader.load_app(
+            app_name='core.apps.example1',
+            source='samples/swedbank/sample1',
+            parser_name='swedbank',
+            formatter_name='swedbank')
+        r = helper.execute_app(app)
 
         self.assertEquals(format_time_struct(r[0]["accounting_date"]), '2015-01-05')
         self.assertEquals(format_time_struct(r[1]["accounting_date"]), '2015-01-02')
@@ -54,9 +58,12 @@ class TestSwedbank(unittest.TestCase):
         self.assertEquals(r[6]["balance"], 17141.54)
 
     def test_sample2(self):
-        r = core.apps.example1.execute('samples/swedbank/sample2',
-            parser='swedbank',
-            formatter='swedbank')
+        app = loader.load_app(
+            app_name='core.apps.example1',
+            source='samples/swedbank/sample2',
+            parser_name='swedbank',
+            formatter_name='swedbank')
+        r = helper.execute_app(app)
 
         self.assertEquals(r[0]["clearing_number"], '12345')
         self.assertEquals(r[1]["clearing_number"], '12345')

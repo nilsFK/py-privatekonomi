@@ -3,8 +3,8 @@
 import core.formatter
 from core.formatter import Formatter
 class AccountFormatter(Formatter):
-    def __init__(self, formatters):
-        super(AccountFormatter, self).__init__(formatters)
+    def __init__(self):
+        super(AccountFormatter, self).__init__()
 
     @classmethod
     def _format_currency(self, content):

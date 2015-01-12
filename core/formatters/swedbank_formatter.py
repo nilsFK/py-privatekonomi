@@ -3,11 +3,11 @@
 
 import sys
 import re
-from formatters.account_formatter import AccountFormatter
+from core.formatters.account_formatter import AccountFormatter
 import core.formatter
 class SwedbankFormatter(AccountFormatter):
-    def __init__(self, formatters):
-        super(SwedbankFormatter, self).__init__(formatters)
+    def __init__(self):
+        super(SwedbankFormatter, self).__init__()
 
     def format_accounting_date(self, content):
         """ Bokföringsdatum """

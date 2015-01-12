@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 class Factory(object):
-    def __init__(self, obj):
-        self._obj = obj
+    def __init__(self):
+        self._obj = {}
 
     def get(self, key):
         if key not in self._obj.keys():
@@ -11,5 +11,12 @@ class Factory(object):
         else:
             return self._obj[key]
 
-    def getTypes(self):
+    def set(self, key, value):
+        print("setting ", key, "to", value)
+        self._obj[key] = value
+
+    def getKeys(self):
         return self._obj.keys()
+
+    def getValues(self):
+        return self._obj.values()

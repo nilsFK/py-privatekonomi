@@ -3,10 +3,11 @@
 from collections import deque
 import time
 class Formatter(object):
-    def __init__(self, formatters):
-        self.formatters = formatters
+    def __init__(self):
+        pass
 
-    def format(self, rows):
+    def format(self, rows, subformatters):
+        self.formatters = subformatters
         rows  = self.__before_format(rows)
         output = self.__process_rows(rows)
         output = self.__after_format(output)
