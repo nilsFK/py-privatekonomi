@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from models.base_model import BaseModel
+from core.models.base_model import BaseModel
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
 
 class TransactionEventType(BaseModel):

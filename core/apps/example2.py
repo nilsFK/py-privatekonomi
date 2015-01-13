@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from models.account import Account
-from models.account_category import AccountCategory
-from models.transaction_event import TransactionEvent
-from models.transaction_event_type import TransactionEventType
-from models.currency import Currency
-from models.organization import Organization
-from models.provider import Provider
-from models.transaction import Transaction
+from core.models.account import Account
+from core.models.account_category import AccountCategory
+from core.models.transaction_event import TransactionEvent
+from core.models.transaction_event_type import TransactionEventType
+from core.models.currency import Currency
+from core.models.organization import Organization
+from core.models.provider import Provider
+from core.models.transaction import Transaction
 
 import core.db
 from utilities import helper, common
