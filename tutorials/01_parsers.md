@@ -7,3 +7,5 @@ Inbygda parsers finns i katalogen core/parsers/, däribland `regex_parser` och `
 Vissa parsers är mer grundläggande än andra. T.ex. så är `regex_parser` mer grundläggande än `swedbank_parser`, då `swedbank_parser` använder sig utav `regex_parser` för att parsa den råa texten.
 
 Parsern returnerar dels den parsade råa texten, samt även en uppsättning av semantiska namn, så kallade subformatterare. Dessa appliceras i tur och ordning, så det är väsentligt i vilken ordning de specificeras i.
+
+Eftersom subformatteraren är en ordnad datastruktur så är den i praktien en array med namn/textsträngar. Dessa namn är välkända och används av formatteraren för att formatera den parsade datan, se nästa del för ytterligare information.
