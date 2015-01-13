@@ -8,4 +8,4 @@ Vissa parsers är mer grundläggande än andra. T.ex. så är `regex_parser` mer
 
 Parsern returnerar dels den parsade råa texten, samt även en uppsättning av semantiska namn, så kallade subformatterare. Dessa appliceras i tur och ordning, så det är väsentligt i vilken ordning de specificeras i.
 
-Eftersom subformatteraren är en ordnad datastruktur så är den i praktien en array med namn/textsträngar. Dessa namn är välkända och används av formatteraren för att formatera den parsade datan, se nästa del för ytterligare information.
+Eftersom subformatteraren är en ordnad datastruktur så är den i praktiken en array med namn/textsträngar. Dessa namn är välkända och används av formatteraren för att formatera den parsade datan, se nästa del för ytterligare information.
