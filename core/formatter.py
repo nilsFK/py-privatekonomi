@@ -7,7 +7,7 @@ class Formatter(object):
         pass
 
     def format(self, rows, subformatters):
-        self.formatters = subformatters
+        self.subformatters = subformatters
         rows  = self.__before_format(rows)
         output = self.__process_rows(rows)
         output = self.__after_format(output)
@@ -28,7 +28,7 @@ class Formatter(object):
 
     def __process_row(self, row):
         tokens = {}
-        formatter_deq = deque(self.formatters)
+        formatter_deq = deque(self.subformatters)
         for token in row:
             token = token.strip()
             token = self.__callback("before_process_token", token)

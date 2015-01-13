@@ -1,4 +1,4 @@
-Formatters (formaterare) tar datastrukturer som har semantisk betydelse men som saknar korrekt formatering. Formaterarens indata är den parsade råa texten samt en uppsättning av semantiska namn (så kallade *subformatter*). Dess utdata är den formaterade indatan.
+Formatters (formaterare) tar datastrukturer som har semantisk betydelse men som saknar korrekt formatering. Formaterarens indata är den parsade råa texten samt en uppsättning av semantiska namn (så kallade *subformatters*). Dess utdata är den formaterade indatan.
 
 Exempel:
 

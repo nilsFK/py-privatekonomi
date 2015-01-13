@@ -1,4 +1,4 @@
-En app i Privatekonomi.py tar emot resultatet av parsningen/formatteringen samt har även möjlighet att spara resultatet till databas.
+En app i Privatekonomi.py tar emot resultatet av parsningen/formateringen samt har även möjlighet att spara resultatet till databas.
 
 Standardexempel finns att tillgå i katalogen core/apps.
 Ett standardexempel ingår i form av example1.py som helt enkelt skapar en parser och en formaterare. Detta exempel kräver inte att man har SQLAlchemy installerat.
