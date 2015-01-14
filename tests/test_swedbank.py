@@ -74,6 +74,7 @@ class TestSwedbank(unittest.TestCase):
         self.assertEquals(r[7]["clearing_number"], '12345')
         self.assertEquals(r[8]["clearing_number"], '12345')
         self.assertEquals(r[9]["clearing_number"], '12345')
+        self.assertEquals(r[10]["clearing_number"], '12345')
 
         self.assertEquals(r[0]["account_number"], '1234567890')
         self.assertEquals(r[1]["account_number"], '1234567890')
@@ -85,6 +86,7 @@ class TestSwedbank(unittest.TestCase):
         self.assertEquals(r[7]["account_number"], '1234567890')
         self.assertEquals(r[8]["account_number"], '1234567890')
         self.assertEquals(r[9]["account_number"], '1234567890')
+        self.assertEquals(r[10]["account_number"], '1234567890')
 
         self.assertEquals(r[0]["account_name"], 'Mitt vanliga konto')
         self.assertEquals(r[1]["account_name"], 'Mitt vanliga konto')
@@ -96,6 +98,7 @@ class TestSwedbank(unittest.TestCase):
         self.assertEquals(r[7]["account_name"], 'Mitt vanliga konto')
         self.assertEquals(r[8]["account_name"], 'Mitt vanliga konto')
         self.assertEquals(r[9]["account_name"], 'Mitt vanliga konto')
+        self.assertEquals(r[10]["account_name"], 'Mitt vanliga konto')
 
         self.assertEquals(r[0]["currency_code"], 'SEK')
         self.assertEquals(r[1]["currency_code"], 'SEK')
@@ -107,6 +110,7 @@ class TestSwedbank(unittest.TestCase):
         self.assertEquals(r[7]["currency_code"], 'SEK')
         self.assertEquals(r[8]["currency_code"], 'SEK')
         self.assertEquals(r[9]["currency_code"], 'SEK')
+        self.assertEquals(r[10]["currency_code"], 'SEK')
 
         self.assertEquals(format_time_struct(r[0]["accounting_date"]), '2015-01-05')
         self.assertEquals(format_time_struct(r[1]["accounting_date"]), '2015-01-02')
@@ -118,6 +122,7 @@ class TestSwedbank(unittest.TestCase):
         self.assertEquals(format_time_struct(r[7]["accounting_date"]), '2014-12-23')
         self.assertEquals(format_time_struct(r[8]["accounting_date"]), '2014-12-23')
         self.assertEquals(format_time_struct(r[9]["accounting_date"]), '2014-12-23')
+        self.assertEquals(format_time_struct(r[10]["accounting_date"]), '2014-12-22')
 
         self.assertEquals(format_time_struct(r[0]["transaction_date"]), '2015-01-03')
         self.assertEquals(format_time_struct(r[1]["transaction_date"]), '2015-01-02')
@@ -129,6 +134,7 @@ class TestSwedbank(unittest.TestCase):
         self.assertEquals(format_time_struct(r[7]["transaction_date"]), '2014-12-23')
         self.assertEquals(format_time_struct(r[8]["transaction_date"]), '2014-12-23')
         self.assertEquals(format_time_struct(r[9]["transaction_date"]), '2014-12-23')
+        self.assertEquals(format_time_struct(r[10]["transaction_date"]), '2014-12-22')
 
         self.assertEquals(r[0]["account_reference"], 'PATREON.COM')
         self.assertEquals(r[1]["account_reference"], 'PATREON.COM')
@@ -140,17 +146,19 @@ class TestSwedbank(unittest.TestCase):
         self.assertEquals(r[7]["account_reference"], 'HBONORDIC.COM')
         self.assertEquals(r[8]["account_reference"], 'BAR BQ BAR & GRI')
         self.assertEquals(r[9]["account_reference"], 'COOP KONSUM')
+        self.assertEquals(r[10]["account_reference"], '')
 
-        self.assertEquals(r[0]["account_event"], 'Kortköp/uttag')
-        self.assertEquals(r[1]["account_event"], 'Kortköp/uttag')
-        self.assertEquals(r[2]["account_event"], 'Kortköp/uttag')
-        self.assertEquals(r[3]["account_event"], 'Kortköp/uttag')
-        self.assertEquals(r[4]["account_event"], 'Kortköp/uttag')
-        self.assertEquals(r[5]["account_event"], 'Kortköp/uttag')
-        self.assertEquals(r[6]["account_event"], 'Kortköp/uttag')
-        self.assertEquals(r[7]["account_event"], 'Kortköp/uttag')
-        self.assertEquals(r[8]["account_event"], 'Kortköp/uttag')
-        self.assertEquals(r[9]["account_event"], 'Kortköp/uttag')
+        self.assertEquals(r[0]["account_event"], u'Kortköp/uttag')
+        self.assertEquals(r[1]["account_event"], u'Kortköp/uttag')
+        self.assertEquals(r[2]["account_event"], u'Kortköp/uttag')
+        self.assertEquals(r[3]["account_event"], u'Kortköp/uttag')
+        self.assertEquals(r[4]["account_event"], u'Kortköp/uttag')
+        self.assertEquals(r[5]["account_event"], u'Kortköp/uttag')
+        self.assertEquals(r[6]["account_event"], u'Kortköp/uttag')
+        self.assertEquals(r[7]["account_event"], u'Kortköp/uttag')
+        self.assertEquals(r[8]["account_event"], u'Kortköp/uttag')
+        self.assertEquals(r[9]["account_event"], u'Kortköp/uttag')
+        self.assertEquals(r[10]["account_event"], u'Kortköp/uttag')
 
         self.assertEquals(r[0]["amount"], -8.02)
         self.assertEquals(r[1]["amount"], -7.96)
@@ -162,6 +170,7 @@ class TestSwedbank(unittest.TestCase):
         self.assertEquals(r[7]["amount"], -79.0)
         self.assertEquals(r[8]["amount"], -72.0)
         self.assertEquals(r[9]["amount"], -103.94)
+        self.assertEquals(r[10]["amount"], -1000.0)
 
 if __name__ == '__main__':
     unittest.main()

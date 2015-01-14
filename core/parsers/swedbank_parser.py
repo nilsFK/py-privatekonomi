@@ -17,7 +17,7 @@ class SwedbankParser(core.parser.Parser):
             if content == '':
                 continue
             elif content.startswith('Clnr'):
-                ret = self.__parse_clnr(contents[idx+1:])
+                ret = self.__parse_clnr(contents[idx], contents[idx+1:])
                 break
             elif p.match(content):
                 ret = self.__parse_simple(contents[idx:])
@@ -26,9 +26,23 @@ class SwedbankParser(core.parser.Parser):
                 continue
         return ret
 
-    def __parse_clnr(self, contents):
-        regex_parser = RegexParser()
-        parsed = regex_parser.parse(contents, r'\s{2,}')
+    def __parse_clnr(self, headers, contents):
+        headers = re.findall(r'(\w+\s*)', headers.decode('utf-8'), re.UNICODE)
+        header_lengths = [len(x) for x in headers]
+        header_offsets = [sum( list( header_lengths[:header[0]+1] ) ) for header in enumerate(headers)]
+        results = []
+        for content in contents:
+            if len(content.strip()) == 0:
+                continue
+            result = []
+            for idx, current_offset in enumerate(header_offsets):
+                previous_offset = header_offsets[idx-1] if idx > 0 else 0
+                if idx >= 7: break
+                token = content.decode('utf-8')[previous_offset : current_offset]
+                result.append(token)
+            last_pieces = content.decode('utf-8')[header_offsets[idx-1]:].strip()
+            result.extend(re.split(r'\s{2,}', last_pieces))
+            results.append(result)
         subformatters = [
             "clearing_number",
             "account_number",
@@ -40,7 +54,7 @@ class SwedbankParser(core.parser.Parser):
             "account_event",
             "amount"
         ]
-        return (parsed, subformatters)
+        return (results, subformatters)
 
     def __parse_simple(self, contents):
         regex_parser = RegexParser()

@@ -25,7 +25,6 @@ class Formatter(object):
             output.append(items)
         return output
 
-
     def __process_row(self, row):
         tokens = {}
         formatter_deq = deque(self.subformatters)
@@ -33,10 +32,9 @@ class Formatter(object):
             token = token.strip()
             token = self.__callback("before_process_token", token)
             formatted_token = token
-            if len(token) > 0:
-                formatter = formatter_deq.popleft()
-                formatted_token = getattr(self, "format_%s" % formatter)(token)
-                tokens[formatter] = formatted_token
+            formatter = formatter_deq.popleft()
+            formatted_token = getattr(self, "format_%s" % formatter)(token)
+            tokens[formatter] = formatted_token
             self.__callback("after_process_token", formatted_token)
         return tokens
 
