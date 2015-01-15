@@ -27,7 +27,10 @@ class SwedbankParser(core.parser.Parser):
         return ret
 
     def __parse_clnr(self, headers, contents):
-        headers = re.findall(r'(\w+\s*)', headers.decode('utf-8'), re.UNICODE)
+        try:
+            headers = re.findall(r'(\w+\s*)', headers.decode('utf-8'), re.UNICODE)
+        except:
+            headers = re.findall(r'(\w+\s*)', headers, re.UNICODE)
         header_lengths = [len(x) for x in headers]
         header_offsets = [sum( list( header_lengths[:header[0]+1] ) ) for header in enumerate(headers)]
         results = []
@@ -38,9 +41,9 @@ class SwedbankParser(core.parser.Parser):
             for idx, current_offset in enumerate(header_offsets):
                 previous_offset = header_offsets[idx-1] if idx > 0 else 0
                 if idx >= 7: break
-                token = content.decode('utf-8')[previous_offset : current_offset]
+                token = content[previous_offset : current_offset]
                 result.append(token)
-            last_pieces = content.decode('utf-8')[header_offsets[idx-1]:].strip()
+            last_pieces = content[header_offsets[idx-1]:].strip()
             result.extend(re.split(r'\s{2,}', last_pieces))
             results.append(result)
         subformatters = [

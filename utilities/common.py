@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import ntpath, time
+import ntpath, time, codecs
 class Struct:
     def __init__(self, **entries):
         self.__dict__.update(entries)
@@ -24,8 +24,12 @@ def path_leaf(path):
     return tail or ntpath.basename(head)
 
 def read_file(file_path):
-    with open(file_path, 'r') as f:
-        content = f.readlines()
+    try:
+        with codecs.open(file_path, 'r', 'utf-8') as f:
+            content = f.readlines()
+    except:
+        with open(file_path, 'r') as f:
+            content = f.readlines()
     return content
 
 def write_file(file_path, content, create_if_missing=False):
@@ -39,3 +43,16 @@ def append_file(file_path, content):
 
 def format_time_struct(time_struct, format='%Y-%m-%d'):
     return time.strftime(format, time_struct)
+
+def is_unicode(s):
+    return isinstance(s, unicode)
+
+def decode(val):
+    try:
+        val = val.decode("utf-8")
+    except:
+        try:
+            val = val.decode("latin-1")
+        except:
+            pass
+    return val
