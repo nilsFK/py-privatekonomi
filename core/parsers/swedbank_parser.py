@@ -59,11 +59,11 @@ class SwedbankParser(core.parser.Parser):
     def __parse_simple(self, contents):
         regex_parser = RegexParser()
         parsed = regex_parser.parse(contents, r'\t+')
-        formatters = [
+        subformatters = [
             "accounting_date",
             "transaction_date",
             "account_reference",
             "amount",
             "balance"
         ]
-        return (parsed, formatters)
+        return (parsed, subformatters)
