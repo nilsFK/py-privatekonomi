@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 from utilities import helper, common
 
-def execute(source, parser, formatter):
-    content = helper.execute(source, parser, formatter)
-    print content
-    return content
+def execute(sources, parser, formatter):
+    contents = helper.execute(sources, parser, formatter)
+    for content in contents:
+        print content
+    return contents

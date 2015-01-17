@@ -12,7 +12,6 @@ class Factory(object):
             return self._obj[key]
 
     def set(self, key, value):
-        print("setting ", key, "to", value)
         self._obj[key] = value
 
     def getKeys(self):

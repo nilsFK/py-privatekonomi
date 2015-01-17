@@ -8,7 +8,6 @@ except:
 def readConfig(name, section):
     config = config_parser()
     configs = config.read("configs/" + name + ".ini")
-    print config.items(section)
     if hasattr(config, 'items'):
         return dict(config.items(section))
     else:

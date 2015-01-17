@@ -14,9 +14,10 @@ from utilities import helper, common
 from sqlalchemy import MetaData
 from core.model_context import ModelContext
 
-def execute(source, parser, formatter):
-    content =  helper.execute(source, parser, formatter)
-    print content
+def execute(sources, parser, formatter):
+    contents = helper.execute(sources, parser, formatter)
+    for content in contents:
+        print content
     return content
 
 def persist(output):
