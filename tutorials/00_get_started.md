@@ -30,11 +30,12 @@ exact_match=/sökväg/till/transaktionsloggar/sample.txt
 ```
 
 där:
-dir = sökvägen till var transaktionsloggarna finns
-suffix = matchar alla filer med ett visst suffix
-prefix = matchar alla filer med ett visst prefix
-filename_like = matchar alla filer som innehåller ett visst ord
-exact_match = matchar exakt på en viss fil
+
+* dir = sökvägen till var transaktionsloggarna finns
+* suffix = matchar alla filer med ett visst suffix
+* prefix = matchar alla filer med ett visst prefix
+* filename_like = matchar alla filer som innehåller ett visst ord
+* exact_match = matchar exakt på en viss fil
 
 Notera att exact_match har företräde över övriga alternativ, vilket medför att den endast kan användas exklusivt.
 
