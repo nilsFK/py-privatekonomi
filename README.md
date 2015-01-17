@@ -1,6 +1,6 @@
 py-privatekonomi
 ================
-Parsar, formatterar och sparar undan transaktionsloggar från diverse källor, däribland Swedbank.
+py-privatekonomi håller reda på din privatekonomi genom att läsa in transaktionsloggar från din bank, konvertera detta till ett strukturerat format, och om du vill, sparar ner resultatet i en databas.
 
 Installation
 ------------
