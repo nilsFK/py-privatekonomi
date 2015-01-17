@@ -15,3 +15,35 @@ För att hämta transaktionsloggar, följ dessa steg:
 ```bash
 python py-privatekonomi.py sökväg/till/transaktionslogg -p swedbank -f swedbank -a core.apps.example1
 ```
+
+ini-filer
+=========
+Istället för att skicka in en direkt sökväg till transaktionsfilen kan man skicka in en sökväg där py-privatekonomi letar upp alla filer som matchar de villkor som anges i ini-filen. ini-filen kan innehålla följande:
+
+```
+[Source]
+dir=/sökväg/till/transaktionsloggar
+suffix=.txt
+prefix=sample
+filename_like=sample
+exact_match=/sökväg/till/transaktionsloggar/sample.txt
+```
+
+där:
+dir = sökvägen till var transaktionsloggarna finns
+suffix = matchar alla filer med ett visst suffix
+prefix = matchar alla filer med ett visst prefix
+filename_like = matchar alla filer som innehåller ett visst ord
+exact_match = matchar exakt på en viss fil
+
+Notera att exact_match har företräde över övriga alternativ, vilket medför att den endast kan användas exklusivt.
+
+För att använda ini-filer, gör följande:
+
+1. Skapa en ny fil configs/, t.ex my_source.ini
+2. Konfigurera my_source.ini med ovanstående alternativ
+3.  Kör följande:
+```bash
+python py-privatekonomi.py my_source.ini -p swedbank -f swedbank -a core.apps.example1
+```
+
