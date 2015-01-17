@@ -13,3 +13,12 @@ class AccountFormatter(Formatter):
         ret_content = ret_content.replace(",", ".")
         ret_content = ret_content.replace(" ", "")
         return float(ret_content)
+
+    @classmethod
+    def _deformat_currency(self, content):
+        ret_content = str(content)
+        ret_content = ret_content.replace(".", ",")
+        if ret_content.endswith(",0"):
+            ret_content += "0"
+        return ret_content
+

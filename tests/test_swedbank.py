@@ -3,7 +3,8 @@
 
 import unittest
 import loader
-from utilities.common import format_time_struct, is_unicode, decode
+import utilities.common
+from utilities.common import format_time_struct, is_unicode
 from utilities import helper
 class TestSwedbank(unittest.TestCase):
     def setUp(self):
@@ -33,13 +34,13 @@ class TestSwedbank(unittest.TestCase):
         self.assertEquality(format_time_struct(r[5]["transaction_date"]), '2014-12-28')
         self.assertEquality(format_time_struct(r[6]["transaction_date"]), '2014-12-27')
 
-        self.assertEquality(r[0]["account_reference"], "PATREON.COM")
-        self.assertEquality(r[1]["account_reference"], "PATREON.COM")
-        self.assertEquality(r[2]["account_reference"], "BURGER KING")
-        self.assertEquality(r[3]["account_reference"], "ICA SUPERMARKET")
-        self.assertEquality(r[4]["account_reference"], "ICA SUPERMARKET")
-        self.assertEquality(r[5]["account_reference"], "McDonalds")
-        self.assertEquality(r[6]["account_reference"], "SPOTIFY Spotify")
+        self.assertEquality(r[0]["account_reference"], u"PATREON.COM")
+        self.assertEquality(r[1]["account_reference"], u"PATREON.COM")
+        self.assertEquality(r[2]["account_reference"], u"BURGER KING")
+        self.assertEquality(r[3]["account_reference"], u"ICA SUPERMARKET")
+        self.assertEquality(r[4]["account_reference"], u"ICA SUPERMARKET")
+        self.assertEquality(r[5]["account_reference"], u"McDonalds")
+        self.assertEquality(r[6]["account_reference"], u"SPOTIFY Spotify")
 
         self.assertEquality(r[0]["amount"], -8.02)
         self.assertEquality(r[1]["amount"], -7.96)
@@ -88,29 +89,29 @@ class TestSwedbank(unittest.TestCase):
         self.assertEquality(r[9]["account_number"], '1234567890')
         self.assertEquality(r[10]["account_number"], '1234567890')
 
-        self.assertEquality(r[0]["account_name"], 'Mitt vanliga konto')
-        self.assertEquality(r[1]["account_name"], 'Mitt vanliga konto')
-        self.assertEquality(r[2]["account_name"], 'Mitt vanliga konto')
-        self.assertEquality(r[3]["account_name"], 'Mitt vanliga konto')
-        self.assertEquality(r[4]["account_name"], 'Mitt vanliga konto')
-        self.assertEquality(r[5]["account_name"], 'Mitt vanliga konto')
-        self.assertEquality(r[6]["account_name"], 'Mitt vanliga konto')
-        self.assertEquality(r[7]["account_name"], 'Mitt vanliga konto')
-        self.assertEquality(r[8]["account_name"], 'Mitt vanliga konto')
-        self.assertEquality(r[9]["account_name"], 'Mitt vanliga konto')
-        self.assertEquality(r[10]["account_name"], 'Mitt vanliga konto')
+        self.assertEquality(r[0]["account_name"], u'Mitt vanliga konto')
+        self.assertEquality(r[1]["account_name"], u'Mitt vanliga konto')
+        self.assertEquality(r[2]["account_name"], u'Mitt vanliga konto')
+        self.assertEquality(r[3]["account_name"], u'Mitt vanliga konto')
+        self.assertEquality(r[4]["account_name"], u'Mitt vanliga konto')
+        self.assertEquality(r[5]["account_name"], u'Mitt vanliga konto')
+        self.assertEquality(r[6]["account_name"], u'Mitt vanliga konto')
+        self.assertEquality(r[7]["account_name"], u'Mitt vanliga konto')
+        self.assertEquality(r[8]["account_name"], u'Mitt vanliga konto')
+        self.assertEquality(r[9]["account_name"], u'Mitt vanliga konto')
+        self.assertEquality(r[10]["account_name"], u'Mitt vanliga konto')
 
-        self.assertEquality(r[0]["currency_code"], 'SEK')
-        self.assertEquality(r[1]["currency_code"], 'SEK')
-        self.assertEquality(r[2]["currency_code"], 'SEK')
-        self.assertEquality(r[3]["currency_code"], 'SEK')
-        self.assertEquality(r[4]["currency_code"], 'SEK')
-        self.assertEquality(r[5]["currency_code"], 'SEK')
-        self.assertEquality(r[6]["currency_code"], 'SEK')
-        self.assertEquality(r[7]["currency_code"], 'SEK')
-        self.assertEquality(r[8]["currency_code"], 'SEK')
-        self.assertEquality(r[9]["currency_code"], 'SEK')
-        self.assertEquality(r[10]["currency_code"], 'SEK')
+        self.assertEquality(r[0]["currency_code"], u'SEK')
+        self.assertEquality(r[1]["currency_code"], u'SEK')
+        self.assertEquality(r[2]["currency_code"], u'SEK')
+        self.assertEquality(r[3]["currency_code"], u'SEK')
+        self.assertEquality(r[4]["currency_code"], u'SEK')
+        self.assertEquality(r[5]["currency_code"], u'SEK')
+        self.assertEquality(r[6]["currency_code"], u'SEK')
+        self.assertEquality(r[7]["currency_code"], u'SEK')
+        self.assertEquality(r[8]["currency_code"], u'SEK')
+        self.assertEquality(r[9]["currency_code"], u'SEK')
+        self.assertEquality(r[10]["currency_code"], u'SEK')
 
         self.assertEquality(format_time_struct(r[0]["accounting_date"]), '2015-01-05')
         self.assertEquality(format_time_struct(r[1]["accounting_date"]), '2015-01-02')
@@ -136,20 +137,19 @@ class TestSwedbank(unittest.TestCase):
         self.assertEquality(format_time_struct(r[9]["transaction_date"]), '2014-12-23')
         self.assertEquality(format_time_struct(r[10]["transaction_date"]), '2014-12-22')
 
-        self.assertEquality(r[0]["account_reference"], 'PATREON.COM')
-        self.assertEquality(r[1]["account_reference"], 'PATREON.COM')
-        self.assertEquality(r[2]["account_reference"], 'ICA SUPERMARKET')
-        self.assertEquality(r[3]["account_reference"], 'ICA SUPERMARKET')
-        self.assertEquality(r[4]["account_reference"], 'ICA SUPERMARKET')
-        self.assertEquality(r[5]["account_reference"], 'SPOTIFY Spotify')
-        self.assertEquality(r[6]["account_reference"], 'ELGIGANTEN STOC')
-        self.assertEquality(r[7]["account_reference"], 'HBONORDIC.COM')
-        self.assertEquality(r[8]["account_reference"], 'BAR BQ BAR & GRI')
-        self.assertEquality(r[9]["account_reference"], 'COOP KONSUM')
-        self.assertEquality(r[10]["account_reference"], '')
+        self.assertEquality(r[0]["account_reference"], u'PATREON.COM')
+        self.assertEquality(r[1]["account_reference"], u'PATREON.COM')
+        self.assertEquality(r[2]["account_reference"], u'ICA SUPERMARKET')
+        self.assertEquality(r[3]["account_reference"], u'ICA SUPERMARKET')
+        self.assertEquality(r[4]["account_reference"], u'ICA SUPERMARKET')
+        self.assertEquality(r[5]["account_reference"], u'SPOTIFY Spotify')
+        self.assertEquality(r[6]["account_reference"], u'ELGIGANTEN STOC')
+        self.assertEquality(r[7]["account_reference"], u'HBONORDIC.COM')
+        self.assertEquality(r[8]["account_reference"], u'BAR BQ BAR & GRI')
+        self.assertEquality(r[9]["account_reference"], u'COOP KONSUM')
+        self.assertEquality(r[10]["account_reference"], u'')
 
-        # is_unicode(r[0]["account_event"])
-        self.assertEquality(r[0]["account_event"], 'Kortköp/uttag')
+        self.assertEquality(r[0]["account_event"], u'Kortköp/uttag')
         self.assertEquality(r[1]["account_event"], u'Kortköp/uttag')
         self.assertEquality(r[2]["account_event"], u'Kortköp/uttag')
         self.assertEquality(r[3]["account_event"], u'Kortköp/uttag')
@@ -174,7 +174,7 @@ class TestSwedbank(unittest.TestCase):
         self.assertEquality(r[10]["amount"], -1000.0)
 
     def assertEquality(self, equals_from, equals_to):
-        self.assertEqual(decode(equals_from), decode(equals_to))
+        self.assertEqual(utilities.common.decode(equals_from), utilities.common.decode(equals_to))
 
 if __name__ == '__main__':
     unittest.main()

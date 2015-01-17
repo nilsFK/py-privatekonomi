@@ -27,6 +27,10 @@ class SwedbankParser(core.parser.Parser):
         return ret
 
     def __parse_clnr(self, headers, contents):
+        """Note that we have to find all the UNICODE characters, not just the regular
+        A-Z0-9, so make sure to pass re.UNICODE to fetch these. Also, we try to decode
+        from utf-8 if in that format, in case of fail we just pass it as is.
+        """
         try:
             headers = re.findall(r'(\w+\s*)', headers.decode('utf-8'), re.UNICODE)
         except:
@@ -40,6 +44,10 @@ class SwedbankParser(core.parser.Parser):
             result = []
             for idx, current_offset in enumerate(header_offsets):
                 previous_offset = header_offsets[idx-1] if idx > 0 else 0
+                """There is an issue with regards to how the headers align with the values;
+                the values can expand over their respective boundaries, we have to manage
+                the last two headers below (see last_pieces).
+                """
                 if idx >= 7: break
                 token = content[previous_offset : current_offset]
                 result.append(token)
