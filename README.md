@@ -48,7 +48,7 @@ Exempel
 
 Projektstatus
 -------------
-* För närvarande endast stöd för Swedbank.
+* Stöd för ordinarie transaktionsloggar för Swedbank och Avanza.
 
 Stöd
 ----
