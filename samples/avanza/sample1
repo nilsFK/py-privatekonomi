@@ -1,0 +1,11 @@
+Datum;Konto;Typ av transaktion;Värdepapper/beskrivning;Antal;Kurs;Belopp;Valuta
+2015-01-08;Spar Aktie;Sälj;Aktiefond #1;4,0726;413,68;-1286,75;SEK
+2015-01-07;Spar Aktie;Köp;Aktiefond #2;15,1663;222,17;-1329,50;SEK
+2015-01-07;Spar Aktie;Köp;Aktiefond #3;0,8534;1974,00;-682,61;SEK
+2015-01-05;Spar Aktie;Insättning;Insättning Januari;-;-;2728,80;SEK
+2014-12-08;Spar Aktie;Köp;Aktiefond #2;5,1423;222,66;-1144,98;SEK
+2014-11-26;Spar Aktie;Insättning;Insättning November;-;-;2145,42;SEK
+2014-10-29;Spar Aktie;Köp;Aktiefond #3;16,2254;114,87;-863,81;SEK
+2014-10-28;Spar Aktie;Köp;Aktiefond #2;8,7321;213,35;-862,99;SEK
+2014-10-27;Spar Aktie;Insättning;Insättning Oktober;-;-;2826,80;SEK
+2014-10-02;Spar Aktie;Köp;Aktiefond #1;149,8263;114,92;-10218,04;SEK

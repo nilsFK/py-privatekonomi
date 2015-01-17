@@ -21,7 +21,6 @@ def execute(sources, parser, formatter):
     contents = []
     for source in sources:
         content = common.read_file(source)
-        print content
         parsed, subformatters = parser.parse(content)
         content = formatter.format(parsed, subformatters)
         contents.append(content)

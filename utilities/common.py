@@ -48,6 +48,14 @@ def is_unicode(s):
     return isinstance(s, unicode)
 
 def decode(val):
+    """Since we in most cases are not aware of
+    the true encoding we try to decode it from
+    utf-8, if that fails we decode it as latin-1,
+    if that fails we return it as is.
+    Note that we attempt decoding in this order
+    because py-privatekonomi only works with
+    utf-8 and latin-1
+    """
     try:
         val = val.decode("utf-8")
     except:

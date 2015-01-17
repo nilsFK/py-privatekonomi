@@ -7,8 +7,10 @@ from core.factories.account_formatter_factory import AccountFormatterFactory
 from core.factories.account_parser_factory import AccountParserFactory
 from core.formatters.account_formatter import AccountFormatter
 from core.formatters.swedbank_formatter import SwedbankFormatter
+from core.formatters.avanza_formatter import AvanzaFormatter
 from core.parsers.regex_parser import RegexParser
 from core.parsers.swedbank_parser import SwedbankParser
+from core.parsers.avanza_parser import AvanzaParser
 from core.config import readConfig
 
 def __load_module(name, folder):
@@ -34,22 +36,33 @@ def load_app(app_name, sources, parser_name = None, formatter_name = None, persi
     return app
 
 def load_core():
+    account_formatter_factories = load_factory({
+        'swedbank' : SwedbankFormatter,
+        'avanza' : AvanzaFormatter
+    }, AccountFormatterFactory)
+
+    account_parser_factories = load_factory({
+        'swedbank' : SwedbankParser,
+        'avanza' : AvanzaParser
+    }, AccountParserFactory)
+
     core = {
         'factories' : {
             'formatters' : {
-                'account_formatter_factory' : load_factory('swedbank', AccountFormatterFactory, SwedbankFormatter)
+                'account_formatter_factory' : account_formatter_factories
             },
             'parsers' : {
-                'account_parser_factory' : load_factory('swedbank', AccountParserFactory, SwedbankParser)
+                'account_parser_factory' : account_parser_factories
             }
         }
     }
     return core
 
-def load_factory(name, factory, factory_type):
-    factory = factory()
-    factory.set(name, factory_type)
-    return factory
+def load_factory(names, factory):
+    _factory = factory()
+    for name, factory_type in names.iteritems():
+        _factory.set(name, factory_type)
+    return _factory
 
 def load_formatter(name, factory):
     return factory.create(name)

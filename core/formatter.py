@@ -31,7 +31,6 @@ class Formatter(object):
         for token in row:
             token = token.strip()
             token = self.__callback("before_process_token", token)
-            formatted_token = token
             formatter = formatter_deq.popleft()
             formatted_token = getattr(self, "format_%s" % formatter)(token)
             tokens[formatter] = formatted_token

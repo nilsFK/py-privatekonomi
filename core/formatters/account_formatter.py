@@ -8,11 +8,27 @@ class AccountFormatter(Formatter):
 
     @classmethod
     def _format_currency(self, content):
-        ret_content = content
-        ret_content = ret_content.strip()
-        ret_content = ret_content.replace(",", ".")
-        ret_content = ret_content.replace(" ", "")
-        return float(ret_content)
+        try:
+            ret_content = content
+            ret_content = ret_content.strip()
+            ret_content = ret_content.replace(",", ".")
+            ret_content = ret_content.replace(" ", "")
+            val = float(ret_content)
+            return val
+        except ValueError:
+            return None
+
+    @classmethod
+    def _format_float(self, content):
+        try:
+            ret_content = content
+            ret_content = ret_content.strip()
+            ret_content = ret_content.replace(",", ".")
+            ret_content = ret_content.replace(" ", "")
+            val = float(ret_content)
+            return val
+        except ValueError:
+            return None
 
     @classmethod
     def _deformat_currency(self, content):
