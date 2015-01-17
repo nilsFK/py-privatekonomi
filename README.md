@@ -4,7 +4,9 @@ Parsar, formatterar och sparar undan transaktionsloggar från diverse källor, d
 
 Installation
 ------------
-> pip install -r requirements.txt
+Ingen installation är nödvändig utom i det fall där man använder sig utav persisting. För att kunna spara undan resultat till databas, kör följande:
+
+> pip install -r persist_requirements.txt
 
 För att persista data, skapa en fil med namnet db.ini i katalogen configs med innehållet:
 
@@ -16,13 +18,14 @@ password = password
 host = host
 port = port
 database = database
+prefix = ekonomi
 ```
 
 engine utgörs av dialect+driver.
 Se följande länk för exempel på dialect+driver:
     http://docs.sqlalchemy.org/en/rel_0_9/dialects/index.html
 
-Notera att dessa kan installeras via **requirements.txt**
+Notera även att till skillnad från övriga konfigurationer är `prefix` valfri och utgör endast ett prefix till tabellerna.
 
 Användning
 ----------
@@ -45,9 +48,8 @@ Exempel
 
 Projektstatus
 -------------
-* Total refaktorisering kommer genomföras.
 * För närvarande endast stöd för Swedbank.
 
 Stöd
 ----
-Siktar på stöd för Python 2.7.x+. Ordentligt stöd för Python 3.x.x kommer senare, är för närvarande att betraktas som otestat.
+Siktar på stöd för Python 2.7.x+. Ordentligt stöd för Python 3.3.x kommer senare, är för närvarande att betraktas som otestat.
