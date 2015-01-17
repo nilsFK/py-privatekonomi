@@ -11,5 +11,5 @@ För att hämta transaktionsloggar, följ dessa steg:
 3. Till höger har du Sök transaktioner på kontot. Välj intervall för bokföringsdatum och klicka på Sök
 4. Klicka därefter på Exportera
 5. På nästa sida: välj Oformaterad text och klicka på Exportera
-6. Notera var på filsystemet filen finns och kör py-privatekonomi.py enligt instruktioner i README.md
+6. Notera var på filsystemet filen finns och kör py-privatekonomi.py enligt:
 
