@@ -12,4 +12,6 @@ För att hämta transaktionsloggar, följ dessa steg:
 4. Klicka därefter på Exportera
 5. På nästa sida: välj Oformaterad text och klicka på Exportera
 6. Notera var på filsystemet filen finns och kör py-privatekonomi.py enligt:
-
+```bash
+python py-privatekonomi.py sökväg/till/transaktionslogg -p swedbank -f swedbank -a core.apps.example1
+```
