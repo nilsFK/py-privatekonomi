@@ -21,12 +21,23 @@ class DB(object):
             'database' : db_config.database
         })
         self.__connection = self.__engine.connect()
+        self.__config = db_config
 
     def getEngine(self):
         return self.__engine
 
     def getConnection(self):
         return self.__connection
+
+    def getConfig(self, config = None):
+        if config is not None:
+            return getattr(self.__config, config)
+        else:
+            return self.__config
+
+    def hasConfig(self, config_name):
+        return hasattr(self.__config, config_name)
+
 
 if __name__ == '__main__':
     db = DB()

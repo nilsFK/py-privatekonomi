@@ -22,6 +22,8 @@ class Model(object):
         return self.context.metadata
 
     def generate(self):
+        if db.DB().hasConfig('prefix'):
+            self.ref.name = db.DB().getConfig('prefix') + "_" + self.ref.name
         self.ref.create(db.DB().getEngine(), checkfirst=True)
         return self
 
