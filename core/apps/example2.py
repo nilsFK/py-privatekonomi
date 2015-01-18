@@ -15,7 +15,7 @@ from sqlalchemy import MetaData
 from core.model_context import ModelContext
 
 def execute(sources, parser, formatter):
-    contents = helper.execute(sources, parser, formatter)
+    contents = helper.execute(sources, parser, formatter, True)
     for content in contents:
         print content
     return content

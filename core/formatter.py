@@ -2,16 +2,23 @@
 # -*- coding: utf-8 -*-
 from collections import deque
 import time
+
 class Formatter(object):
     def __init__(self):
-        pass
+        self.__mappings = []
+        self.__push_mappings = {}
 
-    def format(self, rows, subformatters):
+    def addMapping(self, model_key, subformatter_key, subformatter_value):
+        if model_key not in self.__push_mappings:
+            self.__push_mappings[model_key] = {}
+        self.__push_mappings[model_key][subformatter_key] = subformatter_value
+
+    def format(self, rows, subformatters, format_as_mapper = False):
         self.subformatters = subformatters
         rows  = self.__before_format(rows)
         output = self.__process_rows(rows)
         output = self.__after_format(output)
-        return output
+        return output if not format_as_mapper else self.__mappings
 
     def __process_rows(self, rows):
         output = []
@@ -27,16 +34,17 @@ class Formatter(object):
 
     def __process_row(self, row):
         tokens = {}
-        formatter_deq = deque(self.subformatters)
+        subformatter_deq = deque(self.subformatters)
         for token in row:
             token = token.strip()
             token = self.__callback("before_process_token", token)
-            formatter = formatter_deq.popleft()
-            formatted_token = getattr(self, "format_%s" % formatter)(token)
-            tokens[formatter] = formatted_token
+            subformatter = subformatter_deq.popleft()
+            formatted_token = getattr(self, "format_%s" % subformatter)(token, subformatter)
+            tokens[subformatter] = formatted_token
             self.__callback("after_process_token", formatted_token)
+        self.__mappings.append(self.__push_mappings)
+        self.__push_mappings = {}
         return tokens
-
 
     def __before_format(self, lines):
         lines = self.__callback("before_format", lines)
