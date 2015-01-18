@@ -11,9 +11,23 @@ För att hämta transaktionsloggar, följ dessa steg:
 3. Till höger har du Sök transaktioner på kontot. Välj intervall för bokföringsdatum och klicka på Sök
 4. Klicka därefter på Exportera
 5. På nästa sida: välj Oformaterad text och klicka på Exportera
-6. Notera var på filsystemet filen finns och kör py-privatekonomi.py enligt:
+6. Notera var på filsystemet filen finns och kör privatekonomi.py enligt:
 ```bash
-python py-privatekonomi.py sökväg/till/transaktionslogg -p swedbank -f swedbank -a core.apps.example1
+python privatekonomi.py sökväg/till/transaktionslogg -p swedbank -f swedbank -a core.apps.example1
+```
+
+Avanza
+------
+För att hämta transaktionsloggar från Avanza, följ dessa steg:
+
+1. Logga in på Avanza
+2. Gå till ditt konto
+3. Välj fliken Transaktioner
+4. Välj datumintervall
+5. Klicka på Exportera transaktioner till Excel
+6. Notera var på filsystemet filen finns och kör privatekonomi.py enligt:
+```bash
+python privatekonomi.py sökväg/till/transaktionslogg -p avanza -f avanza -a core.apps.example1
 ```
 
 ini-filer
