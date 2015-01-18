@@ -19,7 +19,7 @@ def execute_app(app):
         app['module'].persist(content)
     return content
 
-def execute(sources, parser, formatter, format_as_mapper):
+def execute(sources, parser, formatter, format_as_mapper = False):
     contents = []
     for source in sources:
         content = common.read_file(source)
