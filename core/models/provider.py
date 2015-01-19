@@ -7,6 +7,6 @@ class Provider(BaseModel):
     def __init__(self, context):
         super(Provider, self).__init__(
             Table('provider', context.metadata,
-                Column('id', Integer, primary_key = True),
+                Column('id', Integer, primary_key=True),
                 Column('name', String(128), nullable=False)
         ), context)

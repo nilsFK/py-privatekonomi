@@ -8,14 +8,16 @@ class Transaction(BaseModel):
     def __init__(self, context):
         super(Transaction, self).__init__(
             Table('transaction', context.metadata,
-                Column('id', Integer, primary_key = True),
-                Column('account_id', Integer),
-                Column('transaction_event_id', Integer),
-                Column('currency_id', Integer),
+                Column('id', Integer, primary_key=True),
                 Column('accounting_date', Date, nullable=False),
                 Column('transaction_date', Date, nullable=True),
                 Column('balance', Numeric(precision=16, scale=2), nullable=False),
-                Column('amount', Numeric(precision=2, scale=2), nullable=False),
+                Column('amount', Numeric(precision=16, scale=2), nullable=False),
+                Column('reference', String (512), nullable=False),
+                Column('account_id', Integer, nullable=False),
+                Column('transaction_category_id', Integer, nullable=True),
+                Column('transaction_type_id', Integer, nullable=False),
+                Column('currency_id', Integer, nullable=False),
                 ForeignKeyConstraint(
                     ['account_id'],
                     ['account.id'],
@@ -25,10 +27,18 @@ class Transaction(BaseModel):
                     ondelete='CASCADE'
                 ),
                 ForeignKeyConstraint(
-                    ['transaction_event_id'],
-                    ['transaction_event.id'],
+                    ['transaction_type_id'],
+                    ['transaction_type.id'],
                     use_alter=False,
-                    name='fk_transaction_transaction_event',
+                    name='fk_transaction_transaction_type',
+                    onupdate='CASCADE',
+                    ondelete='CASCADE'
+                ),
+                ForeignKeyConstraint(
+                    ['transaction_category_id'],
+                    ['transaction_category.id'],
+                    use_alter=False,
+                    name='fk_transaction_transaction_category',
                     onupdate='CASCADE',
                     ondelete='CASCADE'
                 ),

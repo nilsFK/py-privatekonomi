@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 from core.models.account import Account
 from core.models.account_category import AccountCategory
-from core.models.transaction_event import TransactionEvent
-from core.models.transaction_event_type import TransactionEventType
+from core.models.transaction_category import TransactionCategory
+from core.models.transaction_type import TransactionType
 from core.models.currency import Currency
 from core.models.organization import Organization
 from core.models.provider import Provider
@@ -29,9 +29,9 @@ def persist(output):
     transaction = Transaction(context).obliterate()
     account = Account(context).obliterate()
     account_category = AccountCategory(context).obliterate().generate()
-    transaction_event = TransactionEvent(context).obliterate()
-    transaction_event_type = TransactionEventType(context).obliterate().generate()
-    transaction_event.generate()
+    transaction_category = TransactionCategory(context).obliterate()
+    transaction_type = TransactionType(context).obliterate().generate()
+    transaction_category.generate()
     currency = Currency(context).obliterate().generate()
     organization = Organization(context).obliterate().generate()
     provider = Provider(context).obliterate().generate()

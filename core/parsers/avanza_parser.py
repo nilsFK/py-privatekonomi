@@ -13,12 +13,11 @@ class AvanzaParser(core.parser.Parser):
         # skip headers
         contents = contents[1:]
 
-        csv_parser = CsvParser()
-        d = {
+        opts = {
             'delimiter' : ';',
             'quoting' : csv.QUOTE_NONE
         }
-        rows = csv_parser.parse(contents, d)
+        rows = CsvParser().parse(contents, opts=opts)
         subformatters = [
             "transaction_date",
             "account_name",

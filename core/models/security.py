@@ -7,10 +7,10 @@ class Security(BaseModel):
     def __init__(self, context):
         super(Security, self).__init__(
             Table('security', context.metadata,
-                Column('id', Integer, primary_key = True),
+                Column('id', Integer, primary_key=True),
                 Column('rate', Numeric(precision=16, scale=2), nullable=False),
                 Column('amount', Numeric(precision=16, scale=4), nullable=False),
-                Column('transaction_id', Integer),
+                Column('transaction_id', Integer, nullable=False),
                 ForeignKeyConstraint(
                     ['transaction_id'],
                     ['transaction.id'],

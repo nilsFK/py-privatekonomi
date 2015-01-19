@@ -9,7 +9,7 @@ class CsvParser(core.parser.Parser):
     def __init__(self):
         pass
 
-    def parse(self, contents, opts = {}):
+    def parse(self, contents, dialect = 'excel', opts = {}):
         rows = []
         for content in contents:
             content = common.decode(content)
@@ -20,9 +20,9 @@ class CsvParser(core.parser.Parser):
             }
             options.update(opts)
             try:
-                reader = self.unicode_csv_reader(c, dialect='excel', **options)
+                reader = self.unicode_csv_reader(c, dialect=dialect, **options)
             except:
-                reader = csv.reader(c, dialect='excel', **options)
+                reader = csv.reader(c, dialect=dialect, **options)
             for r in reader:
                 rows.append(r)
         return rows
