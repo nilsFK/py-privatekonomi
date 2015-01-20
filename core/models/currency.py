@@ -14,14 +14,3 @@ class Currency(BaseModel):
                 Column('country', String(64), nullable=False)
         ), context)
 
-    def insertCurrency(self, code, symbol, country):
-        result = self.execute(self.ref.insert().values(code=code, symbol=symbol, country=country))
-        return result.inserted_primary_key
-
-    def getCode(self, id):
-        result = self.execute(select([self.ref.c.code]).where(self.ref.c.id==id))
-        ret = result.fetchone()[0]
-        result.close()
-        return ret
-
-

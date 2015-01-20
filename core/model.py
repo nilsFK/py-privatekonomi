@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy.engine import reflection
 # from sqlalchemy import create_engine
-from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
+from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, \
+    update, delete, select
 from sqlalchemy.schema import (
     MetaData,
     Table,
@@ -44,5 +45,45 @@ class Model(object):
         self.ref.drop(db.DB().getEngine(), checkfirst=True)
         return self
 
+    def col(self, val):
+        return self.ref.c[val]
+
     def execute(self, stmt):
         return db.DB().getConnection().execute(stmt)
+
+    def insert(self, values):
+        result = db.DB().getConnection().execute(self.ref.insert().values(values))
+        return result.inserted_primary_key
+
+    # http://docs.sqlalchemy.org/en/rel_0_9/core/tutorial.html
+    # http://docs.sqlalchemy.org/en/latest/core/sqlelement.html#sqlalchemy.sql.expression.ColumnElement
+    def update(self, values=None, where=None):
+        stmt = update(self.ref, where, values)
+        result = self.execute(stmt)
+        return result.rowcount
+
+    def delete(self, where):
+        if where is not None:
+            stmt = delete(self.ref, where)
+            result = self.execute(stmt)
+            return result.rowcount
+        else:
+            return 0
+
+    def select(self, columns=None, whereclause=None):
+        stmt = select(columns=columns, whereclause=whereclause)
+        result = self.execute(stmt)
+        return result
+
+    def selectAll(self):
+        stmt = select([self.ref])
+        result = self.execute(stmt)
+        return result
+
+    def selectValue(self, columns=None, whereclause=None):
+        """ TODO: Implement """
+        pass
+
+    def selectOne(self, columns=None, whereclause=None):
+        """ TODO: Implement """
+        pass

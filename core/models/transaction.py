@@ -12,7 +12,6 @@ class Transaction(BaseModel):
                 Column('group', Integer, nullable=False, index=True),
                 Column('accounting_date', Date, nullable=False),
                 Column('transaction_date', Date, nullable=True),
-                Column('balance', Numeric(precision=16, scale=2), nullable=False),
                 Column('amount', Numeric(precision=16, scale=2), nullable=False),
                 Column('reference', String (512), nullable=False),
                 Column('account_id', Integer, nullable=False),
@@ -52,3 +51,4 @@ class Transaction(BaseModel):
                     ondelete='CASCADE'
                 ),
             ), context)
+
