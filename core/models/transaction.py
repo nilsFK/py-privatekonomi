@@ -9,6 +9,7 @@ class Transaction(BaseModel):
         super(Transaction, self).__init__(
             Table('transaction', context.metadata,
                 Column('id', Integer, primary_key=True),
+                Column('group', Integer, nullable=False, index=True),
                 Column('accounting_date', Date, nullable=False),
                 Column('transaction_date', Date, nullable=True),
                 Column('balance', Numeric(precision=16, scale=2), nullable=False),
