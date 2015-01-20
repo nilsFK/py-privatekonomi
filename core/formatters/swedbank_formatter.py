@@ -11,54 +11,54 @@ class SwedbankFormatter(AccountFormatter):
     def __init__(self):
         super(SwedbankFormatter, self).__init__()
 
-    @AccountMapper("Account")
+    @AccountMapper("Account", "account_code")
     def format_clearing_number(self, content, subformatter):
         """ Clearing-nummer """
         return content.strip()
 
-    @AccountMapper("Account")
+    @AccountMapper("Account", "account_number")
     def format_account_number(self, content, subformatter):
         """ Kontonr """
         return content.strip()
 
-    @AccountMapper("Account")
+    @AccountMapper("Account", "name")
     def format_account_name(self, content, subformatter):
         """ Kontonamn """
         return content.strip()
 
-    @AccountMapper("Account")
+    @AccountMapper("TransactionType", "name")
     def format_account_event(self, content, subformatter):
         """ Kontohändelse """
         return content.strip()
 
-    @AccountMapper("Transaction")
+    @AccountMapper("Transaction", "accounting_date")
     def format_accounting_date(self, content, subformatter):
         """ Bokföringsdatum """
         content = content.strip()
         return super(SwedbankFormatter, self)._format_date(content, "%y-%m-%d")
 
-    @AccountMapper("Transaction")
+    @AccountMapper("Transaction", "transaction_date")
     def format_transaction_date(self, content, subformatter):
         """ Transaktionsdatum """
         content = content.strip()
         return super(SwedbankFormatter, self)._format_date(content, "%y-%m-%d")
 
-    @AccountMapper("Transaction")
+    @AccountMapper("Transaction", "reference")
     def format_account_reference(self, content, subformatter):
         """ Referens """
         return content.strip()
 
-    @AccountMapper("Transaction")
+    @AccountMapper("Transaction", "amount")
     def format_amount(self, content, subformatter):
         """ Summa """
         return super(SwedbankFormatter, self)._format_currency(content)
 
-    @AccountMapper("Transaction")
+    @AccountMapper("Transaction", "balance")
     def format_balance(self, content, subformatter):
         """ Belopp """
         return super(SwedbankFormatter, self)._format_currency(content)
 
-    @AccountMapper("Currency")
+    @AccountMapper("Currency", "code")
     def format_currency_code(self, content, subformatter):
         """ Typ av valuta """
         return content.strip()
