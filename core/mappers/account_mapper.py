@@ -18,9 +18,10 @@ class AccountMapper(object):
             "Organization",
             "Provider",
             "Security",
+            "SecurityRate",
             "Transaction",
-            "TransactionEvent",
-            "TransactionEventType"
+            "TransactionCategory",
+            "TransactionType"
         ]
 
     def __call__(self, formatter_func):
