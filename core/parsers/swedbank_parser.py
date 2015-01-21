@@ -4,6 +4,7 @@
 import core.parser
 import re
 from core.parsers.regex_parser import RegexParser
+from core.error import ParserError
 
 class SwedbankParser(core.parser.Parser):
     def __init__(self):
@@ -24,6 +25,8 @@ class SwedbankParser(core.parser.Parser):
                 break
             else:
                 continue
+        if len(ret) == 0:
+            raise ParserError("Invalid transaction text content: no transactions found for text ending with: %s" % content[0:100].strip() + "...")
         return ret
 
     def __parse_clnr(self, headers, contents):

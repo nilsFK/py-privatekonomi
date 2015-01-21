@@ -1,0 +1,1 @@
+This folder and its subfolders contains samples that are invalid and will throw exceptions for their respective parsers/formatters.

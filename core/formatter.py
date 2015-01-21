@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from collections import deque
 import time
+from core.error import FormatterError
 
 class Formatter(object):
     def __init__(self):
@@ -39,7 +40,13 @@ class Formatter(object):
             token = token.strip()
             token = self.__callback("before_process_token", token)
             subformatter = subformatter_deq.popleft()
-            formatted_token = getattr(self, "format_%s" % subformatter)(token, subformatter)
+            try:
+                formatted_token = getattr(self, "format_%s" % subformatter)(token, subformatter)
+            except Exception as e:
+                raise FormatterError(e, {
+                    'token' : token,
+                    'subformatter' : subformatter
+                })
             tokens[subformatter] = formatted_token
             self.__callback("after_process_token", formatted_token)
         self.__mappings.append(self.__push_mappings)

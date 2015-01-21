@@ -6,6 +6,7 @@ import loader
 import utilities.common
 from utilities.common import format_time_struct, is_unicode
 from utilities import helper
+from core.error import FormatterError, ParserError
 class TestSwedbank(unittest.TestCase):
     def setUp(self):
         pass
@@ -174,6 +175,24 @@ class TestSwedbank(unittest.TestCase):
             self.assertEquality(r[8]["amount"], -72.0)
             self.assertEquality(r[9]["amount"], -103.94)
             self.assertEquality(r[10]["amount"], -1000.0)
+
+    def test_invalid_sample1(self):
+        """ Test invalid transaction file which throws FormatterError """
+        app =  loader.load_app(
+            app_name='core.apps.example1',
+            sources='samples/invalid/swedbank/invalid_sample1',
+            parser_name='swedbank',
+            formatter_name='swedbank')
+        self.assertRaises(FormatterError, helper.execute_app, app)
+
+    def test_invalid_sample2(self):
+        """ Test invalid transaction file which throws ParserError """
+        app =  loader.load_app(
+            app_name='core.apps.example1',
+            sources='samples/invalid/swedbank/invalid_sample2',
+            parser_name='swedbank',
+            formatter_name='swedbank')
+        self.assertRaises(ParserError, helper.execute_app, app)
 
     def assertEquality(self, equals_from, equals_to):
         self.assertEqual(utilities.common.decode(equals_from), utilities.common.decode(equals_to))
