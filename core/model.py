@@ -47,16 +47,9 @@ class Model(object):
     def obliterate(self):
         if not db.DB().getEngine().has_table(self.ref.name):
             return self
-        # inspector = reflection.Inspector.from_engine(db.DB().getEngine())
-        # fks = []
-        # for fk in inspector.get_foreign_keys(self.ref.name):
-        #     if not fk['name']:
-        #         continue
-            # fks.append(ForeignKeyConstraint((), (), name=fk['name']))
 
         fks = self.getConstraints()
-        # t = Table(self.ref.name, MetaData(), *fks)
-
+        Table(self.ref.name, MetaData(), *fks)
         for fk in fks:
             self.execute(DropConstraint(fk))
 

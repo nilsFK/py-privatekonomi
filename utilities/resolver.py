@@ -78,3 +78,7 @@ def resolveObliteration(dependencies):
     print "obliteration resolution"
     print repr(obliterated)
     return obliterated
+
+def resolveGeneration(dependencies):
+    obliterated = resolveObliteration(dependencies)
+    return obliterated.reverse()
