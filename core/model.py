@@ -22,22 +22,40 @@ class Model(object):
     def getMetadata(self):
         return self.context.metadata
 
+    def getName(self):
+        return self.ref.name
+
     def generate(self):
         if db.DB().hasConfig('prefix'):
             self.ref.name = db.DB().getConfig('prefix') + "_" + self.ref.name
         self.ref.create(db.DB().getEngine(), checkfirst=True)
         return self
 
-    def obliterate(self):
-        if not db.DB().getEngine().has_table(self.ref.name):
-            return self
+    def getConstraints(self):
         inspector = reflection.Inspector.from_engine(db.DB().getEngine())
         fks = []
         for fk in inspector.get_foreign_keys(self.ref.name):
             if not fk['name']:
                 continue
             fks.append(ForeignKeyConstraint((), (), name=fk['name']))
-        t = Table(self.ref.name, MetaData(), *fks)
+        return fks
+
+    def getForeignKeys(self, table_name):
+        inspector = reflection.Inspector.from_engine(db.DB().getEngine())
+        return inspector.get_foreign_keys(table_name)
+
+    def obliterate(self):
+        if not db.DB().getEngine().has_table(self.ref.name):
+            return self
+        # inspector = reflection.Inspector.from_engine(db.DB().getEngine())
+        # fks = []
+        # for fk in inspector.get_foreign_keys(self.ref.name):
+        #     if not fk['name']:
+        #         continue
+            # fks.append(ForeignKeyConstraint((), (), name=fk['name']))
+
+        fks = self.getConstraints()
+        # t = Table(self.ref.name, MetaData(), *fks)
 
         for fk in fks:
             self.execute(DropConstraint(fk))
