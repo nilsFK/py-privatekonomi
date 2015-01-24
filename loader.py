@@ -24,7 +24,6 @@ def __load_module(name, folder):
 def load_app(app_name, sources, parser_name = None, formatter_name = None, persist = False):
     _core = load_core()
     _sources = load_sources(sources)
-    print(_sources)
     app = {
         'module' : __load_module(app_name, "apps"),
         'parser' : load_parser(parser_name, _core['factories']['parsers']['account_parser_factory']),
@@ -88,4 +87,19 @@ def load_sources(source_name):
             return files
     else:
         return [source_name]
+
+def load_models(model_names):
+    models = {}
+    model_collection = [common.camelcase_to_underscore(model) for model in model_names]
+    for table_name in model_collection:
+        module = __load_module(table_name, "core.models")
+        model_name = common.underscore_to_camelcase(table_name)
+        type_ = getattr(module, model_name)
+        models[table_name] = {
+            'type' : type_,
+            'table_name' : table_name,
+            'model_name' : model_name
+        }
+    return models
+
 

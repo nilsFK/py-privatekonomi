@@ -14,6 +14,7 @@ from core.models.transaction_type import TransactionType
 from core.models.transaction_category import TransactionCategory
 from core.models.currency import Currency
 from core.models.security import Security
+from core.model_context import ModelContext
 import core.db
 class TestUtilities(unittest.TestCase):
     def setUp(self):
@@ -43,8 +44,9 @@ class TestUtilities(unittest.TestCase):
         self.assertEquals(resolved[5].name, "d")
         self.assertEquals(resolved[6].name, "a")
 
-    def test_model_resolver(self):
+    def test_model_resolver_resolveObliteration(self):
         core.db.DB().connect()
+
         deps = resolver.getModelDependencies([
             Account,
             Provider,
@@ -56,16 +58,29 @@ class TestUtilities(unittest.TestCase):
             Transaction,
             Security
         ])
-        print(deps)
-        obliterated = resolver.resolveObliteration(deps)
-        self.assertEquals(obliterated[0], "security")
-        self.assertEquals(obliterated[1], "transaction")
-        self.assertEquals(obliterated[2], "account")
-        self.assertEquals(obliterated[3], "transaction_type")
-        self.assertEquals(obliterated[4], "currency")
-        self.assertEquals(obliterated[5], "provider")
-        self.assertEquals(obliterated[6], "organization")
-        self.assertEquals(obliterated[7], "transaction_category")
+        obliteration_order = resolver.resolveObliteration(deps)
+        """
+        resolution order can variate, so no asserts for now
+        """
+
+    def test_model_resolver_resolveGeneration(self):
+        core.db.DB().connect()
+
+        deps = resolver.getModelDependencies([
+            Account,
+            Provider,
+            Organization,
+            Currency,
+            TransactionCategory,
+            AccountCategory,
+            TransactionType,
+            Transaction,
+            Security
+        ])
+        generated = resolver.resolveGeneration(deps)
+        """
+        resolution order can variate, so no asserts for now
+        """
 
 if __name__ == '__main__':
     unittest.main()

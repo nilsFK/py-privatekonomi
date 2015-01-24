@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import ntpath, time, codecs
+import ntpath, time, codecs, re
 class Struct:
     def __init__(self, **entries):
         self.__dict__.update(entries)
@@ -64,3 +64,16 @@ def decode(val):
         except:
             pass
     return val
+
+def camelcase_to_underscore(name):
+    """ CamelCase to camel_case """
+    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+
+def underscore_to_camelcase(name):
+    def camelcase():
+        while True:
+            yield str.capitalize
+
+    c = camelcase()
+    return "".join(c.next()(x) if x else '_' for x in name.split("_"))

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from sqlalchemy.engine import reflection
-# from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, \
     update, delete, select
 from sqlalchemy.schema import (
@@ -11,7 +10,10 @@ from sqlalchemy.schema import (
     ForeignKeyConstraint,
     DropConstraint
 )
+import re
 import db
+from utilities.helper import get_model_name
+
 class Model(object):
     def __init__(self, context):
         self.context = context
@@ -40,7 +42,27 @@ class Model(object):
             fks.append(ForeignKeyConstraint((), (), name=fk['name']))
         return fks
 
+    def getDependencies(self):
+        ret = []
+        fks = self.ref.foreign_keys
+        for fk in fks:
+            str_ref = vars(fk)["_colspec"]
+            contents = re.match("(.*)\.(.*)", str_ref)
+            str_ref_table = contents.group(1)
+            str_ref_col = contents.group(2)
+            ret.append({
+                'reference' : str_ref,
+                'referenced_table' : str_ref_table,
+                'referenced_model' : get_model_name(str_ref_table),
+                'referenced_col' : str_ref_col,
+                'referencing_col' : vars(vars(fk)["parent"])["key"]
+            })
+        return ret
+
+
     def getForeignKeys(self, table_name):
+        if not db.DB().getEngine().has_table(self.ref.name):
+            return []
         inspector = reflection.Inspector.from_engine(db.DB().getEngine())
         return inspector.get_foreign_keys(table_name)
 

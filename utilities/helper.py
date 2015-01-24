@@ -27,3 +27,6 @@ def execute(sources, parser, formatter, format_as_mapper = False):
         content = formatter.format(parsed, subformatters, format_as_mapper)
         contents.append(content)
     return contents
+
+def get_model_name(table_name):
+    return common.underscore_to_camelcase(table_name)

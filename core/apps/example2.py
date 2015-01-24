@@ -10,11 +10,37 @@ from core.models.provider import Provider
 from core.models.transaction import Transaction
 from core.models.security import Security
 from utilities.common import decode
+from utilities import resolver
 
 import core.db
 from utilities import helper, common
 from sqlalchemy import MetaData
 from core.model_context import ModelContext
+import loader
+
+def __get_models():
+    context = ModelContext()
+
+    # fetch models
+    models = loader.load_models(AccountMapper.getModelNames())
+    model_type_mappings = dict((k, v["type"]) for k,v in models.iteritems())
+    model_types = model_type_mappings.values()
+    model_deps = resolver.getModelDependencies(model_types)
+
+    # obliterate tables
+    obliteration_order = resolver.resolveObliteration(model_deps)
+    for obliterate in obliteration_order:
+        model = model_type_mappings[obliterate]
+        model(context).obliterate()
+
+    # generate tables
+    generation_order = resolver.resolveGeneration(model_deps)
+    context = ModelContext()
+    generated_models = {}
+    for generate in generation_order:
+        model = model_type_mappings[generate]
+        generated_models[generate] = model(context).generate()
+    return generated_models
 
 def execute(sources, parser, formatter):
     contents = helper.execute(sources, parser, formatter, True)
@@ -24,24 +50,11 @@ def execute(sources, parser, formatter):
 
 def persist(output):
     core.db.DB().connect()
-    context = ModelContext()
 
-    security = Security(context).obliterate()
-    transaction = Transaction(context).obliterate()
-    account = Account(context).obliterate()
-    account_category = AccountCategory(context).obliterate().generate()
-    transaction_category = TransactionCategory(context).obliterate()
-    transaction_type = TransactionType(context).obliterate().generate()
-    transaction_category.generate()
-    currency = Currency(context).obliterate().generate()
-    organization = Organization(context).obliterate().generate()
-    provider = Provider(context).obliterate().generate()
-    account.generate()
-    transaction.generate()
-    security.generate()
+    models = __get_models()
 
     # Insert all items
-    organization.insert([
+    models['organization'].insert([
         {
             'name' : 'Swedbank'
         },
@@ -50,7 +63,7 @@ def persist(output):
         }
     ])
 
-    provider.insert([
+    models['provider'].insert([
         {
             'name' : 'Collector'
         },
@@ -59,7 +72,7 @@ def persist(output):
         }
     ])
 
-    currency.insert([
+    models['currency'].insert([
         {
             'code' : 'SEK',
             'symbol' : 'kr',
@@ -72,7 +85,7 @@ def persist(output):
         }
     ])
 
-    account_category.insert([
+    models['account_category'].insert([
         {
         'name' : u'Lönekonto'
         },
@@ -81,7 +94,7 @@ def persist(output):
         }
     ])
 
-    account.insert([
+    models['account'].insert([
         {
             'name' : u'Mitt Lönekonto',
             'account_code' : '123-123',
@@ -104,7 +117,7 @@ def persist(output):
         }
     ])
 
-    transaction_type.insert([
+    models['transaction_type'].insert([
         {
             'name' : u'Insättning',
         },
@@ -116,7 +129,7 @@ def persist(output):
         }
     ])
 
-    transaction_category.insert([
+    models['transaction_category'].insert([
         {
             'name' : 'Donationer'
         },
@@ -131,7 +144,7 @@ def persist(output):
         }
     ])
 
-    transaction.insert([
+    models['transaction'].insert([
         {
             'group' : 1,
             'accounting_date' : '2015-01-20',
@@ -179,26 +192,25 @@ def persist(output):
     ])
 
     # Update a few items
-    transaction.update({
+    models['transaction'].update({
         'amount' : -6.66,
         'accounting_date' : '2015-01-18'
-    }, transaction.col('id').in_([1,2]))
+    }, models['transaction'].col('id').in_([1,2]))
 
     # Delete a couple of items
-    provider.delete(provider.col('id')==1)
+    models['provider'].delete(models['provider'].col('id')==1)
 
     # Get some items
-    transactions = transaction.selectAll()
-    print(transactions)
+    transactions = models['transaction'].selectAll()
     for t in transactions:
-        print "id:", t[transaction.col('id')]
-        print "group:", t[transaction.col('group')]
-        print "accounting_date:", t[transaction.col('accounting_date')]
-        print "transaction_date:", t[transaction.col('transaction_date')]
-        print "amount:", t[transaction.col('amount')]
-        print "reference:", decode(t[transaction.col('reference')])
-        print "account_id:", t[transaction.col('account_id')]
-        print "transaction_category_id:", t[transaction.col('transaction_category_id')]
-        print "transaction_type_id:", t[transaction.col('transaction_type_id')]
-        print "currency_id:", t[transaction.col('currency_id')]
+        print "id:", t[models['transaction'].col('id')]
+        print "group:", t[models['transaction'].col('group')]
+        print "accounting_date:", t[models['transaction'].col('accounting_date')]
+        print "transaction_date:", t[models['transaction'].col('transaction_date')]
+        print "amount:", t[models['transaction'].col('amount')]
+        print "reference:", decode(t[models['transaction'].col('reference')])
+        print "account_id:", t[models['transaction'].col('account_id')]
+        print "transaction_category_id:", t[models['transaction'].col('transaction_category_id')]
+        print "transaction_type_id:", t[models['transaction'].col('transaction_type_id')]
+        print "currency_id:", t[models['transaction'].col('currency_id')]
         print "-"*80

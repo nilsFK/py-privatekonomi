@@ -6,35 +6,18 @@ from core.models.account_category import AccountCategory
 from core.node import Node
 
 def getModelDependencies(model_types):
-    dependencies = {}
     context = ModelContext()
-    nodes = {}
-    models = []
+    ret_model_deps = {}
     for model_type in model_types:
         _model = model_type(context)
-        nodes[_model.getName()] = Node(_model.getName())
-        models.append(_model)
-
-    for node_key, node_val in nodes.iteritems():
-        print node_key
-
-    for model in models:
-        fks = model.getForeignKeys(model.getName())
-        for fk in fks:
-            print(repr(fk))
-            print "-"*80
-            nodes[model.getName()].addEdge(nodes[fk['referred_table']])
-
-    for node_key, node_val in nodes.iteritems():
-        resolved = []
-        print "resolving: " + node_key
-        print "="*80
-        dependency_resolve(node_val, resolved, [])
-        dependencies[node_key] = []
-        for res in resolved:
-            dependencies[node_key].append(res.getName())
-        print "-"*80
-    return dependencies
+        deps = _model.getDependencies()
+        if len(deps) > 0:
+            ret_model_deps[_model.getName()] = []
+            for dep in deps:
+                ret_model_deps[_model.getName()].append(dep["referenced_table"])
+        else:
+            ret_model_deps[_model.getName()] = []
+    return ret_model_deps
 
 def dependency_resolve(node, resolved, unresolved):
     unresolved.append(node)
@@ -47,8 +30,9 @@ def dependency_resolve(node, resolved, unresolved):
     unresolved.remove(node)
 
 def resolveObliteration(dependencies):
+    """ resolve those who depend on me """
     obliterated = []
-    def __depends_on_me(me):
+    def __depends_on(me):
         depends_on_me = set()
         for them, deps in dependencies.iteritems():
             if me in deps and them is not me:
@@ -58,27 +42,37 @@ def resolveObliteration(dependencies):
         return ret if len(depends_on_me) > 0 else None
     def __resolve(me):
         if me in obliterated:
-            print "Hey, I'm " + me + " and I'm already dead :\\"
+            """ Hey, I'm me and I'm already dead :\\ """
             return
-        print "resolve " + me
-        print "look for those who depend on me:"
-        depends_on_me = __depends_on_me(me)
-        print repr(depends_on_me)
+        """ look for those who depend on me """
+        depends_on_me = __depends_on(me)
         if depends_on_me is None:
-            print "Oh noes! no one depends on me. commit suicide =("
+            """ Oh noes! no one depends on me. commit suicide =( """
             obliterated.append(me)
         else:
-            print "Some depend on me. Let's destroy them!"
+            """ Some guys depend on me. Let's destroy them! """
             for destroy_them in depends_on_me:
                 __resolve(destroy_them)
-        print "*"*80
-    for dep in dependencies:
-        __resolve(dep)
-    print "="*80
-    print "obliteration resolution"
-    print repr(obliterated)
+    for some_guy in dependencies:
+        __resolve(some_guy)
     return obliterated
 
 def resolveGeneration(dependencies):
-    obliterated = resolveObliteration(dependencies)
-    return obliterated.reverse()
+    """ resolve those who i depend on """
+    generated = []
+    def __append(me):
+        if me not in generated:
+            generated.append(me)
+    def __resolve(me, my_dependencies):
+        if len(my_dependencies) == 0:
+            """ i dont depend on anyone really """
+            __append(me)
+            return
+        """ resolve those who i depend on before i resolve myself """
+        for them in my_dependencies:
+            __resolve(them, dependencies[them])
+        """ now i have resolved my friends, so resolve myself """
+        __append(me)
+    for some_guy, their_dependencies in dependencies.iteritems():
+        __resolve(some_guy, their_dependencies)
+    return generated
