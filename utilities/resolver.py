@@ -30,6 +30,9 @@ def dependency_resolve(node, resolved, unresolved):
 def resolveObliteration(dependencies):
     """ resolve those who depend on me """
     obliterated = []
+    def __obliterate(me):
+        if me not in obliterated:
+            obliterated.append(me)
     def __depends_on(me):
         depends_on_me = set()
         for them, deps in dependencies.iteritems():
@@ -46,11 +49,13 @@ def resolveObliteration(dependencies):
         depends_on_me = __depends_on(me)
         if depends_on_me is None:
             """ Oh noes! no one depends on me. commit suicide =( """
-            obliterated.append(me)
+            __obliterate(me)
         else:
             """ Some guys depend on me. Let's destroy them! """
             for destroy_them in depends_on_me:
                 __resolve(destroy_them)
+        """ well, no one depends on me. commit suicide =( """
+        __obliterate(me)
     for some_guy in dependencies:
         __resolve(some_guy)
     return obliterated

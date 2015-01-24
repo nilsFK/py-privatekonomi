@@ -18,7 +18,17 @@ from core.model_context import ModelContext
 import core.db
 class TestUtilities(unittest.TestCase):
     def setUp(self):
-        pass
+        self.model_types = [
+            Account,
+            Provider,
+            Organization,
+            Currency,
+            TransactionCategory,
+            AccountCategory,
+            TransactionType,
+            Transaction,
+            Security
+        ]
 
     def test_resolver_resolve_dependecy_graph(self):
         a = Node('a')
@@ -47,18 +57,9 @@ class TestUtilities(unittest.TestCase):
     def test_model_resolver_resolveObliteration(self):
         core.db.DB().connect()
 
-        deps = resolver.getModelDependencies([
-            Account,
-            Provider,
-            Organization,
-            Currency,
-            TransactionCategory,
-            AccountCategory,
-            TransactionType,
-            Transaction,
-            Security
-        ])
+        deps = resolver.getModelDependencies(self.model_types)
         obliteration_order = resolver.resolveObliteration(deps)
+        self.assertEquals(len(self.model_types), len(obliteration_order))
         """
         resolution order can variate, so no asserts for now
         """
@@ -66,18 +67,9 @@ class TestUtilities(unittest.TestCase):
     def test_model_resolver_resolveGeneration(self):
         core.db.DB().connect()
 
-        deps = resolver.getModelDependencies([
-            Account,
-            Provider,
-            Organization,
-            Currency,
-            TransactionCategory,
-            AccountCategory,
-            TransactionType,
-            Transaction,
-            Security
-        ])
-        generated = resolver.resolveGeneration(deps)
+        deps = resolver.getModelDependencies(self.model_types)
+        generation_order = resolver.resolveGeneration(deps)
+        self.assertEquals(len(self.model_types), len(generation_order))
         """
         resolution order can variate, so no asserts for now
         """
