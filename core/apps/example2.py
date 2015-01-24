@@ -14,7 +14,7 @@ from core.mappers.account_mapper import AccountMapper
 from utilities import helper
 from utilities.common import decode
 from utilities import resolver
-from utilities.models import destroy_tables, create_tables
+from utilities.models import rebuild_tables
 from utilities import helper, common
 from sqlalchemy import MetaData
 import loader
@@ -28,8 +28,7 @@ def execute(sources, parser, formatter):
 def persist(output):
     core.db.DB().connect()
 
-    destroy_tables(AccountMapper.getModelNames())
-    models = create_tables(AccountMapper.getModelNames())
+    models = rebuild_tables(AccountMapper.getModelNames())
 
     # Insert all items
     models['organization'].insert([

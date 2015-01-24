@@ -44,3 +44,8 @@ def create_tables(model_names):
         model = model_type_mappings[generate]
         ret_models[generate] = model(context).generate()
     return ret_models
+
+def rebuild_tables(model_names):
+    destroy_tables(model_names)
+    models = create_tables(model_names)
+    return models
