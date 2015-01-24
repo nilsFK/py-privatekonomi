@@ -28,9 +28,8 @@ def execute(sources, parser, formatter):
 def persist(output):
     core.db.DB().connect()
 
-    model_names = AccountMapper.getModelNames()
-    destroy_tables(model_names)
-    models = create_tables(model_names)
+    destroy_tables(AccountMapper.getModelNames())
+    models = create_tables(AccountMapper.getModelNames())
 
     # Insert all items
     models['organization'].insert([
