@@ -12,7 +12,7 @@ from sqlalchemy.schema import (
 )
 import re
 import db
-from utilities.helper import get_model_name
+from utilities.models import get_model_name
 
 class Model(object):
     def __init__(self, context):

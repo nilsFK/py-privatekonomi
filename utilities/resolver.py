@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from core.model_context import ModelContext
-from core.models.account import Account
-from core.models.account_category import AccountCategory
 from core.node import Node
 
 def getModelDependencies(model_types):

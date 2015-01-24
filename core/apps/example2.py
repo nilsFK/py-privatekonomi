@@ -11,37 +11,13 @@ from core.models.provider import Provider
 from core.models.transaction import Transaction
 from core.models.security import Security
 from core.mappers.account_mapper import AccountMapper
+from utilities import helper
 from utilities.common import decode
 from utilities import resolver
-
+from utilities.models import destroy_tables, create_tables
 from utilities import helper, common
 from sqlalchemy import MetaData
-from core.model_context import ModelContext
 import loader
-
-def __get_models():
-    context = ModelContext()
-
-    # fetch models
-    models = loader.load_models(AccountMapper.getModelNames())
-    model_type_mappings = dict((k, v["type"]) for k,v in models.iteritems())
-    model_types = model_type_mappings.values()
-    model_deps = resolver.getModelDependencies(model_types)
-
-    # obliterate tables
-    obliteration_order = resolver.resolveObliteration(model_deps)
-    for obliterate in obliteration_order:
-        model = model_type_mappings[obliterate]
-        model(context).obliterate()
-
-    # generate tables
-    generation_order = resolver.resolveGeneration(model_deps)
-    context = ModelContext()
-    generated_models = {}
-    for generate in generation_order:
-        model = model_type_mappings[generate]
-        generated_models[generate] = model(context).generate()
-    return generated_models
 
 def execute(sources, parser, formatter):
     contents = helper.execute(sources, parser, formatter, True)
@@ -52,7 +28,9 @@ def execute(sources, parser, formatter):
 def persist(output):
     core.db.DB().connect()
 
-    models = __get_models()
+    model_names = AccountMapper.getModelNames()
+    destroy_tables(model_names)
+    models = create_tables(model_names)
 
     # Insert all items
     models['organization'].insert([

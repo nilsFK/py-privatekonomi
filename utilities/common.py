@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+common.py is common low-level functionality
+and should not import anything except for
+built in packages.
+"""
 import ntpath, time, codecs, re
 class Struct:
     def __init__(self, **entries):
