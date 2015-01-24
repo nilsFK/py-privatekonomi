@@ -47,10 +47,7 @@ def resolveObliteration(dependencies):
             return
         """ look for those who depend on me """
         depends_on_me = __depends_on(me)
-        if depends_on_me is None:
-            """ Oh noes! no one depends on me. commit suicide =( """
-            __obliterate(me)
-        else:
+        if depends_on_me is not None:
             """ Some guys depend on me. Let's destroy them! """
             for destroy_them in depends_on_me:
                 __resolve(destroy_them)
