@@ -53,8 +53,8 @@ def create_tables(model_names):
     ret_models = {}
     for generate in generation_order:
         model = model_type_mappings[generate]
-        ret_models[generate] = model(context).generate()
-    return ret_models
+        ret_models[get_model_name(str(generate))] = model(context).generate()
+    return common.as_obj(ret_models)
 
 def rebuild_tables(model_names):
     destroy_tables(model_names)

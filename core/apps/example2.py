@@ -1,26 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import core.db
-from core.models.account import Account
-from core.models.account_category import AccountCategory
-from core.models.transaction_category import TransactionCategory
-from core.models.transaction_type import TransactionType
-from core.models.currency import Currency
-from core.models.organization import Organization
-from core.models.provider import Provider
-from core.models.transaction import Transaction
-from core.models.security import Security
 from core.mappers.account_mapper import AccountMapper
 from utilities import helper
 from utilities.common import decode
 from utilities import resolver
 from utilities.models import rebuild_tables
 from utilities import helper, common
-from sqlalchemy import MetaData
 import loader
 
+"""
+    This app extends the functionality of example1.py
+    by adding another function: persist(), which is the
+    main ground to persist output data to the database.
+    Note that we are all ready connected to the database
+    when we enter the persist function and the only thing
+    we have to bother about is how to insert that data to
+    the database.
+"""
+
 def execute(sources, parser, formatter):
-    contents = helper.execute(sources, parser, formatter, True)
+    contents = helper.execute(sources, parser, formatter, False)
     for content in contents:
         print content
     return content
@@ -29,7 +30,7 @@ def persist(output):
     models = rebuild_tables(AccountMapper.getModelNames())
 
     # Insert all items
-    models['organization'].insert([
+    models.Organization.insert([
         {
             'name' : 'Swedbank'
         },
@@ -38,7 +39,7 @@ def persist(output):
         }
     ])
 
-    models['provider'].insert([
+    models.Provider.insert([
         {
             'name' : 'Collector'
         },
@@ -47,7 +48,7 @@ def persist(output):
         }
     ])
 
-    models['currency'].insert([
+    models.Currency.insert([
         {
             'code' : 'SEK',
             'symbol' : 'kr',
@@ -60,7 +61,7 @@ def persist(output):
         }
     ])
 
-    models['account_category'].insert([
+    models.AccountCategory.insert([
         {
         'name' : u'Lönekonto'
         },
@@ -69,7 +70,7 @@ def persist(output):
         }
     ])
 
-    models['account'].insert([
+    models.Account.insert([
         {
             'name' : u'Mitt Lönekonto',
             'account_code' : '123-123',
@@ -92,7 +93,7 @@ def persist(output):
         }
     ])
 
-    models['transaction_type'].insert([
+    models.TransactionType.insert([
         {
             'name' : u'Insättning',
         },
@@ -104,7 +105,7 @@ def persist(output):
         }
     ])
 
-    models['transaction_category'].insert([
+    models.TransactionCategory.insert([
         {
             'name' : 'Donationer'
         },
@@ -119,7 +120,7 @@ def persist(output):
         }
     ])
 
-    models['transaction'].insert([
+    models.Transaction.insert([
         {
             'group' : 1,
             'accounting_date' : '2015-01-20',
@@ -167,25 +168,25 @@ def persist(output):
     ])
 
     # Update a few items
-    models['transaction'].update({
+    models.Transaction.update({
         'amount' : -6.66,
         'accounting_date' : '2015-01-18'
-    }, models['transaction'].col('id').in_([1,2]))
+    }, models.Transaction.col('id').in_([1,2]))
 
     # Delete a couple of items
-    models['provider'].delete(models['provider'].col('id')==1)
+    models.Provider.delete(models.Provider.col('id')==1)
 
     # Get some items
-    transactions = models['transaction'].selectAll()
+    transactions = models.Transaction.selectAll()
     for t in transactions:
-        print "id:", t[models['transaction'].col('id')]
-        print "group:", t[models['transaction'].col('group')]
-        print "accounting_date:", t[models['transaction'].col('accounting_date')]
-        print "transaction_date:", t[models['transaction'].col('transaction_date')]
-        print "amount:", t[models['transaction'].col('amount')]
-        print "reference:", decode(t[models['transaction'].col('reference')])
-        print "account_id:", t[models['transaction'].col('account_id')]
-        print "transaction_category_id:", t[models['transaction'].col('transaction_category_id')]
-        print "transaction_type_id:", t[models['transaction'].col('transaction_type_id')]
-        print "currency_id:", t[models['transaction'].col('currency_id')]
+        print "id:", t[models.Transaction.col('id')]
+        print "group:", t[models.Transaction.col('group')]
+        print "accounting_date:", t[models.Transaction.col('accounting_date')]
+        print "transaction_date:", t[models.Transaction.col('transaction_date')]
+        print "amount:", t[models.Transaction.col('amount')]
+        print "reference:", decode(t[models.Transaction.col('reference')])
+        print "account_id:", t[models.Transaction.col('account_id')]
+        print "transaction_category_id:", t[models.Transaction.col('transaction_category_id')]
+        print "transaction_type_id:", t[models.Transaction.col('transaction_type_id')]
+        print "currency_id:", t[models.Transaction.col('currency_id')]
         print "-"*80
