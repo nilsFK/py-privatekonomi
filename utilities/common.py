@@ -50,13 +50,7 @@ def append_file(file_path, content):
         f.write(content)
 
 def format_time_struct(time_struct, format='%Y-%m-%d'):
-    try:
-        formatted_time = time.strftime(format, time_struct)
-        return formatted_time
-    except TypeError as e:
-        print(repr(time_struct))
-        raise e
-
+    return time.strftime(format, time_struct)
 
 def is_unicode(s):
     return isinstance(s, unicode)
