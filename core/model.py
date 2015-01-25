@@ -115,10 +115,19 @@ class Model(object):
         result = self.execute(stmt)
         return result
 
-    def selectValue(self, columns=None, whereclause=None):
-        """ TODO: Implement """
-        pass
+    def selectValue(self, column, whereclause=None):
+        result = self.selectOne([self.col(column)], whereclause)
+        for res in result:
+            return res[self.col(column)]
+        else:
+            return False
+        return False
 
     def selectOne(self, columns=None, whereclause=None):
-        """ TODO: Implement """
-        pass
+        stmt = select(columns=columns, whereclause=whereclause).limit(1)
+        result = self.execute(stmt)
+        return result
+
+    def existsBy(self, by_col, by_val):
+        select_value = self.selectValue(by_col, self.col(by_col) == by_val)
+        return select_value is not False

@@ -11,7 +11,7 @@ class Account(BaseModel):
                 Column('name', String(255), nullable=False),
                 Column('account_code', String(16), nullable=False),
                 Column('account_number', String(32), nullable=False),
-                Column('current_balance', Numeric(precision=16, scale=2), nullable=False),
+                Column('current_balance', Numeric(precision=16, scale=2), nullable=False, default=0.0),
                 Column('future_balance', Numeric(precision=16, scale=2), nullable=True),
                 Column('account_category_id', Integer, nullable=False),
                 Column('organization_id', Integer, nullable=False),

@@ -53,7 +53,6 @@ class SwedbankFormatter(AccountFormatter):
         """ Summa """
         return super(SwedbankFormatter, self)._format_currency(content)
 
-    @AccountMapper("Transaction", "balance")
     def format_balance(self, content, subformatter):
         """ Belopp """
         return super(SwedbankFormatter, self)._format_currency(content)
