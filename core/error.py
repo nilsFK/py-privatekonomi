@@ -32,3 +32,15 @@ class MapperError(BaseError):
         self.capture_data = capture_data
     def __str__(self):
         pass
+
+class MissingAppFunctionError(BaseError):
+    def __init__(self, message="", capture_data = {}):
+        message = "App is missing function: %(fun_name)s (%(app)s)" % {
+            'fun_name' : repr(capture_data['fun_name']),
+            'app' : repr(capture_data['app'])
+        }
+        super(MissingAppFunctionError, self).__init__(message)
+        self.capture_data = capture_data
+        self.message=message
+    def __str__(self):
+        return self.message
