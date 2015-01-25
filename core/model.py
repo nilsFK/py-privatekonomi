@@ -67,6 +67,8 @@ class Model(object):
         return inspector.get_foreign_keys(table_name)
 
     def obliterate(self):
+        if db.DB().hasConfig('prefix'):
+            self.ref.name = db.DB().getConfig('prefix') + "_" + self.ref.name
         if not db.DB().getEngine().has_table(self.ref.name):
             return self
 
