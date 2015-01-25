@@ -5,6 +5,17 @@ from utilities import resolver
 import common
 from core.model_context import ModelContext
 
+"""
+    Collects a variety of functions to help with models.
+
+    Terminology:
+    ============
+    model_name: Name of a model, e.g. Transaction, Account, TransactionCategory, etc.
+    model_names: Collection of model_name, usually list
+    table_name: Name of a table, e.g. transaction, account, transaction_category, etc.
+    table_names: Collection of table_name, usually list
+"""
+
 def get_model_name(table_name):
     return common.underscore_to_camelcase(table_name)
 

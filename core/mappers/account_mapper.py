@@ -4,7 +4,6 @@ from core.error import MapperError
 import pprint
 """
      AccountMapper limits decorations to known core models
-     (presently hard-coded into the constructor).
      Usage outside of these core models will cause an exception
 """
 class AccountMapper(object):

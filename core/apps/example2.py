@@ -26,8 +26,6 @@ def execute(sources, parser, formatter):
     return content
 
 def persist(output):
-    core.db.DB().connect()
-
     models = rebuild_tables(AccountMapper.getModelNames())
 
     # Insert all items

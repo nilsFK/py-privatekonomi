@@ -61,7 +61,9 @@ class TestUtilities(unittest.TestCase):
         obliteration_order = resolver.resolveObliteration(deps)
         self.assertEquals(len(self.model_types), len(obliteration_order))
         """
-        resolution order can variate, so no asserts for now
+        obliteration order can variate between models, i.e. it's not
+        deterministic, so we can't assert their positions within
+        obliteration_order
         """
 
     def test_model_resolver_resolveGeneration(self):
@@ -71,7 +73,9 @@ class TestUtilities(unittest.TestCase):
         generation_order = resolver.resolveGeneration(deps)
         self.assertEquals(len(self.model_types), len(generation_order))
         """
-        resolution order can variate, so no asserts for now
+        generation order can variate between models, i.e. it's not
+        deterministic, so we can't assert their positions within
+        generation_order
         """
 
 if __name__ == '__main__':

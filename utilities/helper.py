@@ -3,6 +3,7 @@
 
 from core.factories.account_formatter_factory import AccountFormatterFactory
 from core.factories.account_parser_factory import AccountParserFactory
+import core.db
 from utilities import common
 import sys
 import pprint
@@ -16,6 +17,7 @@ def get_formatter(acc_type):
 def execute_app(app):
     content = app['module'].execute(app['sources'], app['parser'], app['formatter'])
     if app['persist']:
+        core.db.DB().connect()
         app['module'].persist(content)
     return content
 
