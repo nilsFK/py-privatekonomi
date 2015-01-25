@@ -13,6 +13,9 @@ class Struct:
 def as_obj(to_obj):
     return Struct(**to_obj)
 
+def as_dict(from_obj):
+    return from_obj.__dict__
+
 def singleton(cls):
     obj = cls()
     # Always return the same object

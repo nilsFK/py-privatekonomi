@@ -14,10 +14,14 @@ from core.model_context import ModelContext
     model_names: Collection of model_name, usually list
     table_name: Name of a table, e.g. transaction, account, transaction_category, etc.
     table_names: Collection of table_name, usually list
+    model_struct: A common.Struct with the key being the name of the model, e.g:
+            models = rebuild_tables(AccountMapper.getModelNames())
+            models.Transaction.insert(...)
+        can be converted back to dict using common.as_dict(models)
 """
 
 def get_model_name(table_name):
-    return common.underscore_to_camelcase(table_name)
+    return common.underscore_to_camelcase(str(table_name))
 
 def get_table_name(model_name):
     return common.camelcase_to_underscore(model_name)
@@ -32,6 +36,13 @@ def get_model_dependencies(model_names):
     model_types = model_type_mappings.values()
     model_deps = resolver.getModelDependencies(model_types)
     return model_deps
+
+def get_dependency_order(model_struct):
+    model_names = common.as_dict(model_struct)
+    model_deps = get_model_dependencies(model_names)
+    generation_order = resolver.resolveGeneration(model_deps)
+    generation_order = [get_model_name(generate) for generate in generation_order]
+    return generation_order
 
 def destroy_tables(model_names):
     context = ModelContext()
@@ -53,7 +64,7 @@ def create_tables(model_names):
     ret_models = {}
     for generate in generation_order:
         model = model_type_mappings[generate]
-        ret_models[get_model_name(str(generate))] = model(context).generate()
+        ret_models[get_model_name(generate)] = model(context).generate()
     return common.as_obj(ret_models)
 
 def rebuild_tables(model_names):
