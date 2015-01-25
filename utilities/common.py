@@ -50,7 +50,13 @@ def append_file(file_path, content):
         f.write(content)
 
 def format_time_struct(time_struct, format='%Y-%m-%d'):
-    return time.strftime(format, time_struct)
+    try:
+        formatted_time = time.strftime(format, time_struct)
+        return formatted_time
+    except TypeError as e:
+        print(repr(time_struct))
+        raise e
+
 
 def is_unicode(s):
     return isinstance(s, unicode)
@@ -86,3 +92,15 @@ def underscore_to_camelcase(name):
 
     c = camelcase()
     return "".join(c.next()(x) if x else '_' for x in name.split("_"))
+
+def is_string(string):
+    """ should work in both 2.7+ and 3+ """
+    is_string_ = False
+    if isinstance(string, str):
+        is_string_ = True
+    try:
+        if isinstance(s, basestring):
+            is_string_ = True
+    except NameError:
+        pass
+    return is_string_

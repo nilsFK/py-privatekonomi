@@ -121,12 +121,17 @@ def __manage_transaction(models, transaction_data, resolved_dependencies_data):
         'transaction_category_id' : resolved_dependencies_data["TransactionCategory"],
         'transaction_type_id' : resolved_dependencies_data["TransactionType"],
         'currency_id' : resolved_dependencies_data["Currency"],
-        'transaction_date' : common.format_time_struct(transaction_data["transaction_date"])
     })
+    if 'transaction_date' in transaction_data:
+        if not common.is_string(transaction_data['transaction_date']):
+            transaction_data.update({
+                'transaction_date' : common.format_time_struct(transaction_data['transaction_date'])
+            })
     if 'accounting_date' in transaction_data:
-        transaction_data.update({
-            'accounting_date' : common.format_time_struct(transaction_data['accounting_date'])
-        })
+        if not common.is_string(transaction_data['accounting_date']):
+            transaction_data.update({
+                'accounting_date' : common.format_time_struct(transaction_data['accounting_date'])
+            })
     if 'reference' not in transaction_data:
         transaction_data['reference'] = ''
     transaction_id = models.Transaction.create(transaction_data)
