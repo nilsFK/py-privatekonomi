@@ -34,7 +34,7 @@ class AccountMapper(object):
             model_attr = self.model_attr if (self.model_attr is not None) else subformatter
             formatted_content = formatter_func(*args)
             if self.model_name not in AccountMapper.getModelNames():
-                raise MapperError(errors={
+                raise MapperError(capture_data={
                     'model_name' : self.model_name,
                     'subformatter' : model_attr,
                     'valid_model_names' : AccountMapper.getModelNames()
