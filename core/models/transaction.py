@@ -13,7 +13,7 @@ class Transaction(BaseModel):
                 Column('accounting_date', Date, nullable=True),
                 Column('transaction_date', Date, nullable=False),
                 Column('amount', Numeric(precision=16, scale=2), nullable=False),
-                Column('reference', String (512), nullable=False),
+                Column('reference', String(512), nullable=False),
                 Column('account_id', Integer, nullable=False),
                 Column('transaction_category_id', Integer, nullable=True),
                 Column('transaction_type_id', Integer, nullable=False),

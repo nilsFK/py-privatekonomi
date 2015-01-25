@@ -65,6 +65,10 @@ def __manage_account(models, account_data, resolved_dependencies_data):
             account_data.update({
                 'provider_id' : resolved_dependencies_data["Provider"]
             })
+        if "account_number" not in account_data:
+            account_data["account_number"] = ""
+        if "account_code" not in account_data:
+            account_data["account_code"] = ""
         account_id = models.Account.create(account_data)
     if account_id is None:
         account_id = models.Account.getValue('id', 'name', account_data["name"])
@@ -84,7 +88,6 @@ def __manage_transaction_type(models, transaction_type_data, resolved_dependenci
     if transaction_type_id is None:
         transaction_type_id = models.TransactionType.getValue('id', 'name', name)
     return transaction_type_id
-
 
 def __manage_currency(models, currency_data, resolved_dependencies_data):
     currency_id = None
@@ -124,6 +127,8 @@ def __manage_transaction(models, transaction_data, resolved_dependencies_data):
         transaction_data.update({
             'accounting_date' : common.format_time_struct(transaction_data['accounting_date'])
         })
+    if 'reference' not in transaction_data:
+        transaction_data['reference'] = ''
     transaction_id = models.Transaction.create(transaction_data)
     return transaction_id
 
