@@ -16,7 +16,7 @@ from utilities.models import get_model_name
 
 class Model(object):
     def __init__(self, context):
-        self.context = context
+            self.context = context
 
     def getRef(self):
         return self.ref
@@ -27,9 +27,14 @@ class Model(object):
     def getName(self):
         return self.ref.name
 
+    def getNormalizedName(self):
+        return self.__normalized_name
+
     def generate(self):
         if db.DB().hasConfig('prefix'):
-            self.ref.name = db.DB().getConfig('prefix') + "_" + self.ref.name
+            self.__prefix = db.DB().getConfig('prefix')
+            self.__normalized_name = self.ref.name
+            self.ref.name = self.__prefix + "_" + self.ref.name
         self.ref.create(db.DB().getEngine(), checkfirst=True)
         return self
 

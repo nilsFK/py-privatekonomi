@@ -101,5 +101,3 @@ def load_models(model_names):
             'model_name' : model_name
         }
     return models
-
-
