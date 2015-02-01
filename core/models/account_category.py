@@ -8,5 +8,5 @@ class AccountCategory(BaseModel):
         super(AccountCategory, self).__init__(
             Table('account_category', context.metadata,
                 Column('id', Integer, primary_key=True),
-                Column('name', String(128), nullable=False)
+                Column('name', String(128), nullable=False, unique=True)
         ), context)

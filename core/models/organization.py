@@ -8,5 +8,5 @@ class Organization(BaseModel):
         super(Organization, self).__init__(
             Table('organization', context.metadata,
                 Column('id', Integer, primary_key=True),
-                Column('name', String(128), nullable=False)
+                Column('name', String(128), nullable=False, unique=True)
         ), context)
