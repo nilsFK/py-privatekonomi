@@ -5,43 +5,35 @@ from utilities.models import get_table_name
 from utilities import common
 from sys import exit
 import sys
+from core.buffer import Buffer
+from core.model_container import ModelContainer
 """
     A base class for resolving models
 """
 
-orig_stdout = sys.stdout
-f = file("C:\\Users\\nils\\Desktop\\out.txt", "w")
-sys.stdout = f
+save_to_output = True
+
+if save_to_output:
+    orig_stdout = sys.stdout
+    f = file("C:\\out.txt", "w")
+    sys.stdout = f
 
 class Persist(object):
     def __init__(self, models):
         self._models = models
         self.__dependencies = models_utility.get_model_dependencies_struct(self._models)
         self._filler_data = {}
-        self.__buffer_capacity = {}
-        self.__buffer_storage = {}
+        self.__buffer = Buffer()
+        self.__model_container = ModelContainer([])
         self._inserted_ids = {}
 
     def buffer(self, model, n):
-        """
-        How many inserts should be buffered at a time
-        before persisting to database? Decided by n.
-        """
-        if n < 1: n = 1
-        self.__buffer_capacity[model.getNormalizedName()] = n
-        self.__buffer_storage[model.getNormalizedName()] = []
+        self.__buffer.buffer(model.getNormalizedName(), n)
 
     def __buffer_store(self, model_name, model_data):
-        print "Can we buffer:", repr(model_data)
-        if model_data is not None:
-            table_name = get_table_name(model_name)
-            if table_name not in self.__buffer_storage:
-                self.__buffer_storage[table_name] = []
-            self.__buffer_storage[table_name].append(model_data)
-            print("Buffered", table_name, "to", len(self.__buffer_storage[table_name]))
-            print("Buffer now contains:", repr(self.__buffer_storage[table_name]))
+        self.__buffer.store(get_table_name(model_name), model_data)
 
-    def __check_dependencies(self, table_name, dependencies):
+    def __build_dependencies(self, table_name, dependencies):
         deps = set()
         for dep_table, dep_table_depends_on in dependencies.iteritems():
             if table_name != dep_table and table_name in dep_table_depends_on:
@@ -50,10 +42,10 @@ class Persist(object):
 
     def __resolve_buffers(self, model_name, force_resolve):
         table_name = get_table_name(model_name)
-        buffer_stored = len(self.__buffer_storage[table_name]) if table_name in self.__buffer_storage else 0
-        buffer_capacity = self.__buffer_capacity[table_name] if table_name in self.__buffer_capacity else 0
+        buffer_stored = self.__buffer.stored(table_name)
+        buffer_capacity = self.__buffer.capacity(table_name)
         i_depend_on = self.__dependencies[table_name]
-        depends_on_me = self.__check_dependencies(table_name, self.__dependencies)
+        depends_on_me = self.__build_dependencies(table_name, self.__dependencies)
         print "Hello, I am", table_name
         print "I depend on:", repr(i_depend_on)
         print "Buffer stored:", buffer_stored
@@ -62,7 +54,7 @@ class Persist(object):
         print "Who depends on me?:", repr(depends_on_me)
         dependant_buffers = False
         for dep in depends_on_me:
-            if dep in self.__buffer_storage:
+            if self.__buffer.has(dep):
                 print dep, "has buffers"
                 dependant_buffers = True
                 break
@@ -83,23 +75,21 @@ class Persist(object):
                 self.__resolve_buffers(dependency, True)
             print "Control has been given back to:", table_name
             print "<"*40
-            if table_name in self.__buffer_storage and \
-                buffer_stored > 0:
+            if self.__buffer.has(table_name) and buffer_stored > 0:
                 self.__persist(table_name)
             else:
                 print "Well, I don't have anything to persist. Next."
                 pass
-        # exit(1)
 
     def _hasFiller(self, model):
         return model.getNormalizedName() in self._filler_data
 
     def __persist(self, table_name):
         print "!"*80
-        print("Persisting:", table_name, repr(self.__buffer_storage[table_name]))
+        print("Persisting:", table_name, self.__buffer.get(table_name))
         print "!"*80
         print(repr(self._inserted_ids[table_name]))
-        persist_data = self.__buffer_storage[table_name]
+        persist_data = self.__buffer.get(table_name)
         if ("id" in persist_data[0] and persist_data[0]["id"] not in self._inserted_ids[table_name]) \
             or ("id" not in persist_data[0]):
                 id_ = self._model_data[models_utility.get_model_name(table_name)]["model_struct"].create(persist_data)
@@ -108,8 +98,7 @@ class Persist(object):
             print "This has already been created"
             pass
         print "Clearing buffer storage for", table_name
-
-        self.__buffer_storage[table_name] = []
+        self.__buffer.clear_storage(table_name)
         if "id" in persist_data[0] and persist_data[0]["id"] not in self._inserted_ids[table_name]:
             self._inserted_ids[table_name].add(persist_data[0]["id"])
 
@@ -150,6 +139,7 @@ class Persist(object):
                 resolved_row = getattr(self, "_resolve_%s" % self._model_data[model_name]["table_name"])(model_data, resolved_dependency_data)
                 generated_data[model_name].append(resolved_row)
                 resolved_dependency_data[model_name] = resolved_row
+
                 self.__buffer_store(model_name, resolved_row)
                 self.__resolve_buffers(model_name, False)
                 print "-"*40
@@ -159,5 +149,6 @@ class Persist(object):
         print "we have now analyzed all data, let's resolve remaining buffers if any"
         self.__resolve_buffers(dependency_order[-1], True)
         print "***** DONE! *****"
-        sys.stdout = orig_stdout
-        f.close()
+        if save_to_output:
+            sys.stdout = orig_stdout
+            f.close()

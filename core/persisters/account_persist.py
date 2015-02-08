@@ -46,6 +46,7 @@ class AccountPersist(Persist):
         if 'accounting_date' in transaction_data:
             transaction_data["accounting_date"] = common.format_time_struct(transaction_data["accounting_date"])
         transaction_data["transaction_date"] = common.format_time_struct(transaction_data["transaction_date"])
+        print("Constructed transaction data:", transaction_data)
         return transaction_data
 
     def _resolve_transaction_category(self, transaction_category_data, dependency_data):

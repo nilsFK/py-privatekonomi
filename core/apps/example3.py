@@ -60,9 +60,9 @@ def __persist(content, models):
         'country' : 'SE'
     }, 'id')
 
-    # transaction_type = models.TransactionType.createAndGet({
-    #     'name' : u'Okänd'
-    # }, 'id')
+    transaction_type = models.TransactionType.createAndGet({
+        'name' : u'Okänd'
+    }, 'id')
 
     account_persist = AccountPersist(models)
     # account_persist.buffer(models.Transaction, 100)
@@ -98,9 +98,9 @@ def __persist(content, models):
             currency, ['id', 'code', 'symbol', 'country']
     )[0])
 
-    # account_persist.fillDataGap(models.TransactionType,
-    #     models.TransactionType.getResults(
-    #         transaction_type, ['id', 'name']
-    # )[0])
+    account_persist.fillDataGap(models.TransactionType,
+        models.TransactionType.getResults(
+            transaction_type, ['id', 'name']
+    )[0])
 
     account_persist.persist(content)
