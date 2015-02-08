@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy import MetaData
 from utilities import common
+from utilities.models import get_table_name
+from utilities.models import get_model_name
 
 """
 A container class for models
@@ -25,8 +27,25 @@ Internally keys are stored as table names
 """
 class ModelContainer(object):
     def __init__(self, models):
-        self.__models = models
+        self.__models = common.as_dict(models)
 
-    def lookup(lookup_by):
+    def lookup(self, lookup_by):
+        lookup = get_table_name(lookup_by)
+        return self.__models[get_model_name(lookup)]
+
+    def asTableName(self, model):
+        if common.is_string(model):
+            model_name = model
+        else:
+            model_name = model.getNormalizedName()
+        return get_table_name(model_name)
+
+    def asModelName(self, model):
         pass
+
+    def all(self):
+        return common.as_obj(self.__models)
+
+    def internal(self):
+        return self.__models
 

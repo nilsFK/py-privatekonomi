@@ -50,7 +50,7 @@ class AccountPersist(Persist):
         return transaction_data
 
     def _resolve_transaction_category(self, transaction_category_data, dependency_data):
-        if transaction_category_data is None and self._hasFiller(self._models.TransactionCategory):
+        if transaction_category_data is None and self._hasFiller(self._models.lookup("TransactionCategory")):
             return self._filler_data['transaction_category']
         elif transaction_category_data:
             return transaction_category_data
@@ -58,7 +58,7 @@ class AccountPersist(Persist):
             return None
 
     def _resolve_transaction_type(self, transaction_type_data, dependency_data):
-        if transaction_type_data is None and self._hasFiller(self._models.TransactionType):
+        if transaction_type_data is None and self._hasFiller(self._models.lookup("TransactionType")):
             return self._filler_data['transaction_type']
         elif transaction_type_data:
             return transaction_type_data
@@ -66,7 +66,7 @@ class AccountPersist(Persist):
             return None
 
     def _resolve_organization(self, organization_data, dependency_data):
-        if organization_data is None and self._hasFiller(self._models.Organization):
+        if organization_data is None and self._hasFiller(self._models.lookup("Organization")):
             return self._filler_data['organization']
         elif organization_data:
             return organization_data
@@ -74,7 +74,7 @@ class AccountPersist(Persist):
             return None
 
     def _resolve_provider(self, provider_data, dependency_data):
-        if provider_data is None and self._hasFiller(self._models.Provider):
+        if provider_data is None and self._hasFiller(self._models.lookup("Provider")):
             return self._filler_data['provider']
         elif provider_data:
             return provider_data
@@ -82,7 +82,7 @@ class AccountPersist(Persist):
             return None
 
     def _resolve_account_category(self, account_category_data, dependency_data):
-        if account_category_data is None and self._hasFiller(self._models.AccountCategory):
+        if account_category_data is None and self._hasFiller(self._models.lookup("AccountCategory")):
             return self._filler_data['account_category']
         elif account_category_data:
             return account_category_data
@@ -90,7 +90,7 @@ class AccountPersist(Persist):
             return None
 
     def _resolve_account(self, account_data, dependency_data):
-        if account_data is None and self._hasFiller(self._models.Account):
+        if account_data is None and self._hasFiller(self._models.lookup("Account")):
             return self._filler_data['account']
         elif account_data:
             account_data['account_category_id'] = dependency_data['AccountCategory']["id"]
@@ -102,7 +102,7 @@ class AccountPersist(Persist):
             return None
 
     def _resolve_currency(self, currency_data, dependency_data):
-        if currency_data is None and self._hasFiller(self._models.Currency):
+        if currency_data is None and self._hasFiller(self._models.lookup("Currency")):
             return self._filler_data['currency']
         elif currency_data:
             return currency_data

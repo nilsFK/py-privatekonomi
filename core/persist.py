@@ -11,7 +11,7 @@ from core.model_container import ModelContainer
     A base class for resolving models
 """
 
-save_to_output = True
+save_to_output = False
 
 if save_to_output:
     orig_stdout = sys.stdout
@@ -20,18 +20,17 @@ if save_to_output:
 
 class Persist(object):
     def __init__(self, models):
-        self._models = models
-        self.__dependencies = models_utility.get_model_dependencies_struct(self._models)
+        self.__dependencies = models_utility.get_model_dependencies_struct(models)
         self._filler_data = {}
         self.__buffer = Buffer()
-        self.__model_container = ModelContainer([])
+        self._models = ModelContainer(models)
         self._inserted_ids = {}
 
     def buffer(self, model, n):
-        self.__buffer.buffer(model.getNormalizedName(), n)
+        self.__buffer.buffer(self._models.asTableName(model), n)
 
     def __buffer_store(self, model_name, model_data):
-        self.__buffer.store(get_table_name(model_name), model_data)
+        self.__buffer.store(self._models.asTableName(model_name), model_data)
 
     def __build_dependencies(self, table_name, dependencies):
         deps = set()
@@ -41,7 +40,7 @@ class Persist(object):
         return list(deps)
 
     def __resolve_buffers(self, model_name, force_resolve):
-        table_name = get_table_name(model_name)
+        table_name = self._models.asTableName(model_name)
         buffer_stored = self.__buffer.stored(table_name)
         buffer_capacity = self.__buffer.capacity(table_name)
         i_depend_on = self.__dependencies[table_name]
@@ -82,7 +81,7 @@ class Persist(object):
                 pass
 
     def _hasFiller(self, model):
-        return model.getNormalizedName() in self._filler_data
+        return self._models.asTableName(model) in self._filler_data
 
     def __persist(self, table_name):
         print "!"*80
@@ -103,7 +102,7 @@ class Persist(object):
             self._inserted_ids[table_name].add(persist_data[0]["id"])
 
     def fillDataGap(self, model, data):
-        table_name = model.getNormalizedName()
+        table_name = self._models.asTableName(model)
         model_name = models_utility.get_model_name(table_name)
         self._filler_data[table_name] = data
         if table_name not in self._inserted_ids:
@@ -112,19 +111,20 @@ class Persist(object):
 
     def persist(self, content):
         generated_data = {}
-        dependency_order = models_utility.get_dependency_order(self._models)
+        dependency_order = models_utility.get_dependency_order(self._models.all())
 
         self._model_data = {}
-        for model, value in common.as_dict(self._models).iteritems():
-            print model
+        for model_name, value in self._models.internal().iteritems():
+            print model_name
             data = {}
             data["model_struct"] = value
-            data["model_name"] = model
-            data["table_name"] = models_utility.get_table_name(model)
+            data["model_name"] = model_name
+            data["table_name"] = models_utility.get_table_name(model_name)
+            # data["table_name"] = self._models.asTableName(model_name)
             data["model_type"] = type(value)
             self._model_data[data["model_name"]] = data
-            if models_utility.get_table_name(model) not in self._inserted_ids:
-                self._inserted_ids[models_utility.get_table_name(model)] = set()
+            if data["table_name"] not in self._inserted_ids:
+                self._inserted_ids[data["table_name"]] = set()
 
         print(repr(dependency_order))
         for model_name in dependency_order:
