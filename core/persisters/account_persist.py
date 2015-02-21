@@ -2,11 +2,6 @@
 # -*- coding: utf-8 -*-
 from core.persist import Persist
 from utilities import common
-# import utilities.models as models_utility
-"""
-    A base class for resolving models into database
-    Uses buffer to optimize bulk inserts
-"""
 
 class AccountPersist(Persist):
     def __init__(self, models):
@@ -96,12 +91,12 @@ class AccountPersist(Persist):
             account_data['account_category_id'] = dependency_data['AccountCategory']["id"]
             account_data['organization_id'] = dependency_data['Organization']["id"]
             account_data['provider_id'] = dependency_data['Provider']["id"]
-            # print(repr(account_data))
             return account_data
         else:
             return None
 
     def _resolve_currency(self, currency_data, dependency_data):
+        self._log("checking for currency_data: " + repr(currency_data))
         if currency_data is None and self._hasFiller(self._models.lookup("Currency")):
             return self._filler_data['currency']
         elif currency_data:
