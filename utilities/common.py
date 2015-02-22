@@ -73,6 +73,16 @@ def decode(val):
             pass
     return val
 
+__unicode = unicode
+def unicode(val):
+    try:
+        val = __unicode(val)
+        return val
+    except UnicodeDecodeError:
+        # Already unicode
+        return val
+    raise Exception("Invalid unicode: " + val)
+
 def camelcase_to_underscore(name):
     """ CamelCase to camel_case """
     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)

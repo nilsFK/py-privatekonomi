@@ -7,8 +7,9 @@ from sys import exit
 import sys
 from core.buffer import Buffer
 from core.model_container import ModelContainer
+
 """
-    A base class for resolving models
+    A base class for resolving models and persisting data to database
 """
 
 class Persist(object):
@@ -17,7 +18,8 @@ class Persist(object):
         self._filler_data = {}
         self.__buffer = Buffer()
         self._models = ModelContainer(models)
-        self._inserted_ids = {}
+        self._inserted = {}
+        self._use_log = False
 
     def buffer(self, model, n):
         self.__buffer.buffer(self._models.asTableName(model), n)
@@ -26,12 +28,42 @@ class Persist(object):
         table_name = self._models.asTableName(model)
         model_name = models_utility.get_model_name(table_name)
         self._filler_data[table_name] = data
-        if table_name not in self._inserted_ids:
-            self._inserted_ids[table_name] = set()
-        self._inserted_ids[table_name].add(data["id"])
+        if table_name not in self._inserted:
+            self._inserted[table_name] = []
+        # print(repr(table_name))
+        # print(repr(data))
+        # print(repr(self._inserted))
+        self.__insert(table_name, data)
+
+    def __insert(self, table, data):
+        known_identifiers = ["id", "name", "code"]
+        insertion_point = self._inserted[table]
+        self._log("Inserting data:")
+        self._log(table, data)
+        self._log("inserted for " + table + " at this point:")
+        self._log(insertion_point)
+
+        insertion_point.append(data)
+
+    def __is_inserted(self, table_name, by_key, by_val):
+        self._log("__is_inserted")
+        insertion_point = self._inserted[table_name]
+        self._log("rummaging through:")
+        self._log(insertion_point)
+        for next_ins in self._inserted[table_name]:
+            self._log("comparing " + repr(common.unicode(common.decode(next_ins[by_key])))
+                + " with " + repr(common.unicode(by_val)))
+            if by_key in next_ins and common.unicode(common.decode(next_ins[by_key])) == common.unicode(by_val):
+                return True
+        return False
+
+
+    def useLogging(self, use):
+        self._use_log = use
 
     def persist(self, content):
-        generated_data = {}
+        self._log("initial inserted data:")
+        self._log(self._inserted)
         dependency_order = models_utility.get_dependency_order(self._models.all())
 
         self._model_data = {}
@@ -43,12 +75,9 @@ class Persist(object):
             data["table_name"] = models_utility.get_table_name(model_name)
             data["model_type"] = type(value)
             self._model_data[data["model_name"]] = data
-            if data["table_name"] not in self._inserted_ids:
-                self._inserted_ids[data["table_name"]] = set()
+            if data["table_name"] not in self._inserted:
+                self._inserted[data["table_name"]] = []
 
-        self._log(repr(dependency_order))
-        for model_name in dependency_order:
-            generated_data[model_name] = []
         for data in content:
             resolved_row = []
             resolved_dependency_data = {} # <-- resolved so far in the dependency order
@@ -58,7 +87,6 @@ class Persist(object):
 
                 model_data = data[model_name] if model_name in data else None
                 resolved_row = getattr(self, "_resolve_%s" % self._model_data[model_name]["table_name"])(model_data, resolved_dependency_data)
-                generated_data[model_name].append(resolved_row)
                 resolved_dependency_data[model_name] = resolved_row
 
                 self.__buffer_store(model_name, resolved_row)
@@ -72,8 +100,9 @@ class Persist(object):
         self._log("***** DONE! *****")
 
     def _log(self, *msg):
-        for m in msg:
-            print m
+        if self._use_log is True:
+            for m in msg:
+                print m
 
     def _hasFiller(self, model):
         return self._models.asTableName(model) in self._filler_data
@@ -126,23 +155,45 @@ class Persist(object):
                 self.__persist(table_name)
             else:
                 self._log("Well, I don't have anything to persist. Next.")
-                pass
 
     def __persist(self, table_name):
+        persist_data = self.__buffer.get(table_name)[0]
         self._log("!"*80)
-        self._log("Persisting: " + table_name + " " +  str(self.__buffer.get(table_name)))
+        self._log("Persisting: " + table_name + " " +  repr(persist_data))
         self._log("!"*80)
-        self._log(repr(self._inserted_ids[table_name]))
-        persist_data = self.__buffer.get(table_name)
 
-        if ("id" in persist_data[0] and persist_data[0]["id"] not in self._inserted_ids[table_name]) \
-            or ("id" not in persist_data[0]):
-                id_ = self._model_data[models_utility.get_model_name(table_name)]["model_struct"].create(persist_data)
-                self._inserted_ids[table_name].add(id_)
+        id_key = None
+        id_val = None
+
+        # Test in order of accepted keys
+        # TODO: Generate the names of the keys somewhere else, before resolving
+        valid_ins_keys = ["id", "name", "code"]
+
+        for v in valid_ins_keys:
+            self._log(v)
+            if v in persist_data:
+                id_key = v
+                id_val = persist_data[v]
+                break
+
+        self._log("decided that identifier key was: " + repr(id_key))
+        self._log("decided that identifier val was: " + repr(id_val))
+        self._log("inserted to table before persisting:")
+
+        if id_key is None or id_val is None:
+            is_inserted = False
         else:
-            self._log("This has already been created")
+            is_inserted = self.__is_inserted(table_name, id_key, id_val)
+        if not is_inserted:
+            self._log("persisting...")
+            row_id = self._model_data[models_utility.get_model_name(table_name)]["model_struct"].create(persist_data)
+            if "id" not in persist_data:
+                persist_data["id"] = row_id
+            self.__insert(table_name, persist_data)
+        else:
+            self._log("This has already been created/inserted")
+
+        self._log(self._inserted[table_name])
 
         self._log("Clearing buffer storage for", table_name)
         self.__buffer.clear_storage(table_name)
-        if "id" in persist_data[0] and persist_data[0]["id"] not in self._inserted_ids[table_name]:
-            self._inserted_ids[table_name].add(persist_data[0]["id"])

@@ -4,10 +4,8 @@
 import core.db
 from core.mappers.account_mapper import AccountMapper
 from utilities import helper
-from utilities.common import decode
-from utilities import resolver
-from utilities.models import rebuild_tables, get_dependency_order
-from utilities import helper, common
+from utilities.models import rebuild_tables
+from utilities import helper
 from core.persisters.account_persist import AccountPersist
 import loader
 import sys
@@ -31,7 +29,10 @@ def persist(output):
 
 def __persist(content, models):
     account_persist = AccountPersist(models)
-    save_output_to_file = False
+    account_persist.useLogging(True)
+    # Set to False to disable or path to file to enable
+    save_output_to_file = True
+    save_output_to_file = "C:\\out.txt"
     # account_persist.buffer(models.Transaction, 100)
     # account_persist.buffer(models.Security, 100)
 
@@ -103,14 +104,23 @@ def __persist(content, models):
     #########################################
     # CURRENCY
     # =======================================
-    currency = models.Currency.createAndGet({
+    currency_sek = models.Currency.createAndGet({
         'code' : 'SEK',
         'symbol' : 'kr',
         'country' : 'SE'
     }, 'id')
+    currency_usd = models.Currency.createAndGet({
+        'code' : 'USD',
+        'symbol' : '$',
+        'country' : 'US'
+    }, 'id')
     account_persist.fillDataGap(models.Currency,
         models.Currency.getResults(
-            currency, ['id', 'code', 'symbol', 'country']
+            currency_sek, ['id', 'code', 'symbol', 'country']
+    )[0])
+    account_persist.fillDataGap(models.Currency,
+        models.Currency.getResults(
+            currency_usd, ['id', 'code', 'symbol', 'country']
     )[0])
 
 
@@ -126,9 +136,9 @@ def __persist(content, models):
     )[0])
 
 
-    if save_output_to_file:
+    if save_output_to_file is not False:
         orig_stdout = sys.stdout
-        f = file("C:\\out.txt", "w")
+        f = file(save_output_to_file, "w")
         sys.stdout = f
 
     account_persist.persist(content)

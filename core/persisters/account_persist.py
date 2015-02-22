@@ -8,40 +8,36 @@ class AccountPersist(Persist):
         super(AccountPersist, self).__init__(models)
 
     def _resolve_transaction(self, transaction_data, dependency_data):
-        print("Resolving transaction using:", dependency_data, "and", transaction_data)
-        if len(self._inserted_ids['account']) > 0:
-            transaction_data["account_id"] = list(self._inserted_ids["account"])[0]
-        else:
-            transaction_data["account_id"] = dependency_data["Account"]["id"]
+        self._log("Resolving transaction using:", dependency_data, "and", transaction_data)
+        self._log("inserted at transaction point: " + repr(self._inserted))
+        for dep_model, dep_data in dependency_data.iteritems():
+            if dep_data is None:
+                raise Exception(dep_model + " is missing from formatted data, please data gap fill using Persist.fillDataGap")
+            if dep_model == 'Account':
+                if "id" in dep_data:
+                    transaction_data["account_id"] = dep_data["id"]
+                else:
+                    if len(self._inserted["account"]) == 1:
+                        transaction_data["account_id"] = self._inserted["account"][0]["id"]
+                    else:
+                        for ins in self._inserted["account"]:
+                            # self._log("transaction comparing " + repr(common.unicode(common.decode(ins["name"]))) + " with " + repr(common.unicode(dep_data["name"])))
+                            if common.unicode(common.decode(ins["name"])) == common.unicode(dep_data["name"]):
+                                transaction_data["account_id"] = ins["id"]
+                                break
+            elif dep_model == 'TransactionCategory':
+                transaction_data["transaction_category_id"] = dep_data["id"]
+            elif dep_model == 'Currency':
+                if "id" in dep_data:
+                    transaction_data["currency_id"] = dep_data["id"]
+                else:
+                    transaction_data["currency_id"] = self._inserted["currency"][0]["id"]
+            elif dep_model == 'Provider':
+                transaction_data["transaction_type_id"] = dep_data["id"]
 
-        if len(self._inserted_ids['transaction_category']) > 0:
-            transaction_data["transaction_category_id"] = list(self._inserted_ids["transaction_category"])[0]
-        else:
-            transaction_data["transaction_category_id"] = dependency_data["TransactionCategory"]["id"]
-
-        if len(self._inserted_ids['transaction_type']) > 0:
-            transaction_data["transaction_type_id"] = list(self._inserted_ids["transaction_type"])[0]
-        else:
-            transaction_data["transaction_type_id"] = dependency_data["TransactionType"]["id"]
-
-        if len(self._inserted_ids['organization']) > 0:
-            transaction_data['organization_id'] = list(self._inserted_ids["organization"])[0]
-        else:
-            transaction_data["organization_id"] = dependency_data["Organization"]["id"]
-
-        if len(self._inserted_ids['provider']) > 0:
-            transaction_data['provider_id'] = list(self._inserted_ids["provider"])[0]
-        else:
-            transaction_data["provider_id"] = dependency_data["Provider"]["id"]
-
-        if len(self._inserted_ids["currency"]) > 0:
-            transaction_data["currency_id"] = list(self._inserted_ids["currency"])[0]
-        else:
-            transaction_data["currency_id"] = dependency_data["Currency"]["id"]
         if 'accounting_date' in transaction_data:
             transaction_data["accounting_date"] = common.format_time_struct(transaction_data["accounting_date"])
         transaction_data["transaction_date"] = common.format_time_struct(transaction_data["transaction_date"])
-        print("Constructed transaction data:", transaction_data)
         return transaction_data
 
     def _resolve_transaction_category(self, transaction_category_data, dependency_data):
