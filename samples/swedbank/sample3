@@ -4,14 +4,14 @@ Transaktionstyp Alla
 
 
 Clnr   Kontonr     Konto                Valuta  Bokföringsdatum  Transaktionsdatum  Referens                            Kontohändelse                   Belopp
-12345  1234567890  Mitt vanliga konto   SEK     15-01-05         15-01-03           PATREON.COM                         Kortköp/uttag                    -8,02
+12345  1234567890  Mitt vanliga konto   USD     15-01-05         15-01-03           PATREON.COM                         Kortköp/uttag                    -8,02
 12345  1234567890  Mitt vanliga konto   SEK     15-01-02         15-01-02           PATREON.COM                         Kortköp/uttag                    -7,96
 12345  1234567890  Mitt vanliga konto   SEK     15-01-02         15-01-02           ICA SUPERMARKET                     Kortköp/uttag                   -93,97
-12345  1234567890  Mitt vanliga konto   SEK     15-01-02         15-01-01           ICA SUPERMARKET                     Kortköp/uttag                   -88,60
+12345  1234567890  Mitt vanliga konto   SEK     15-01-02         15-01-01           ICA SUPERMARKET                     Bankomatuttag                   -88,60
 23456  2345678901  Mitt andra konto     SEK     15-01-02         14-12-31           ICA SUPERMARKET                     Kortköp/uttag                  -315,29
-23456  2345678901  Mitt andra konto     SEK     14-12-29         14-12-27           SPOTIFY Spotify                     Kortköp/uttag                   -49,00
+23456  2345678901  Mitt andra konto     USD     14-12-29         14-12-27           SPOTIFY Spotify                     Kortköp/uttag                   -49,00
 23456  2345678901  Mitt andra konto     SEK     14-12-29         14-12-24           ELGIGANTEN STOC                     Kortköp/uttag                -1 490,00
 23456  2345678901  Mitt andra konto     SEK     14-12-23         14-12-23           HBONORDIC.COM                       Kortköp/uttag                   -79,00
 23456  2345678901  Mitt andra konto     SEK     14-12-23         14-12-23           BAR BQ BAR & GRI                    Kortköp/uttag                   -72,00
-23456  2345678901  Mitt andra konto     SEK     14-12-23         14-12-23           COOP KONSUM                         Kortköp/uttag                  -103,94
+23456  2345678901  Mitt andra konto     SEK     14-12-23         14-12-23           COOP KONSUM                         Bankomatuttag                  -103,94
 34567  3456789012  Mitt tredje konto    USD     14-12-22         14-12-22                                               Bankomatuttag                -1 000,00

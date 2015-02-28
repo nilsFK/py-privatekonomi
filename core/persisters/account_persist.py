@@ -7,6 +7,18 @@ class AccountPersist(Persist):
     def __init__(self, models):
         super(AccountPersist, self).__init__(models)
 
+    def _set_model_data(self, model_data, dep_data, data_id_key, inserted_table_key, comparison_key = "name"):
+        if "id" in dep_data:
+            model_data[data_id_key] = dep_data["id"]
+        else:
+            if len(self._inserted[inserted_table_key]) == 1:
+                model_data[data_id_key] = self._inserted[inserted_table_key][0]["id"]
+            else:
+                for ins in self._inserted[inserted_table_key]:
+                    if common.unicode(common.decode(ins[comparison_key])) == common.unicode(dep_data[comparison_key]):
+                        model_data[data_id_key] = ins["id"]
+                        break
+
     def _resolve_transaction(self, transaction_data, dependency_data):
         self._log("Resolving transaction using:", dependency_data, "and", transaction_data)
         self._log("inserted at transaction point: " + repr(self._inserted))
@@ -14,26 +26,15 @@ class AccountPersist(Persist):
             if dep_data is None:
                 raise Exception(dep_model + " is missing from formatted data, please data gap fill using Persist.fillDataGap")
             if dep_model == 'Account':
-                if "id" in dep_data:
-                    transaction_data["account_id"] = dep_data["id"]
-                else:
-                    if len(self._inserted["account"]) == 1:
-                        transaction_data["account_id"] = self._inserted["account"][0]["id"]
-                    else:
-                        for ins in self._inserted["account"]:
-                            # self._log("transaction comparing " + repr(common.unicode(common.decode(ins["name"]))) + " with " + repr(common.unicode(dep_data["name"])))
-                            if common.unicode(common.decode(ins["name"])) == common.unicode(dep_data["name"]):
-                                transaction_data["account_id"] = ins["id"]
-                                break
+                self._set_model_data(transaction_data, dep_data, "account_id", "account")
             elif dep_model == 'TransactionCategory':
                 transaction_data["transaction_category_id"] = dep_data["id"]
             elif dep_model == 'Currency':
-                if "id" in dep_data:
-                    transaction_data["currency_id"] = dep_data["id"]
-                else:
-                    transaction_data["currency_id"] = self._inserted["currency"][0]["id"]
+                self._set_model_data(transaction_data, dep_data, "currency_id", "currency", "code")
             elif dep_model == 'Provider':
                 transaction_data["transaction_type_id"] = dep_data["id"]
+            elif dep_model == "TransactionType":
+                self._set_model_data(transaction_data, dep_data, "transaction_type_id", "transaction_type")
 
         if 'accounting_date' in transaction_data:
             transaction_data["accounting_date"] = common.format_time_struct(transaction_data["accounting_date"])

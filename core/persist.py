@@ -30,33 +30,21 @@ class Persist(object):
         self._filler_data[table_name] = data
         if table_name not in self._inserted:
             self._inserted[table_name] = []
-        # print(repr(table_name))
-        # print(repr(data))
-        # print(repr(self._inserted))
         self.__insert(table_name, data)
 
     def __insert(self, table, data):
         known_identifiers = ["id", "name", "code"]
         insertion_point = self._inserted[table]
-        self._log("Inserting data:")
-        self._log(table, data)
-        self._log("inserted for " + table + " at this point:")
-        self._log(insertion_point)
-
         insertion_point.append(data)
 
     def __is_inserted(self, table_name, by_key, by_val):
-        self._log("__is_inserted")
         insertion_point = self._inserted[table_name]
-        self._log("rummaging through:")
-        self._log(insertion_point)
         for next_ins in self._inserted[table_name]:
             self._log("comparing " + repr(common.unicode(common.decode(next_ins[by_key])))
                 + " with " + repr(common.unicode(by_val)))
             if by_key in next_ins and common.unicode(common.decode(next_ins[by_key])) == common.unicode(by_val):
                 return True
         return False
-
 
     def useLogging(self, use):
         self._use_log = use
