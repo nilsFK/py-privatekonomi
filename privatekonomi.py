@@ -3,6 +3,7 @@
 import argparse
 import loader
 from utilities import helper
+
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(description='Process source (for example, a file) that will be parsed for content into a data structure')
     argparser.add_argument('source',
@@ -29,3 +30,37 @@ if __name__ == '__main__':
 
     app = loader.load_app(args.app, args.source, args.parser, args.formatter, args.persist)
     result = helper.execute_app(app)
+
+class App:
+    def __init__(self):
+        self.__formatter = None
+        self.__parser = None
+        self.__source = None
+        self.__persist = False
+        self.app = None
+
+    def setFormatter(self, formatter_name):
+        self.__formatter = formatter_name
+
+    def setParser(self, parser_name):
+        self.__parser = parser_name
+
+    def setSource(self, source_name):
+        self.__source = source_name
+
+    def setPersist(self, persist):
+        self.__persist = persist
+
+    def build(self):
+        if self.__formatter is None:
+            raise Exception("Formatter has not been specified")
+        if self.__parser is None:
+            raise Exception("Parser has not been specified")
+        if self.__source is None:
+            raise Exception("Source has not been specified")
+
+        self.app = loader.load_app("core.apps.default", self.__source, self.__parser, self.__formatter, self.__persist)
+        return self
+
+    def run(self):
+        return helper.execute_app(self.app)
