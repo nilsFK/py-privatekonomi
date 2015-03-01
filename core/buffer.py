@@ -23,7 +23,6 @@ class Buffer(object):
         """ if the buffer is missing we will allocate
         an empty one that has a capacity of 0
         """
-        print "Can we buffer:", repr(data)
         if data is not None:
             if not self.has(name):
                 self.clear_storage(name)

@@ -29,10 +29,10 @@ def persist(output):
 
 def __persist(content, models):
     account_persist = AccountPersist(models)
-    account_persist.useLogging(True)
+    account_persist.useLogging(False)
     # Set to False to disable or path to file to enable
-    save_output_to_file = True
     save_output_to_file = "C:\\out.txt"
+    save_output_to_file = False
     # account_persist.buffer(models.Transaction, 100)
     # account_persist.buffer(models.Security, 100)
 
@@ -143,6 +143,6 @@ def __persist(content, models):
 
     account_persist.persist(content)
 
-    if save_output_to_file:
+    if save_output_to_file is not False:
         sys.stdout = orig_stdout
         f.close()
