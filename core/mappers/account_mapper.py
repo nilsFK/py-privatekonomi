@@ -23,6 +23,7 @@ class AccountMapper(object):
             "SecurityRate",
             "Transaction",
             "TransactionCategory",
+            "TransactionGroup",
             "TransactionType"
         ]
 

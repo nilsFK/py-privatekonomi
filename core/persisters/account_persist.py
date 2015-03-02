@@ -7,6 +7,9 @@ class AccountPersist(Persist):
     def __init__(self, models):
         super(AccountPersist, self).__init__(models)
 
+    def _before_process(self):
+        self._transaction_group_id = self._models.lookup("TransactionGroup").allocate()
+
     def _set_model_data(self, model_data, dep_data, data_id_key, inserted_table_key, comparison_key = "name"):
         if "id" in dep_data:
             model_data[data_id_key] = dep_data["id"]
@@ -39,6 +42,7 @@ class AccountPersist(Persist):
         if 'accounting_date' in transaction_data:
             transaction_data["accounting_date"] = common.format_time_struct(transaction_data["accounting_date"])
         transaction_data["transaction_date"] = common.format_time_struct(transaction_data["transaction_date"])
+        transaction_data["group"] = self._transaction_group_id
         return transaction_data
 
     def _resolve_transaction_category(self, transaction_category_data, dependency_data):
@@ -105,4 +109,7 @@ class AccountPersist(Persist):
         pass
 
     def _resolve_security(self, security_data, dependency_data):
+        pass
+
+    def _resolve_transaction_group(self, transaction_group_data, dependency_data):
         pass

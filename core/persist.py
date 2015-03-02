@@ -33,6 +33,7 @@ class Persist(object):
         self.__insert(table_name, data)
 
     def __insert(self, table, data):
+        #TODO: Hard-coded identifiers, should be specified
         known_identifiers = ["id", "name", "code"]
         insertion_point = self._inserted[table]
         insertion_point.append(data)
@@ -65,6 +66,9 @@ class Persist(object):
             self._model_data[data["model_name"]] = data
             if data["table_name"] not in self._inserted:
                 self._inserted[data["table_name"]] = []
+
+        if "_before_process" in dir(self):
+            getattr(self, "_before_process")()
 
         for data in content:
             resolved_row = []
