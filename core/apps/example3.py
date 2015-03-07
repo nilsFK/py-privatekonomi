@@ -31,10 +31,8 @@ def __persist(content, models):
     account_persist = AccountPersist(models)
     account_persist.useLogging(False)
     # Set to False to disable or path to file to enable
-    save_output_to_file = "C:\\out.txt"
     save_output_to_file = False
-    # account_persist.buffer(models.Transaction, 100)
-    # account_persist.buffer(models.Security, 100)
+    # save_output_to_file = "C:\\out.txt"
 
     #########################################
     # PROVIDER

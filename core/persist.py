@@ -85,6 +85,8 @@ class Persist(object):
                 self.__resolve_buffers(model_name, False)
                 self._log("-"*40)
             self._log("="*40)
+        if "_after_process" in dir(self):
+            getattr(self, "_after_process")()
         # Is there anything else left to unbuffer?
         self._log("="*80)
         self._log("we have now analyzed all data, let's resolve remaining buffers if any")
@@ -129,24 +131,25 @@ class Persist(object):
         if depends_on_me is not None and len(depends_on_me) > 0:
             self._log("Do they have buffers?: " + str(dependant_buffers))
 
-        if force_resolve:
-            resolve = True
-        else:
-            resolve = ((buffer_stored == 0 and buffer_capacity == 0) \
-                or buffer_stored >= buffer_capacity)
-        self._log("Should we resolve? " + str(resolve))
-
-        if resolve is True:
-            self._log(">"*40)
-            self._log("I will force resolve those i depend on before resolving myself")
-            for dependency in i_depend_on:
-                self.__resolve_buffers(dependency, True)
-            self._log("Control has been given back to: " + table_name)
-            self._log("<"*40)
-            if self.__buffer.has(table_name) and buffer_stored > 0:
-                self.__persist(table_name)
+        self._log(">"*40)
+        self._log("I will force resolve those i depend on before resolving myself")
+        for dependency in i_depend_on:
+            self.__resolve_buffers(dependency, True)
+        self._log("Control has been given back to: " + table_name)
+        self._log("<"*40)
+        if self.__buffer.has(table_name) and buffer_stored > 0:
+            if table_name == "transaction":
+                persist = False
+                if force_resolve is True:
+                    persist = True
+                self.__persist_transaction()
             else:
-                self._log("Well, I don't have anything to persist. Next.")
+                self.__persist(table_name)
+        else:
+            self._log("Well, I don't have anything to persist. Next.")
+
+    def __persist_transaction(self):
+        getattr(self, "_persist_transaction")()
 
     def __persist(self, table_name):
         persist_data = self.__buffer.get(table_name)[0]

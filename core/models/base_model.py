@@ -15,6 +15,9 @@ class BaseModel(core.model.Model):
             self.__pks = pks
             return pks
 
+    def createMany(self, data):
+        self.insertMany(data)
+
     def get(self, by_col, where_value):
         return self.select([self.ref], self.col(by_col) == where_value)
 

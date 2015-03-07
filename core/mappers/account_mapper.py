@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from core.error import MapperError
-import pprint
 """
      AccountMapper limits decorations to known core models
      Usage outside of these core models will cause an exception

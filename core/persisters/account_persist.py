@@ -6,9 +6,14 @@ from utilities import common
 class AccountPersist(Persist):
     def __init__(self, models):
         super(AccountPersist, self).__init__(models)
+        self._transactions = []
+        self._limit = 100
 
     def _before_process(self):
         self._transaction_group_id = self._models.lookup("TransactionGroup").allocate()
+
+    def _after_process(self):
+        self._limit = 0
 
     def _set_model_data(self, model_data, dep_data, data_id_key, inserted_table_key, comparison_key = "name"):
         if "id" in dep_data:
@@ -21,6 +26,11 @@ class AccountPersist(Persist):
                     if common.unicode(common.decode(ins[comparison_key])) == common.unicode(dep_data[comparison_key]):
                         model_data[data_id_key] = ins["id"]
                         break
+
+    def _persist_transaction(self):
+        if len(self._transactions) >= self._limit and len(self._transactions) > 0:
+            self._models.lookup("Transaction").createMany(self._transactions)
+            self._transactions = []
 
     def _resolve_transaction(self, transaction_data, dependency_data):
         self._log("Resolving transaction using:", dependency_data, "and", transaction_data)
@@ -43,6 +53,8 @@ class AccountPersist(Persist):
             transaction_data["accounting_date"] = common.format_time_struct(transaction_data["accounting_date"])
         transaction_data["transaction_date"] = common.format_time_struct(transaction_data["transaction_date"])
         transaction_data["group"] = self._transaction_group_id
+        self._log("Persist transaction data: " + repr(transaction_data))
+        self._transactions.append(transaction_data)
         return transaction_data
 
     def _resolve_transaction_category(self, transaction_category_data, dependency_data):
