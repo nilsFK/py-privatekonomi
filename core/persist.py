@@ -32,21 +32,6 @@ class Persist(object):
             self._inserted[table_name] = []
         self.__insert(table_name, data)
 
-    def __insert(self, table, data):
-        #TODO: Hard-coded identifiers, should be specified
-        known_identifiers = ["id", "name", "code"]
-        insertion_point = self._inserted[table]
-        insertion_point.append(data)
-
-    def __is_inserted(self, table_name, by_key, by_val):
-        insertion_point = self._inserted[table_name]
-        for next_ins in self._inserted[table_name]:
-            self._log("comparing " + repr(common.unicode(common.decode(next_ins[by_key])))
-                + " with " + repr(common.unicode(by_val)))
-            if by_key in next_ins and common.unicode(common.decode(next_ins[by_key])) == common.unicode(by_val):
-                return True
-        return False
-
     def useLogging(self, use):
         self._use_log = use
 
@@ -85,8 +70,10 @@ class Persist(object):
                 self.__resolve_buffers(model_name, False)
                 self._log("-"*40)
             self._log("="*40)
+
         if "_after_process" in dir(self):
             getattr(self, "_after_process")()
+
         # Is there anything else left to unbuffer?
         self._log("="*80)
         self._log("we have now analyzed all data, let's resolve remaining buffers if any")
@@ -100,6 +87,21 @@ class Persist(object):
 
     def _hasFiller(self, model):
         return self._models.asTableName(model) in self._filler_data
+
+    def __insert(self, table, data):
+        #TODO: Hard-coded identifiers, should be specified
+        known_identifiers = ["id", "name", "code"]
+        insertion_point = self._inserted[table]
+        insertion_point.append(data)
+
+    def __is_inserted(self, table_name, by_key, by_val):
+        insertion_point = self._inserted[table_name]
+        for next_ins in self._inserted[table_name]:
+            self._log("comparing " + repr(common.unicode(common.decode(next_ins[by_key])))
+                + " with " + repr(common.unicode(by_val)))
+            if by_key in next_ins and common.unicode(common.decode(next_ins[by_key])) == common.unicode(by_val):
+                return True
+        return False
 
     def __buffer_store(self, model_name, model_data):
         self.__buffer.store(self._models.asTableName(model_name), model_data)
@@ -138,20 +140,13 @@ class Persist(object):
         self._log("Control has been given back to: " + table_name)
         self._log("<"*40)
         if self.__buffer.has(table_name) and buffer_stored > 0:
-            if table_name == "transaction":
-                persist = False
-                if force_resolve is True:
-                    persist = True
-                self.__persist_transaction()
-            else:
-                self.__persist(table_name)
+            self.__persist(table_name)
         else:
             self._log("Well, I don't have anything to persist. Next.")
 
-    def __persist_transaction(self):
-        getattr(self, "_persist_transaction")()
-
     def __persist(self, table_name):
+        if "_persist_%s" % table_name in dir(self):
+            return getattr(self, "_persist_%s" % table_name)
         persist_data = self.__buffer.get(table_name)[0]
         self._log("!"*80)
         self._log("Persisting: " + table_name + " " +  repr(persist_data))

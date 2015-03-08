@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import core.db
-from core.mappers.account_mapper import AccountMapper
+from core.mappers.economy_mapper import EconomyMapper
 from utilities import helper
 from utilities.models import rebuild_tables
 from utilities import helper
-from core.persisters.account_persist import AccountPersist
+from core.persisters.economy_persist import EconomyPersist
 import loader
 import sys
 
@@ -23,13 +23,13 @@ def execute(sources, parser, formatter):
     return contents
 
 def persist(output):
-    models = rebuild_tables(loader.load_models(AccountMapper.getModelNames()))
+    models = rebuild_tables(loader.load_models(EconomyMapper.getModelNames()))
     for content in output:
         __persist(content, models)
 
 def __persist(content, models):
-    account_persist = AccountPersist(models)
-    account_persist.useLogging(False)
+    economy_persist = EconomyPersist(models, 100)
+    economy_persist.useLogging(False)
     # Set to False to disable or path to file to enable
     save_output_to_file = False
     # save_output_to_file = "C:\\out.txt"
@@ -40,7 +40,7 @@ def __persist(content, models):
     provider = models.Provider.createAndGet({
         'name' : 'Collector'
     }, 'id')
-    account_persist.fillDataGap(models.Provider,
+    economy_persist.fillDataGap(models.Provider,
         models.Provider.getResults(
             provider, ['id', 'name']
     )[0])
@@ -52,7 +52,7 @@ def __persist(content, models):
     account_category = models.AccountCategory.createAndGet({
         'name' : u'Okänd'
     }, 'id')
-    account_persist.fillDataGap(models.AccountCategory,
+    economy_persist.fillDataGap(models.AccountCategory,
         models.AccountCategory.getResults(
             account_category, ['id', 'name']
     )[0])
@@ -64,7 +64,7 @@ def __persist(content, models):
     organization = models.Organization.createAndGet({
         'name' : 'Swedbank'
     }, 'id')
-    account_persist.fillDataGap(models.Organization,
+    economy_persist.fillDataGap(models.Organization,
         models.Organization.getResults(
             organization, ['id', 'name']
     )[0])
@@ -81,7 +81,7 @@ def __persist(content, models):
         'account_number' : '1234567890',
         'current_balance' : 12345.67
     }, 'id')
-    account_persist.fillDataGap(models.Account,
+    economy_persist.fillDataGap(models.Account,
         models.Account.getResults(
             account, ['id', 'name']
     )[0])
@@ -93,7 +93,7 @@ def __persist(content, models):
     transaction_category = models.TransactionCategory.createAndGet({
         'name' : u'Okänd'
     }, 'id')
-    account_persist.fillDataGap(models.TransactionCategory,
+    economy_persist.fillDataGap(models.TransactionCategory,
         models.TransactionCategory.getResults(
             transaction_category, ['id', 'name']
     )[0])
@@ -112,11 +112,11 @@ def __persist(content, models):
         'symbol' : '$',
         'country' : 'US'
     }, 'id')
-    account_persist.fillDataGap(models.Currency,
+    economy_persist.fillDataGap(models.Currency,
         models.Currency.getResults(
             currency_sek, ['id', 'code', 'symbol', 'country']
     )[0])
-    account_persist.fillDataGap(models.Currency,
+    economy_persist.fillDataGap(models.Currency,
         models.Currency.getResults(
             currency_usd, ['id', 'code', 'symbol', 'country']
     )[0])
@@ -128,7 +128,7 @@ def __persist(content, models):
     transaction_type = models.TransactionType.createAndGet({
         'name' : u'Okänd'
     }, 'id')
-    account_persist.fillDataGap(models.TransactionType,
+    economy_persist.fillDataGap(models.TransactionType,
         models.TransactionType.getResults(
             transaction_type, ['id', 'name']
     )[0])
@@ -139,7 +139,7 @@ def __persist(content, models):
         f = file(save_output_to_file, "w")
         sys.stdout = f
 
-    account_persist.persist(content)
+    economy_persist.persist(content)
 
     if save_output_to_file is not False:
         sys.stdout = orig_stdout

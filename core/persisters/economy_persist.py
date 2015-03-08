@@ -3,32 +3,20 @@
 from core.persist import Persist
 from utilities import common
 
-class AccountPersist(Persist):
-    def __init__(self, models):
-        super(AccountPersist, self).__init__(models)
+class EconomyPersist(Persist):
+    def __init__(self, models, persist_at_inserted):
+        super(EconomyPersist, self).__init__(models)
         self._transactions = []
-        self._limit = 100
+        self._persist_at = persist_at_inserted
 
     def _before_process(self):
         self._transaction_group_id = self._models.lookup("TransactionGroup").allocate()
 
     def _after_process(self):
-        self._limit = 0
-
-    def _set_model_data(self, model_data, dep_data, data_id_key, inserted_table_key, comparison_key = "name"):
-        if "id" in dep_data:
-            model_data[data_id_key] = dep_data["id"]
-        else:
-            if len(self._inserted[inserted_table_key]) == 1:
-                model_data[data_id_key] = self._inserted[inserted_table_key][0]["id"]
-            else:
-                for ins in self._inserted[inserted_table_key]:
-                    if common.unicode(common.decode(ins[comparison_key])) == common.unicode(dep_data[comparison_key]):
-                        model_data[data_id_key] = ins["id"]
-                        break
+        self._persist_at = 0
 
     def _persist_transaction(self):
-        if len(self._transactions) >= self._limit and len(self._transactions) > 0:
+        if len(self._transactions) >= self._persist_at and len(self._transactions) > 0:
             self._models.lookup("Transaction").createMany(self._transactions)
             self._transactions = []
 
@@ -39,15 +27,17 @@ class AccountPersist(Persist):
             if dep_data is None:
                 raise Exception(dep_model + " is missing from formatted data, please data gap fill using Persist.fillDataGap")
             if dep_model == 'Account':
-                self._set_model_data(transaction_data, dep_data, "account_id", "account")
+                self.__set_model_data(transaction_data, dep_data, "account_id", "account")
             elif dep_model == 'TransactionCategory':
                 transaction_data["transaction_category_id"] = dep_data["id"]
             elif dep_model == 'Currency':
-                self._set_model_data(transaction_data, dep_data, "currency_id", "currency", "code")
+                self.__set_model_data(transaction_data, dep_data, "currency_id", "currency", "code")
             elif dep_model == 'Provider':
                 transaction_data["transaction_type_id"] = dep_data["id"]
             elif dep_model == "TransactionType":
-                self._set_model_data(transaction_data, dep_data, "transaction_type_id", "transaction_type")
+                self.__set_model_data(transaction_data, dep_data, "transaction_type_id", "transaction_type")
+            else:
+                assert("Dependency model has not been explicitly handled")
 
         if 'accounting_date' in transaction_data:
             transaction_data["accounting_date"] = common.format_time_struct(transaction_data["accounting_date"])
@@ -125,3 +115,15 @@ class AccountPersist(Persist):
 
     def _resolve_transaction_group(self, transaction_group_data, dependency_data):
         pass
+
+    def __set_model_data(self, model_data, dep_data, data_id_key, inserted_table_key, comparison_key = "name"):
+        if "id" in dep_data:
+            model_data[data_id_key] = dep_data["id"]
+        else:
+            if len(self._inserted[inserted_table_key]) == 1:
+                model_data[data_id_key] = self._inserted[inserted_table_key][0]["id"]
+            else:
+                for ins in self._inserted[inserted_table_key]:
+                    if common.unicode(common.decode(ins[comparison_key])) == common.unicode(dep_data[comparison_key]):
+                        model_data[data_id_key] = ins["id"]
+                        break

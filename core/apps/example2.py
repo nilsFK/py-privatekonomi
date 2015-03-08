@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import core.db
-from core.mappers.account_mapper import AccountMapper
+from core.mappers.economy_mapper import EconomyMapper
 from utilities import helper
 from utilities.common import decode
 from utilities import resolver
@@ -27,7 +27,7 @@ def execute(sources, parser, formatter):
     return content
 
 def persist(output):
-    models = rebuild_tables(AccountMapper.getModelNames())
+    models = rebuild_tables(EconomyMapper.getModelNames())
 
     # Insert all items
     models.Organization.insert([

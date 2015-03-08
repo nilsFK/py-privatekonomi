@@ -14,7 +14,7 @@ from core.model_context import ModelContext
     table_name: Name of a table, e.g. transaction, account, transaction_category, etc.
     table_names: Collection of table_name, usually list
     model_struct: A common.Struct with the key being the name of the model, e.g:
-            _models = rebuild_tables(AccountMapper.getModelNames())
+            _models = rebuild_tables(EconomyMapper.getModelNames())
             _models.Transaction.insert(...)
         where Transaction is the model struct within the _models object
         can be converted back to dict using common.as_dict(models)

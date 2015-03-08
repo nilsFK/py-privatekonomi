@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 from core.error import MapperError
 """
-     AccountMapper limits decorations to known core models
+     EconomyMapper limits decorations to known core models
      Usage outside of these core models will cause an exception
 """
-class AccountMapper(object):
+class EconomyMapper(object):
     def __init__(self, model_name, model_attr = None):
         self.model_name = model_name
         self.model_attr = model_attr
@@ -33,11 +33,11 @@ class AccountMapper(object):
             subformatter = args[2]
             model_attr = self.model_attr if (self.model_attr is not None) else subformatter
             formatted_content = formatter_func(*args)
-            if self.model_name not in AccountMapper.getModelNames():
+            if self.model_name not in EconomyMapper.getModelNames():
                 raise MapperError(capture_data={
                     'model_name' : self.model_name,
                     'subformatter' : model_attr,
-                    'valid_model_names' : AccountMapper.getModelNames()
+                    'valid_model_names' : EconomyMapper.getModelNames()
                 })
             formatter.addMapping(self.model_name, model_attr, formatted_content)
             return formatted_content
