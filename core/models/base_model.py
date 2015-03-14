@@ -18,10 +18,13 @@ class BaseModel(core.model.Model):
     def createMany(self, data):
         self.insertMany(data)
 
-    def get(self, by_col, where_value):
-        return self.select([self.ref], self.col(by_col) == where_value)
+    def get(self, by_col = None, where_value = None):
+        if by_col is not None and where_value is not None:
+            return self.select([self.ref], self.col(by_col) == where_value)
+        else:
+            return self.select([self.ref])
 
-    def createAndGet(self, data, by_col):
+    def createAndGet(self, data, by_col, check_if_exists = False):
         pks = self.create(data)
         return self.get(by_col, where_value=pks)
 
@@ -39,4 +42,3 @@ class BaseModel(core.model.Model):
 
     def id(self):
         return self.__pks
-

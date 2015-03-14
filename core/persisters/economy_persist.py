@@ -91,6 +91,12 @@ class EconomyPersist(Persist):
         if account_data is None and self._hasFiller(self._models.lookup("Account")):
             return self._filler_data['account']
         elif account_data:
+            if not dependency_data["AccountCategory"]:
+                raise Exception("AccountCategory is not set: " + repr(dependency_data))
+            if not dependency_data["Organization"]:
+                raise Exception("Organization is not set: " + repr(dependency_data))
+            if not dependency_data["Provider"]:
+                raise Exception("Provider is not set: " + repr(dependency_data))
             account_data['account_category_id'] = dependency_data['AccountCategory']["id"]
             account_data['organization_id'] = dependency_data['Organization']["id"]
             account_data['provider_id'] = dependency_data['Provider']["id"]
@@ -107,9 +113,11 @@ class EconomyPersist(Persist):
         else:
             return None
 
+    # TODO: Implement
     def _resolve_security_rate(self, security_rate_data, dependency_data):
         pass
 
+    # TODO: Implement
     def _resolve_security(self, security_data, dependency_data):
         pass
 
@@ -117,6 +125,8 @@ class EconomyPersist(Persist):
         pass
 
     def __set_model_data(self, model_data, dep_data, data_id_key, inserted_table_key, comparison_key = "name"):
+        if not isinstance(dep_data, dict):
+            raise Exception("Dependency data should be instance of dict, is instead: " + repr(dep_data))
         if "id" in dep_data:
             model_data[data_id_key] = dep_data["id"]
         else:

@@ -3,8 +3,6 @@
 import utilities.models as models_utility
 from utilities.models import get_table_name
 from utilities import common
-from sys import exit
-import sys
 from core.buffer import Buffer
 from core.model_container import ModelContainer
 
@@ -21,9 +19,6 @@ class Persist(object):
         self._inserted = {}
         self._use_log = False
 
-    def buffer(self, model, n):
-        self.__buffer.buffer(self._models.asTableName(model), n)
-
     def fillDataGap(self, model, data):
         table_name = self._models.asTableName(model)
         model_name = models_utility.get_model_name(table_name)
@@ -36,8 +31,6 @@ class Persist(object):
         self._use_log = use
 
     def persist(self, content):
-        self._log("initial inserted data:")
-        self._log(self._inserted)
         dependency_order = models_utility.get_dependency_order(self._models.all())
 
         self._model_data = {}
@@ -52,8 +45,7 @@ class Persist(object):
             if data["table_name"] not in self._inserted:
                 self._inserted[data["table_name"]] = []
 
-        if "_before_process" in dir(self):
-            getattr(self, "_before_process")()
+        self.__callback("_before_process")
 
         for data in content:
             resolved_row = []
@@ -64,6 +56,8 @@ class Persist(object):
 
                 model_data = data[model_name] if model_name in data else None
                 resolved_row = getattr(self, "_resolve_%s" % self._model_data[model_name]["table_name"])(model_data, resolved_dependency_data)
+                if isinstance(resolved_row, list) and len(resolved_row) == 1:
+                    resolved_row = resolved_row[0]
                 resolved_dependency_data[model_name] = resolved_row
 
                 self.__buffer_store(model_name, resolved_row)
@@ -71,10 +65,9 @@ class Persist(object):
                 self._log("-"*40)
             self._log("="*40)
 
-        if "_after_process" in dir(self):
-            getattr(self, "_after_process")()
+        self.__callback("_after_process")
 
-        # Is there anything else left to unbuffer?
+        # Is there anything else left to resolve?
         self._log("="*80)
         self._log("we have now analyzed all data, let's resolve remaining buffers if any")
         self.__resolve_buffers(dependency_order[-1], True)
@@ -89,19 +82,10 @@ class Persist(object):
         return self._models.asTableName(model) in self._filler_data
 
     def __insert(self, table, data):
-        #TODO: Hard-coded identifiers, should be specified
-        known_identifiers = ["id", "name", "code"]
+        if isinstance(data, dict):
+            data = [data]
         insertion_point = self._inserted[table]
-        insertion_point.append(data)
-
-    def __is_inserted(self, table_name, by_key, by_val):
-        insertion_point = self._inserted[table_name]
-        for next_ins in self._inserted[table_name]:
-            self._log("comparing " + repr(common.unicode(common.decode(next_ins[by_key])))
-                + " with " + repr(common.unicode(by_val)))
-            if by_key in next_ins and common.unicode(common.decode(next_ins[by_key])) == common.unicode(by_val):
-                return True
-        return False
+        insertion_point.extend(data)
 
     def __buffer_store(self, model_name, model_data):
         self.__buffer.store(self._models.asTableName(model_name), model_data)
@@ -118,20 +102,10 @@ class Persist(object):
         buffer_stored = self.__buffer.stored(table_name)
         buffer_capacity = self.__buffer.capacity(table_name)
         i_depend_on = self.__dependencies[table_name]
-        depends_on_me = self.__build_dependencies(table_name, self.__dependencies)
         self._log("Hello, I am " + table_name + " and I depend on " + repr(i_depend_on))
         self._log("Buffer stored: " + str(buffer_stored))
         self._log("Buffer capacity: " + str(buffer_capacity))
         self._log("Force resolve: " +  str(force_resolve))
-        self._log("Who depends on me?: " + repr(depends_on_me))
-        dependant_buffers = False
-        for dep in depends_on_me:
-            if self.__buffer.has(dep):
-                self._log(dep + " has buffers")
-                dependant_buffers = True
-                break
-        if depends_on_me is not None and len(depends_on_me) > 0:
-            self._log("Do they have buffers?: " + str(dependant_buffers))
 
         self._log(">"*40)
         self._log("I will force resolve those i depend on before resolving myself")
@@ -146,7 +120,8 @@ class Persist(object):
 
     def __persist(self, table_name):
         if "_persist_%s" % table_name in dir(self):
-            return getattr(self, "_persist_%s" % table_name)
+            # return getattr(self, "_persist_%s" % table_name)()
+            return self.__callback("_persist_%s" % table_name)
         persist_data = self.__buffer.get(table_name)[0]
         self._log("!"*80)
         self._log("Persisting: " + table_name + " " +  repr(persist_data))
@@ -158,22 +133,27 @@ class Persist(object):
         # Test in order of accepted keys
         # TODO: Generate the names of the keys somewhere else, before resolving
         valid_ins_keys = ["id", "name", "code"]
-
-        for v in valid_ins_keys:
-            self._log(v)
-            if v in persist_data:
-                id_key = v
-                id_val = persist_data[v]
-                break
+        for vis in valid_ins_keys:
+            if id_key is not None: break
+            elif isinstance(persist_data, list):
+                for pdata in persist_data:
+                    if vis in pdata:
+                        id_key = vis
+                        id_val = pdata[id_key]
+                        break
+            elif isinstance(persist_data, dict):
+                if vis in persist_data:
+                    id_key = vis
+                    id_val = persist_data[vis]
+                    break
+            else:
+                raise Exception("Invalid datatype given for persist_data: " + type(persist_data))
 
         self._log("decided that identifier key was: " + repr(id_key))
         self._log("decided that identifier val was: " + repr(id_val))
-        self._log("inserted to table before persisting:")
 
-        if id_key is None or id_val is None:
-            is_inserted = False
-        else:
-            is_inserted = self.__is_inserted(table_name, id_key, id_val)
+        is_inserted = id_key is not None and id_val is not None
+
         if not is_inserted:
             self._log("persisting...")
             row_id = self._model_data[models_utility.get_model_name(table_name)]["model_struct"].create(persist_data)
@@ -181,9 +161,13 @@ class Persist(object):
                 persist_data["id"] = row_id
             self.__insert(table_name, persist_data)
         else:
-            self._log("This has already been created/inserted")
+            self._log("This has already been inserted")
 
         self._log(self._inserted[table_name])
 
         self._log("Clearing buffer storage for", table_name)
         self.__buffer.clear_storage(table_name)
+
+    def __callback(self, name):
+        if name in dir(self):
+            return getattr(self, name)()

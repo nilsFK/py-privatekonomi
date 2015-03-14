@@ -7,7 +7,6 @@ import core.db
 from core.error import MissingAppFunctionError
 from utilities import common
 import sys
-import pprint
 
 def get_parser(acc_type):
     return AccountParserFactory().create(acc_type)

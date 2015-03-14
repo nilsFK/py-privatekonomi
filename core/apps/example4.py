@@ -11,11 +11,10 @@ import sys
 from utilities.common import as_obj
 
 """
-    Notice that we pass True to helper.execute as the last argument.
-    This will transform the contents into data that is formatted
-    according to how it maps to the models. This is very useful
-    for saving data to the database since it enables automatization
-    using the core.persist.Persist class.
+    An extension of example3.py that does not rebuild tables, but
+    create tables from scratch (if necessary).
+    If there is any data in the database we fill those data gaps
+    that need to be sealed.
 """
 
 # Configurations
@@ -33,7 +32,7 @@ def execute(sources, parser, formatter):
     return contents
 
 def persist(output):
-    models = rebuild_tables(loader.load_models(EconomyMapper.getModelNames()))
+    models = create_tables(loader.load_models(EconomyMapper.getModelNames()))
     for content in output:
         __persist(content, models)
 
@@ -45,102 +44,49 @@ def __persist(content, models):
     #########################################
     # PROVIDER
     # =======================================
-    provider = models.Provider.createAndGet({
-        'name' : 'Collector'
-    }, 'id')
+    provider = models.Provider.get()
     economy_persist.fillDataGap(models.Provider,
-        models.Provider.getResults(
-            provider, ['id', 'name']
-    )[0])
-
+        models.Provider.getResults(provider, ['id', 'name']))
 
     #########################################
     # ACCOUNT CATEGORY
     # =======================================
-    account_category = models.AccountCategory.createAndGet({
-        'name' : u'Okänd'
-    }, 'id')
+    account_category = models.AccountCategory.get()
     economy_persist.fillDataGap(models.AccountCategory,
-        models.AccountCategory.getResults(
-            account_category, ['id', 'name']
-    )[0])
-
+        models.AccountCategory.getResults(account_category, ['id', 'name']))
 
     #########################################
     # ORGANIZATION
     # =======================================
-    organization = models.Organization.createAndGet({
-        'name' : 'Swedbank'
-    }, 'id')
+    organization = models.Organization.get()
     economy_persist.fillDataGap(models.Organization,
-        models.Organization.getResults(
-            organization, ['id', 'name']
-    )[0])
-
+        models.Organization.getResults(organization, ['id', 'name']))
 
     #########################################
     # ACCOUNT
     # =======================================
-    account = models.Account.createAndGet({
-        'name' : u'Okänd',
-        'account_category_id' : models.AccountCategory.id(),
-        'organization_id' : models.Organization.id(),
-        'account_code' : '123-456',
-        'account_number' : '1234567890',
-        'current_balance' : 12345.67
-    }, 'id')
+    account = models.Account.get()
     economy_persist.fillDataGap(models.Account,
-        models.Account.getResults(
-            account, ['id', 'name']
-    )[0])
-
+        models.Account.getResults(account, ['id', 'name']))
 
     #########################################
     # TRANSACTION CATEGORY
     # =======================================
-    transaction_category = models.TransactionCategory.createAndGet({
-        'name' : u'Okänd'
-    }, 'id')
+    transaction_category = models.TransactionCategory.get()
     economy_persist.fillDataGap(models.TransactionCategory,
-        models.TransactionCategory.getResults(
-            transaction_category, ['id', 'name']
-    )[0])
-
+        models.TransactionCategory.getResults(transaction_category, ['id', 'name']))
 
     #########################################
     # CURRENCY
     # =======================================
-    currency_sek = models.Currency.createAndGet({
-        'code' : 'SEK',
-        'symbol' : 'kr',
-        'country' : 'SE'
-    }, 'id')
-    currency_usd = models.Currency.createAndGet({
-        'code' : 'USD',
-        'symbol' : '$',
-        'country' : 'US'
-    }, 'id')
+    currency = models.Currency.get()
     economy_persist.fillDataGap(models.Currency,
-        models.Currency.getResults(
-            currency_sek, ['id', 'code', 'symbol', 'country']
-    )[0])
-    economy_persist.fillDataGap(models.Currency,
-        models.Currency.getResults(
-            currency_usd, ['id', 'code', 'symbol', 'country']
-    )[0])
+        models.Currency.getResults(currency, ['id', 'code', 'symbol', 'country']))
 
 
     #########################################
     # TRANSACTION TYPE
     # =======================================
-    transaction_type = models.TransactionType.createAndGet({
-        'name' : u'Okänd'
-    }, 'id')
-    economy_persist.fillDataGap(models.TransactionType,
-        models.TransactionType.getResults(
-            transaction_type, ['id', 'name']
-    )[0])
-
 
     if save_output_to_file is not False:
         orig_stdout = sys.stdout
