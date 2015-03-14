@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from core.models.base_model import BaseModel
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, ForeignKeyConstraint
-from sqlalchemy.types import Date, Numeric
+from sqlalchemy.types import Date, Numeric, DateTime
 
 class Transaction(BaseModel):
     def __init__(self, context):
@@ -14,6 +14,7 @@ class Transaction(BaseModel):
                 Column('transaction_date', Date, nullable=False),
                 Column('amount', Numeric(precision=16, scale=2), nullable=False),
                 Column('reference', String(512), nullable=False),
+                Column('created', DateTime, nullable=False),
                 Column('account_id', Integer, nullable=False),
                 Column('transaction_category_id', Integer, nullable=True),
                 Column('transaction_type_id', Integer, nullable=False),

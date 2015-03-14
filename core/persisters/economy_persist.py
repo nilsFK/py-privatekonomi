@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from core.persist import Persist
 from utilities import common
+import time
 
 class EconomyPersist(Persist):
     def __init__(self, models, persist_at_inserted):
@@ -43,6 +44,7 @@ class EconomyPersist(Persist):
             transaction_data["accounting_date"] = common.format_time_struct(transaction_data["accounting_date"])
         transaction_data["transaction_date"] = common.format_time_struct(transaction_data["transaction_date"])
         transaction_data["group"] = self._transaction_group_id
+        transaction_data['created'] = time.strftime("%Y-%m-%d %H-%M-%S")
         self._log("Persist transaction data: " + repr(transaction_data))
         self._transactions.append(transaction_data)
         return transaction_data
