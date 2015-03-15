@@ -118,9 +118,17 @@ class Persist(object):
         else:
             self._log("Well, I don't have anything to persist. Next.")
 
+    def __is_inserted(self, table_name, by_key, by_val):
+        if by_key is None or by_val is None:
+            return False
+        insertion_point = self._inserted[table_name]
+        for ins in self._inserted[table_name]:
+            if by_key in ins and common.unicode(common.decode(ins[by_key])) == common.unicode(by_val):
+                return True
+        return False
+
     def __persist(self, table_name):
         if "_persist_%s" % table_name in dir(self):
-            # return getattr(self, "_persist_%s" % table_name)()
             return self.__callback("_persist_%s" % table_name)
         persist_data = self.__buffer.get(table_name)[0]
         self._log("!"*80)
@@ -152,7 +160,7 @@ class Persist(object):
         self._log("decided that identifier key was: " + repr(id_key))
         self._log("decided that identifier val was: " + repr(id_val))
 
-        is_inserted = id_key is not None and id_val is not None
+        is_inserted = self.__is_inserted(table_name, id_key, id_val)
 
         if not is_inserted:
             self._log("persisting...")

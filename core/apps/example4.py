@@ -87,6 +87,9 @@ def __persist(content, models):
     #########################################
     # TRANSACTION TYPE
     # =======================================
+    transaction_type = models.TransactionType.get()
+    economy_persist.fillDataGap(models.TransactionType,
+        models.TransactionType.getResults(transaction_type, ['id', 'name']))
 
     if save_output_to_file is not False:
         orig_stdout = sys.stdout
