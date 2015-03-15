@@ -14,7 +14,7 @@ def get_parser(acc_type):
 def get_formatter(acc_type):
     return AccountFormatterFactory().create(acc_type)
 
-def execute_app(app):
+def execute_app(app, file_config = "db"):
     if hasattr(app['module'], 'execute'):
         content = app['module'].execute(app['sources'], app['parser'], app['formatter'])
     else:
@@ -24,7 +24,7 @@ def execute_app(app):
         })
     if app['persist']:
         if hasattr(app['module'], 'persist'):
-            core.db.DB().connect()
+            core.db.DB().connect(file_config)
             app['module'].persist(content)
         else:
             raise MissingAppFunctionError(capture_data={

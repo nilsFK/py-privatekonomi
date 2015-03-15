@@ -12,8 +12,8 @@ class TestErrors(unittest.TestCase):
         pass
 
     def test_missing_app_function_error(self):
-        app =  loader.load_app(
-            app_name='core.apps.example1',
+        app = loader.load_app(
+            app_name='core.apps.default',
             sources='samples/swedbank/sample1',
             parser_name='swedbank',
             formatter_name='swedbank',

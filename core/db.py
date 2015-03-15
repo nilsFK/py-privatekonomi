@@ -9,8 +9,8 @@ from utilities.common import singleton
 
 @singleton
 class DB(object):
-    def connect(self):
-        db_config = config.readConfig("db", "Database")
+    def connect(self, file_config = "db"):
+        db_config = config.readConfig(file_config, "Database")
         db_config = common.as_obj(db_config)
         self.__engine = sqlalchemy.create_engine("%(engine)s://%(username)s:%(password)s@%(host)s:%(port)s/%(database)s" % {
             'engine' : db_config.engine,
