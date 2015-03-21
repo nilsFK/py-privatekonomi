@@ -3,7 +3,7 @@
 import sqlalchemy
 from sqlalchemy import __version__
 from sqlalchemy import create_engine
-import config
+from core import config
 from utilities import common
 from utilities.common import singleton
 

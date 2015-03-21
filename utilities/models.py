@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from utilities import resolver
-import common
+from utilities import common
 from core.model_context import ModelContext
 
 """
@@ -28,7 +28,8 @@ def get_table_name(model_name):
 
 def get_model_type_mappings(models):
     model_type_mappings = {}
-    for model, values in models.iteritems():
+    for model in models:
+        values = models[model]
         if isinstance(values, dict):
             model_type_mappings[model] = values["type"]
         else:

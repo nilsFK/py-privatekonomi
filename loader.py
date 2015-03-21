@@ -59,8 +59,8 @@ def load_core():
 
 def load_factory(names, factory):
     _factory = factory()
-    for name, factory_type in names.iteritems():
-        _factory.set(name, factory_type)
+    for name in names:
+        _factory.set(name, names[name])
     return _factory
 
 def load_formatter(name, factory):

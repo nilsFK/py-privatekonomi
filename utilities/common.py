@@ -5,7 +5,16 @@ common.py is common low-level functionality
 and should not import anything except for
 built in packages.
 """
-import ntpath, time, codecs, re
+import ntpath, time, codecs, re, sys
+
+if sys.version < '3':
+    import codecs
+    def u(x):
+        return codecs.unicode_escape_decode(x)[0]
+else:
+    def u(x):
+        return x
+
 class Struct:
     def __init__(self, **entries):
         self.__dict__.update(entries)
@@ -53,7 +62,10 @@ def format_time_struct(time_struct, format='%Y-%m-%d'):
     return time.strftime(format, time_struct)
 
 def is_unicode(s):
-    return isinstance(s, unicode)
+    if sys.version < '3':
+        return isinstance(s, unicode)
+    else:
+        return isinstance(s, str)
 
 def decode(val):
     """Since we in most cases are not aware of
@@ -73,15 +85,19 @@ def decode(val):
             pass
     return val
 
-__unicode = unicode
-def unicode(val):
-    try:
-        val = __unicode(val)
+if sys.version < '3':
+    __unicode = unicode
+    def unicode(val):
+        try:
+            val = __unicode(val)
+            return val
+        except UnicodeDecodeError:
+            # Already unicode
+            return val
+        raise Exception("Invalid unicode: " + val)
+else:
+    def unicode(val):
         return val
-    except UnicodeDecodeError:
-        # Already unicode
-        return val
-    raise Exception("Invalid unicode: " + val)
 
 def camelcase_to_underscore(name):
     """ CamelCase to camel_case """
@@ -89,16 +105,9 @@ def camelcase_to_underscore(name):
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
 def underscore_to_camelcase(name):
-    """ camel_case to CamelCase """
-    def camelcase():
-        while True:
-            yield str.capitalize
-
-    c = camelcase()
-    return "".join(c.next()(x) if x else '_' for x in name.split("_"))
+    return ''.join(x.capitalize() or '_' for x in name.split('_'))
 
 def is_string(string):
-    """ should work in both 2.7+ and 3+ """
     is_string_ = False
     if isinstance(string, str):
         is_string_ = True

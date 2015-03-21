@@ -23,7 +23,7 @@ import loader
 def execute(sources, parser, formatter):
     contents = helper.execute(sources, parser, formatter, False)
     for content in contents:
-        print content
+        print(content)
     return content
 
 def persist(output):
@@ -179,14 +179,14 @@ def persist(output):
     # Get some items
     transactions = models.Transaction.selectAll()
     for t in transactions:
-        print "id:", t[models.Transaction.col('id')]
-        print "group:", t[models.Transaction.col('group')]
-        print "accounting_date:", t[models.Transaction.col('accounting_date')]
-        print "transaction_date:", t[models.Transaction.col('transaction_date')]
-        print "amount:", t[models.Transaction.col('amount')]
-        print "reference:", decode(t[models.Transaction.col('reference')])
-        print "account_id:", t[models.Transaction.col('account_id')]
-        print "transaction_category_id:", t[models.Transaction.col('transaction_category_id')]
-        print "transaction_type_id:", t[models.Transaction.col('transaction_type_id')]
-        print "currency_id:", t[models.Transaction.col('currency_id')]
-        print "-"*80
+        print("id:", t[models.Transaction.col('id')])
+        print("group:", t[models.Transaction.col('group')])
+        print("accounting_date:", t[models.Transaction.col('accounting_date')])
+        print("transaction_date:", t[models.Transaction.col('transaction_date')])
+        print("amount:", t[models.Transaction.col('amount')])
+        print("reference:", decode(t[models.Transaction.col('reference')]))
+        print("account_id:", t[models.Transaction.col('account_id')])
+        print("transaction_category_id:", t[models.Transaction.col('transaction_category_id')])
+        print("transaction_type_id:", t[models.Transaction.col('transaction_type_id')])
+        print("currency_id:", t[models.Transaction.col('currency_id')])
+        print("-"*80)

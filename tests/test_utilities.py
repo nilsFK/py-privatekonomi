@@ -12,6 +12,7 @@ from core.models.provider import Provider
 from core.models.transaction import Transaction
 from core.models.transaction_type import TransactionType
 from core.models.transaction_category import TransactionCategory
+from core.models.transaction_group import TransactionGroup
 from core.models.currency import Currency
 from core.models.security import Security
 from core.model_context import ModelContext
@@ -27,7 +28,8 @@ class TestUtilities(unittest.TestCase):
             AccountCategory,
             TransactionType,
             Transaction,
-            Security
+            Security,
+            TransactionGroup
         ]
 
     def test_resolver_resolve_dependecy_graph(self):
@@ -46,20 +48,20 @@ class TestUtilities(unittest.TestCase):
 
         resolved = []
         resolver.dependency_resolve(a, resolved, [])
-        self.assertEquals(resolved[0].name, "d")
-        self.assertEquals(resolved[1].name, "e")
-        self.assertEquals(resolved[2].name, "c")
-        self.assertEquals(resolved[3].name, "e")
-        self.assertEquals(resolved[4].name, "b")
-        self.assertEquals(resolved[5].name, "d")
-        self.assertEquals(resolved[6].name, "a")
+        self.assertEqual(resolved[0].name, "d")
+        self.assertEqual(resolved[1].name, "e")
+        self.assertEqual(resolved[2].name, "c")
+        self.assertEqual(resolved[3].name, "e")
+        self.assertEqual(resolved[4].name, "b")
+        self.assertEqual(resolved[5].name, "d")
+        self.assertEqual(resolved[6].name, "a")
 
     def test_model_resolver_resolveObliteration(self):
         core.db.DB().connect()
 
         deps = resolver.getModelDependencies(self.model_types)
         obliteration_order = resolver.resolveObliteration(deps)
-        self.assertEquals(len(self.model_types), len(obliteration_order))
+        self.assertEqual(len(self.model_types), len(obliteration_order))
         """
         obliteration order can variate between models, i.e. it's not
         deterministic, so we can't assert their positions within
@@ -71,7 +73,7 @@ class TestUtilities(unittest.TestCase):
 
         deps = resolver.getModelDependencies(self.model_types)
         generation_order = resolver.resolveGeneration(deps)
-        self.assertEquals(len(self.model_types), len(generation_order))
+        self.assertEqual(len(self.model_types), len(generation_order))
         """
         generation order can variate between models, i.e. it's not
         deterministic, so we can't assert their positions within

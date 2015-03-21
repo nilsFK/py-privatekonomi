@@ -24,9 +24,10 @@ class EconomyPersist(Persist):
     def _resolve_transaction(self, transaction_data, dependency_data):
         self._log("Resolving transaction using:", dependency_data, "and", transaction_data)
         self._log("inserted at transaction point: " + repr(self._inserted))
-        for dep_model, dep_data in dependency_data.iteritems():
-            if dep_data is None:
-                raise Exception(dep_model + " is missing from formatted data, please data gap fill using Persist.fillDataGap")
+        for dep_model in dependency_data:
+            dep_data = dependency_data[dep_model]
+            # if dep_data is None:
+            #     raise Exception(dep_model + " is missing from formatted data, please data gap fill using Persist.fillDataGap")
             if dep_model == 'Account':
                 self.__set_model_data(transaction_data, dep_data, "account_id", "account")
             elif dep_model == 'TransactionCategory':

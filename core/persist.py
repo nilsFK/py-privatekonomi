@@ -34,7 +34,8 @@ class Persist(object):
         dependency_order = models_utility.get_dependency_order(self._models.all())
 
         self._model_data = {}
-        for model_name, value in self._models.internal().iteritems():
+        for model_name in self._models.internal():
+            value = self._models.internal()[model_name]
             self._log(model_name)
             data = {}
             data["model_struct"] = value
@@ -70,13 +71,17 @@ class Persist(object):
         # Is there anything else left to resolve?
         self._log("="*80)
         self._log("we have now analyzed all data, let's resolve remaining buffers if any")
-        self.__resolve_buffers(dependency_order[-1], True)
+        for idx, model_name in enumerate(dependency_order):
+            if model_name == 'Transaction':
+                self.__resolve_buffers(dependency_order[idx], True)
+                break
+
         self._log("***** DONE! *****")
 
     def _log(self, *msg):
         if self._use_log is True:
             for m in msg:
-                print m
+                print(m)
 
     def _hasFiller(self, model):
         return self._models.asTableName(model) in self._filler_data

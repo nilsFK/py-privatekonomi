@@ -11,7 +11,7 @@ from sqlalchemy.schema import (
     DropConstraint
 )
 import re
-import db
+from core import db
 from utilities.models import get_model_name
 
 class Model(object):

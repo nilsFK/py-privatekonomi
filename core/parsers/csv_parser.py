@@ -2,9 +2,12 @@
 # -*- coding: utf-8 -*-
 import core.parser
 import csv
-import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 from utilities import common
-
+import sys
 class CsvParser(core.parser.Parser):
     def __init__(self):
         pass
@@ -13,19 +16,26 @@ class CsvParser(core.parser.Parser):
         rows = []
         for content in contents:
             content = common.decode(content)
-            c = StringIO.StringIO(content)
+            c = StringIO(content)
             options = {
                 'delimiter' : ',',
                 'quoting' : csv.QUOTE_ALL
             }
             options.update(opts)
-            try:
+
+            if sys.version < '3':
                 reader = self.unicode_csv_reader(c, dialect=dialect, **options)
-            except:
-                reader = csv.reader(c, dialect=dialect, **options)
+            else:
+                reader = self.csv_reader(c, dialect=dialect, **options)
+
             for r in reader:
                 rows.append(r)
         return rows
+
+    def csv_reader(self, data, dialect, **kwargs):
+        reader = csv.reader(data, dialect=dialect, **kwargs)
+        for row in reader:
+            yield [cell for cell in row]
 
     def unicode_csv_reader(self, unicode_csv_data, dialect=csv.excel, **kwargs):
         # csv.py doesn't do Unicode; encode temporarily as UTF-8:

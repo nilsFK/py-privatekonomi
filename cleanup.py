@@ -24,4 +24,4 @@ if __name__ == '__main__':
     directory = os.listdir('.')
     print("Delete pyc files recursively in directory: " + os.getcwd())
     deleted = pyc_cleanup(directory, ".")
-    print "Deleted", deleted, ".pyc files"
+    print("Deleted", deleted, ".pyc files")

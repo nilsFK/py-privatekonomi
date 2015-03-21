@@ -20,7 +20,7 @@ class TestAvanza(TestBase):
             'avanza',
             True)
         if results is False:
-            print "Skipping:", inspect.stack()[0][3]
+            print("Skipping:", inspect.stack()[0][3])
 
 if __name__ == '__main__':
     unittest.main()

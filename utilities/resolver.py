@@ -35,7 +35,8 @@ def resolveObliteration(dependencies):
             obliterated.append(me)
     def __depends_on(me):
         depends_on_me = set()
-        for them, deps in dependencies.iteritems():
+        for them in dependencies:
+            deps = dependencies[them]
             if me in deps and them is not me:
                 if them not in obliterated:
                     depends_on_me.add(them)
@@ -73,6 +74,7 @@ def resolveGeneration(dependencies):
             __resolve(them, dependencies[them])
         """ now i have resolved my friends, so resolve myself """
         __append(me)
-    for some_guy, their_dependencies in dependencies.iteritems():
+    for some_guy in dependencies:
+        their_dependencies = dependencies[some_guy]
         __resolve(some_guy, their_dependencies)
     return generated

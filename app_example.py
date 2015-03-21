@@ -16,4 +16,4 @@ app.setPersist(persist)
 app.build()
 data = app.run()
 
-print data
+print(data)

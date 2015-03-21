@@ -20,7 +20,7 @@ class TestSwedbank(TestBase):
             'swedbank',
             True)
         if results is False:
-            print "Skipping:", inspect.stack()[0][3]
+            print("Skipping:", inspect.stack()[0][3])
 
     def test_sample2_db(self):
         results = self.executeApp('core.apps.example3',
@@ -29,7 +29,7 @@ class TestSwedbank(TestBase):
             'swedbank',
             True)
         if results is False:
-            print "Skipping:", inspect.stack()[0][3]
+            print("Skipping:", inspect.stack()[0][3])
 
     def test_sample3_db(self):
         results = self.executeApp('core.apps.example3',
@@ -38,7 +38,7 @@ class TestSwedbank(TestBase):
             'swedbank',
             True)
         if results is False:
-            print "Skipping:", inspect.stack()[0][3]
+            print("Skipping:", inspect.stack()[0][3])
 
 
 if __name__ == '__main__':
