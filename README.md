@@ -1,10 +1,10 @@
 py-privatekonomi
 ================
-py-privatekonomi håller reda på din privatekonomi genom att läsa in transaktionsloggar från din bank, konvertera detta till ett strukturerat format, och om du vill, sparar ner resultatet i en databas.
+py-privatekonomi håller reda på din privatekonomi genom att läsa in transaktionsloggar från din bank, konvertera detta till ett strukturerat format och, om du vill, sparar ner resultatet i en databas.
 
 Installation
 ------------
-Ingen installation är nödvändig utom i det fall där man använder sig utav persisting. För att kunna spara undan resultat till databas, kör följande:
+Ingen installation är nödvändig utom i det fall där slutresultatet skall ner i databasen. För att kunna spara undan resultat till databas, kör följande:
 
 > pip install -r persist_requirements.txt
 
@@ -48,8 +48,9 @@ Exempel
 
 Projektstatus
 -------------
-* Stöd för ordinarie transaktionsloggar för Swedbank och Avanza.
+* Stöd för Swedbank (ordinarie textexporter)
+* Stöd för Avanza (ordinarie csv-filer)
 
 Stöd
 ----
-Siktar på stöd för Python 2.7.x+. Ordentligt stöd för Python 3.3.x kommer senare, är för närvarande att betraktas som otestat.
+Testas regelbundet för Python 2.7.x och 3.3.x
