@@ -33,8 +33,8 @@ class Model(object):
     def generate(self):
         if db.DB().hasConfig('prefix'):
             self.__prefix = db.DB().getConfig('prefix')
-            self.__normalized_name = self.ref.name
             self.ref.name = self.__prefix + "_" + self.ref.name
+        self.__normalized_name = self.ref.name
         self.ref.create(db.DB().getEngine(), checkfirst=True)
         return self
 
