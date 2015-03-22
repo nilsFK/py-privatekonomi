@@ -31,10 +31,10 @@ class Model(object):
         return self.__normalized_name
 
     def generate(self):
+        self.__normalized_name = self.ref.name
         if db.DB().hasConfig('prefix'):
             self.__prefix = db.DB().getConfig('prefix')
             self.ref.name = self.__prefix + "_" + self.ref.name
-        self.__normalized_name = self.ref.name
         self.ref.create(db.DB().getEngine(), checkfirst=True)
         return self
 
