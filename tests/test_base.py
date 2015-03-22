@@ -5,9 +5,11 @@ import utilities.common
 import loader
 try:
     # 2.x.x
+    import ConfigParser
     from ConfigParser import SafeConfigParser as config_parser
 except:
     # 3.x.x
+    import configparser as ConfigParser
     from configparser import ConfigParser as config_parser
 class TestBase(unittest.TestCase):
     def __init__(self, *args, **kwargs):
@@ -51,14 +53,14 @@ class TestBase(unittest.TestCase):
 
     def executeApp(self, app_name, sources, parser_name, formatter_name, persist = False):
         file_config = None if persist is False else "db_test"
-        # try:
-        app = loader.load_app(
-            app_name=app_name,
-            sources=sources,
-            parser_name=parser_name,
-            formatter_name=formatter_name,
-            persist=persist)
-        results = helper.execute_app(app, file_config)
-        # except config_parser.Error:
-        #     results = False
+        try:
+            app = loader.load_app(
+                app_name=app_name,
+                sources=sources,
+                parser_name=parser_name,
+                formatter_name=formatter_name,
+                persist=persist)
+            results = helper.execute_app(app, file_config)
+        except ConfigParser.NoSectionError:
+            results = False
         return results
