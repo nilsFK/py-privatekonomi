@@ -9,6 +9,7 @@ from utilities.common import format_time_struct, is_unicode
 from utilities import helper
 from core.error import FormatterError, ParserError
 from test_base import TestBase
+from tests.dataset.avanza.sample1 import test_data as test_data_1
 class TestAvanza(TestBase):
     def setUp(self):
         pass
@@ -21,6 +22,8 @@ class TestAvanza(TestBase):
             True)
         if results is False:
             print("Skipping:", inspect.stack()[0][3])
+        else:
+            self.assertFormatted(results, test_data_1, True)
 
 if __name__ == '__main__':
     unittest.main()

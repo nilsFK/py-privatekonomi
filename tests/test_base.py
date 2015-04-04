@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
 import unittest
 from utilities.common import format_time_struct, is_unicode
 from utilities import helper
@@ -64,3 +67,20 @@ class TestBase(unittest.TestCase):
         except ConfigParser.NoSectionError:
             results = False
         return results
+
+    def assertFormatted(self, models_data, expected, key_models=False):
+        for model_data in models_data:
+            for idx, data in enumerate(model_data):
+                try:
+                    next_expected = expected[idx]
+                except IndexError:
+                    raise Exception("Expected data is missing index: %s (from expected dataset %s)" % (idx, expected))
+                if key_models is True:
+                    for model_name in data.keys():
+                        if model_name not in next_expected:
+                            raise Exception("Missing model: %s in (%s)" % (model_name, next_expected))
+                        for col in next_expected[model_name].keys():
+                            val = next_expected[model_name][col]
+                            self.assertEqual(val, data[model_name][col], "%s.%s %s is not equal to %s.%s %s in index %s (comparing subdata %s with %s)" % (model_name, col, val, model_name, col, data[model_name][col], idx, next_expected, data[model_name]))
+                else:
+                    raise NotImplementedError
