@@ -25,7 +25,7 @@ class TestSwedbank(TestBase):
         if results is False:
             print("Skipping:", inspect.stack()[0][3])
         else:
-            self.assertFormatted(results, test_data_1, True)
+            self.assertFormatted(results, test_data_1, format_as_mapper=True)
 
     def test_sample2_db(self):
         results = self.executeApp('core.apps.example3',
@@ -36,7 +36,7 @@ class TestSwedbank(TestBase):
         if results is False:
             print("Skipping:", inspect.stack()[0][3])
         else:
-            self.assertFormatted(results, test_data_2, True)
+            self.assertFormatted(results, test_data_2, format_as_mapper=True)
 
     def test_sample3_db(self):
         results = self.executeApp('core.apps.example3',
@@ -47,7 +47,7 @@ class TestSwedbank(TestBase):
         if results is False:
             print("Skipping:", inspect.stack()[0][3])
         else:
-            self.assertFormatted(results, test_data_3, True)
+            self.assertFormatted(results, test_data_3, format_as_mapper=True)
 
 
 if __name__ == '__main__':

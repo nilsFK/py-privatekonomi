@@ -19,13 +19,13 @@ class AvanzaParser(core.parser.Parser):
         }
         rows = CsvParser().parse(contents, opts=opts)
         subformatters = [
-            "transaction_date",
+            "transaction_transaction_date",
             "account_name",
-            "transaction_event",
+            "transaction_type_name",
             "security_name",
-            "security_amount",
-            "security_rate",
+            "security_rate_amount",
+            "security_rate_rate",
             "transaction_amount",
-            "transaction_currency_code"
+            "currency_code"
         ]
         return (rows, subformatters)

@@ -2,9 +2,8 @@
 # -*- coding: utf-8 -*-
 #
 import unittest
-from utilities.common import format_time_struct, is_unicode
-from utilities import helper
-import utilities.common
+from utilities.common import format_time_struct, is_unicode, is_time_struct
+from utilities import helper, common
 import loader
 try:
     # 2.x.x
@@ -19,7 +18,7 @@ class TestBase(unittest.TestCase):
         unittest.TestCase.__init__(self, *args, **kwargs)
 
     def __assertEquals(self, equals_from, equals_to, msg=None):
-        super(TestBase, self).assertEqual(utilities.common.decode(equals_from), utilities.common.decode(equals_to), msg)
+        super(TestBase, self).assertEqual(common.decode(equals_from), common.decode(equals_to), msg)
 
     def assertEqual(self, a, b, msg=None):
         self.__assertEquals(a, b, msg)
@@ -68,14 +67,14 @@ class TestBase(unittest.TestCase):
             results = False
         return results
 
-    def assertFormatted(self, models_data, expected, key_models=False):
+    def assertFormatted(self, models_data, expected, format_as_mapper=False):
         for model_data in models_data:
             for idx, data in enumerate(model_data):
                 try:
                     next_expected = expected[idx]
                 except IndexError:
                     raise Exception("Expected data is missing index: %s (from expected dataset %s)" % (idx, expected))
-                if key_models is True:
+                if format_as_mapper is True:
                     for model_name in data.keys():
                         if model_name not in next_expected:
                             raise Exception("Missing model: %s in (%s)" % (model_name, next_expected))
@@ -83,4 +82,12 @@ class TestBase(unittest.TestCase):
                             val = next_expected[model_name][col]
                             self.assertEqual(val, data[model_name][col], "%s.%s %s is not equal to %s.%s %s in index %s (comparing subdata %s with %s)" % (model_name, col, val, model_name, col, data[model_name][col], idx, next_expected, data[model_name]))
                 else:
-                    raise NotImplementedError
+                    for model_name in next_expected:
+                        for col in next_expected[model_name].keys():
+                            val = next_expected[model_name][col]
+                            col_name = common.camelcase_to_underscore(model_name) + "_" + col
+
+                            if is_time_struct(data[col_name]):
+                                self.assertEqual(val, format_time_struct(data[col_name]))
+                            else:
+                                self.assertEqual(val, data[col_name])

@@ -58,15 +58,15 @@ class SwedbankParser(core.parser.Parser):
             result.extend(re.split(r'\s{2,}', last_pieces))
             results.append(result)
         subformatters = [
-            "clearing_number",
-            "account_number",
+            "account_account_code",
+            "account_account_number",
             "account_name",
             "currency_code",
-            "accounting_date",
-            "transaction_date",
-            "account_reference",
-            "account_event",
-            "amount"
+            "transaction_accounting_date",
+            "transaction_transaction_date",
+            "transaction_reference",
+            "transaction_type_name",
+            "transaction_amount"
         ]
         return (results, subformatters)
 
@@ -74,10 +74,10 @@ class SwedbankParser(core.parser.Parser):
         regex_parser = RegexParser()
         parsed = regex_parser.parse(contents, r'\t+')
         subformatters = [
-            "accounting_date",
-            "transaction_date",
-            "account_reference",
-            "amount",
-            "balance"
+            "transaction_accounting_date",
+            "transaction_transaction_date",
+            "transaction_reference",
+            "transaction_amount",
+            "account_current_balance"
         ]
         return (parsed, subformatters)

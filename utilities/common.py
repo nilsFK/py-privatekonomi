@@ -61,6 +61,9 @@ def append_file(file_path, content):
 def format_time_struct(time_struct, format='%Y-%m-%d'):
     return time.strftime(format, time_struct)
 
+def is_time_struct(data):
+    return isinstance(data, time.struct_time)
+
 def is_unicode(s):
     if sys.version < '3':
         return isinstance(s, unicode)
