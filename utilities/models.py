@@ -78,3 +78,14 @@ def rebuild_tables(models):
     destroy_tables(models)
     models = create_tables(models)
     return models
+
+def get_models(models, to_obj = True):
+    ret_models = {}
+    context = ModelContext()
+    for k in models:
+        v = models[k]
+        ret_models[v["model_name"]] = v["type"](context).generate()
+    if to_obj is True:
+        return common.as_obj(ret_models)
+    else:
+        return ret_models

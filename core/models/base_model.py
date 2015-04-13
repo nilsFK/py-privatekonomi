@@ -31,12 +31,14 @@ class BaseModel(core.model.Model):
     def getValue(self, get_value, by_col, where_col):
         return self.selectValue(get_value, self.col(by_col) == where_col)
 
-    def getResults(self, result_set, cols):
+    def getResults(self, result_set, cols, decode = False):
         results = []
         for rs in result_set:
             result = {}
             for col in cols:
                 result[col] = rs[self.col(col)]
+                if decode is True:
+                    result[col] = self.decode(result[col])
             results.append(result)
         return results
 

@@ -12,6 +12,7 @@ from sqlalchemy.schema import (
 )
 import re
 from core import db
+from utilities import common
 from utilities.models import get_model_name
 
 class Model(object):
@@ -39,9 +40,8 @@ class Model(object):
         return self
 
     def getConstraints(self):
-        inspector = reflection.Inspector.from_engine(db.DB().getEngine())
         fks = []
-        for fk in inspector.get_foreign_keys(self.ref.name):
+        for fk in self.__get_inspector().get_foreign_keys(self.ref.name):
             if not fk['name']:
                 continue
             fks.append(ForeignKeyConstraint((), (), name=fk['name']))
@@ -64,6 +64,25 @@ class Model(object):
             })
         return ret
 
+    def getCols(self):
+        """
+        http://docs.sqlalchemy.org/en/rel_0_9/core/reflection.html?highlight=inspector#sqlalchemy.engine.reflection.Inspector.get_columns
+        """
+        return self.__get_inspector().get_columns(self.ref.name)
+
+    def getCol(self, col_name):
+        cols = self.getCols()
+        for c in cols:
+            if col_name == c["name"]:
+                return c
+        return False
+
+    def decode(self, value):
+        if common.is_date(value):
+            return common.format_date(value)
+        if common.is_decimal(value):
+            return float(value)
+        return value
 
     def getForeignKeys(self, table_name):
         if not db.DB().getEngine().has_table(self.ref.name):
@@ -139,3 +158,6 @@ class Model(object):
     def existsBy(self, by_col, by_val):
         select_value = self.selectValue(by_col, self.col(by_col) == by_val)
         return select_value is not False
+
+    def __get_inspector(self):
+        return reflection.Inspector.from_engine(db.DB().getEngine())

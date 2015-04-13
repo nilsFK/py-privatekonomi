@@ -5,7 +5,12 @@ common.py is common low-level functionality
 and should not import anything except for
 built in packages.
 """
-import ntpath, time, codecs, re, sys
+import ntpath
+import time, datetime
+import codecs
+import re
+import sys
+import decimal
 
 if sys.version < '3':
     import codecs
@@ -61,8 +66,20 @@ def append_file(file_path, content):
 def format_time_struct(time_struct, format='%Y-%m-%d'):
     return time.strftime(format, time_struct)
 
+def format_date(date, format='%Y-%m-%d'):
+    return date.strftime(format)
+
 def is_time_struct(data):
     return isinstance(data, time.struct_time)
+
+def is_date(data):
+    return isinstance(data, datetime.date)
+
+def is_datetime(data):
+    return isinstance(data, datetime.datetime)
+
+def is_decimal(data):
+    return isinstance(data, decimal.Decimal)
 
 def is_unicode(s):
     if sys.version < '3':

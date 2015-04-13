@@ -3,8 +3,10 @@
 #
 import unittest
 from utilities.common import format_time_struct, is_unicode, is_time_struct
+from utilities.models import get_models
 from utilities import helper, common
 import loader
+from core.mappers.economy_mapper import EconomyMapper
 try:
     # 2.x.x
     import ConfigParser
@@ -91,3 +93,16 @@ class TestBase(unittest.TestCase):
                                 self.assertEqual(val, format_time_struct(data[col_name]))
                             else:
                                 self.assertEqual(val, data[col_name])
+
+    def assertPersisted(self, expected):
+        models = get_models(loader.load_models(["Transaction"]), False)
+        transaction_model = models["Transaction"]
+        col_names = [col_name for col_name in expected[0]["Transaction"]]
+        db_results = transaction_model.getResults(transaction_model.get(), col_names, decode=True)
+
+        for idx, e in enumerate(expected):
+            db_res = db_results[idx]
+            for col in col_names:
+                db_val = db_results[idx][col]
+                db_val = transaction_model.decode(db_val)
+                self.assertEqual(e["Transaction"][col], db_val)
