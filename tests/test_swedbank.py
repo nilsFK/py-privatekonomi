@@ -10,6 +10,7 @@ from core.error import FormatterError, ParserError
 from test_base import TestBase
 from tests.dataset.swedbank.sample1 import test_data as test_data_1
 from tests.dataset.swedbank.sample2 import test_data as test_data_2
+
 class TestSwedbank(TestBase):
     def setUp(self):
         pass
@@ -20,8 +21,9 @@ class TestSwedbank(TestBase):
             sources='samples/swedbank/sample1',
             parser_name='swedbank',
             formatter_name='swedbank')
-        results = helper.execute_app(app)
-
+        config = {}
+        config['database'] = self.get_default_config()
+        results = helper.execute_app(app, config)
         self.assertFormatted(results, test_data_1, format_as_mapper=False)
 
     def test_sample2(self):
@@ -31,7 +33,6 @@ class TestSwedbank(TestBase):
             parser_name='swedbank',
             formatter_name='swedbank')
         results = helper.execute_app(app)
-
         self.assertFormatted(results, test_data_2, format_as_mapper=False)
 
     def test_invalid_sample1(self):

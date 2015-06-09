@@ -20,13 +20,13 @@ import loader
     the database.
 """
 
-def execute(sources, parser, formatter):
+def execute(sources, parser, formatter, configs):
     contents = helper.execute(sources, parser, formatter, False)
     for content in contents:
         print(content)
     return content
 
-def persist(output):
+def persist(output, configs):
     models = rebuild_tables(EconomyMapper.getModelNames())
 
     # Insert all items

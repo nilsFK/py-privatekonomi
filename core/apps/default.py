@@ -7,6 +7,6 @@ from utilities import helper, common
     the app and a persist function that simply returns
     the output back again """
 
-def execute(sources, parser, formatter):
+def execute(sources, parser, formatter, configs):
     contents = helper.execute(sources, parser, formatter, False)
     return contents

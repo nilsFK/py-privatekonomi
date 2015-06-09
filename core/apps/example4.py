@@ -17,26 +17,16 @@ from utilities.common import as_obj
     that need to be sealed.
 """
 
-# Configurations
-configs = as_obj({
-    # Log output from persisting?
-    "use_logging" : False,
-    # Log to file? Set to full path name to enable, otherwise set to False
-    "log_to_file" : False,
-    # How many rows to batch insert at a time (might affect performance)
-    "insert_rows" : 100
-})
-
-def execute(sources, parser, formatter):
+def execute(sources, parser, formatter, configs):
     contents = helper.execute(sources, parser, formatter, True) # <--
     return contents
 
-def persist(output):
+def persist(output, configs):
     models = create_tables(loader.load_models(EconomyMapper.getModelNames()))
     for content in output:
-        __persist(content, models)
+        __persist(content, models, configs)
 
-def __persist(content, models):
+def __persist(content, models, configs):
     economy_persist = EconomyPersist(models, configs.insert_rows)
     economy_persist.useLogging(configs.use_logging)
     save_output_to_file = configs.log_to_file

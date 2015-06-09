@@ -10,11 +10,13 @@ class TestAvanzaDB(TestBase):
         pass
 
     def test_sample1_db(self):
-        results = self.executeApp('core.apps.example3',
-            'samples/avanza/sample1',
-            'avanza',
-            'avanza',
-            True)
+        results = self.executeApp(
+            app_name='core.apps.example3',
+            sources='samples/avanza/sample1',
+            parser_name='avanza',
+            formatter_name='avanza',
+            persist=True,
+            config=self.get_default_config())
         if results is False:
             print("Skipping:", inspect.stack()[0][3])
         else:

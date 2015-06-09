@@ -3,6 +3,7 @@
 
 import unittest
 import inspect
+from utilities import common
 from test_base import TestBase
 from tests.dataset.swedbank.sample1 import test_data as test_data_1
 from tests.dataset.swedbank.sample2 import test_data as test_data_2
@@ -16,7 +17,8 @@ class TestSwedbankDB(TestBase):
             'samples/swedbank/sample1',
             'swedbank',
             'swedbank',
-            True)
+            persist=True,
+            config=self.get_default_config())
         if results is False:
             print("Skipping:", inspect.stack()[0][3])
         else:
@@ -28,7 +30,8 @@ class TestSwedbankDB(TestBase):
             'samples/swedbank/sample2',
             'swedbank',
             'swedbank',
-            True)
+            persist=True,
+            config=self.get_default_config())
         if results is False:
             print("Skipping:", inspect.stack()[0][3])
         else:
@@ -40,7 +43,8 @@ class TestSwedbankDB(TestBase):
             'samples/swedbank/sample3',
             'swedbank',
             'swedbank',
-            True)
+            config=self.get_default_config(),
+            persist=True)
         if results is False:
             print("Skipping:", inspect.stack()[0][3])
         else:

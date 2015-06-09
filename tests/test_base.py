@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 #
 import unittest
-from utilities.common import format_time_struct, is_unicode, is_time_struct
+from utilities.common import format_time_struct, is_unicode, is_time_struct, as_obj
 from utilities.models import get_models
 from utilities import helper, common
 import loader
 from core.mappers.economy_mapper import EconomyMapper
+from core import config
 try:
     # 2.x.x
     import ConfigParser
@@ -55,8 +56,17 @@ class TestBase(unittest.TestCase):
     # def assertNotIsInstance(self, a, b):
     #     raise NotImplementedError
 
-    def executeApp(self, app_name, sources, parser_name, formatter_name, persist = False):
-        file_config = None if persist is False else "db_test"
+    def get_default_config(self):
+        db_config = config.readConfig("db_test", "Database")
+        __config = {
+            'insert_rows' : False,
+            'use_logging' : False,
+            'log_to_file' : False,
+            'database' : db_config
+        }
+        return __config
+
+    def executeApp(self, app_name, sources, parser_name, formatter_name, config = {}, persist = False):
         try:
             app = loader.load_app(
                 app_name=app_name,
@@ -64,7 +74,7 @@ class TestBase(unittest.TestCase):
                 parser_name=parser_name,
                 formatter_name=formatter_name,
                 persist=persist)
-            results = helper.execute_app(app, file_config)
+            results = helper.execute_app(app, as_obj(config))
         except ConfigParser.NoSectionError:
             results = False
         return results

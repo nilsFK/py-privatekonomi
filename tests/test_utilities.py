@@ -16,8 +16,9 @@ from core.models.transaction_group import TransactionGroup
 from core.models.currency import Currency
 from core.models.security import Security
 from core.model_context import ModelContext
+from test_base import TestBase
 import core.db
-class TestUtilities(unittest.TestCase):
+class TestUtilities(TestBase):
     def setUp(self):
         self.model_types = [
             Account,
@@ -57,7 +58,7 @@ class TestUtilities(unittest.TestCase):
         self.assertEqual(resolved[6].name, "a")
 
     def test_model_resolver_resolveObliteration(self):
-        core.db.DB().connect()
+        core.db.DB().connect(common.as_obj(self.get_default_config()).database)
 
         deps = resolver.getModelDependencies(self.model_types)
         obliteration_order = resolver.resolveObliteration(deps)
@@ -69,7 +70,7 @@ class TestUtilities(unittest.TestCase):
         """
 
     def test_model_resolver_resolveGeneration(self):
-        core.db.DB().connect()
+        core.db.DB().connect(common.as_obj(self.get_default_config()).database)
 
         deps = resolver.getModelDependencies(self.model_types)
         generation_order = resolver.resolveGeneration(deps)

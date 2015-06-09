@@ -3,6 +3,20 @@
 import argparse
 import loader
 from utilities import helper
+from utilities.common import as_obj
+from core import config
+
+def get_default_config():
+    return {
+        # Log output from persisting?
+        "use_logging" : False,
+        # Log to file? Set to full path name to enable, otherwise set to False
+        "log_to_file" : False,
+        # How many rows to batch insert at a time (might affect performance)
+        "insert_rows" : 100,
+        # database settings
+        "database" : {}
+    }
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(description='Process source (for example, a file) that will be parsed for content into a data structure')
@@ -29,7 +43,11 @@ if __name__ == '__main__':
     args = argparser.parse_args()
 
     app = loader.load_app(args.app, args.source, args.parser, args.formatter, args.persist)
-    result = helper.execute_app(app)
+
+    config = as_obj(get_default_config())
+    db_config = config.readConfig("db", "Database")
+    config.database = as_obj(db_config)
+    result = helper.execute_app(app, config)
 
 class App:
     def __init__(self):
@@ -37,6 +55,8 @@ class App:
         self.__parser = None
         self.__source = None
         self.__persist = False
+        self.__config =  {}
+        self.__db = {}
         self.app = None
 
     def setFormatter(self, formatter_name):
@@ -48,8 +68,12 @@ class App:
     def setSource(self, source_name):
         self.__source = source_name
 
-    def setPersist(self, persist):
-        self.__persist = persist
+    def persistWith(self, database_settings):
+        self.__persist = True
+        self.__db = database_settings
+
+    def config(self, conf):
+        self.__config.update(conf)
 
     def build(self):
         if self.__formatter is None:
@@ -59,8 +83,17 @@ class App:
         if self.__source is None:
             raise Exception("Source has not been specified")
 
-        self.app = loader.load_app("core.apps.default", self.__source, self.__parser, self.__formatter, self.__persist)
+        if len(self.__db) > 0:
+            self.__config['database'] = self.__db
+
+        internal_app = "core.apps.default"
+        if self.__persist is True:
+            internal_app = "core.apps.example4"
+        self.app = loader.load_app(internal_app, self.__source, self.__parser, self.__formatter, self.__persist)
         return self
 
     def run(self):
-        return helper.execute_app(self.app)
+        return helper.execute_app(self.app, as_obj(self.__config))
+
+    def __repr__(self):
+        return "App %s" % (repr(self.__config))

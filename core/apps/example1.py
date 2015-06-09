@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from utilities import helper, common
 
-def execute(sources, parser, formatter):
+def execute(sources, parser, formatter, configs):
     contents = helper.execute(sources, parser, formatter, False)
     for content in contents:
         print(content)

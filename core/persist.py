@@ -139,6 +139,8 @@ class Persist(object):
         self._log("!"*80)
         self._log("Persisting: " + table_name + " " +  repr(persist_data))
         self._log("!"*80)
+        if len(persist_data) == 0:
+            return
 
         id_key = None
         id_val = None
@@ -168,7 +170,7 @@ class Persist(object):
         is_inserted = self.__is_inserted(table_name, id_key, id_val)
 
         if not is_inserted:
-            self._log("persisting...")
+            self._log("persisting: ", persist_data)
             row_id = self._model_data[models_utility.get_model_name(table_name)]["model_struct"].create(persist_data)
             if "id" not in persist_data:
                 persist_data["id"] = row_id
