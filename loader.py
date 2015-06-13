@@ -3,19 +3,19 @@
 import importlib
 import os, os.path
 from utilities import common
-from core.factories.account_formatter_factory import AccountFormatterFactory
-from core.factories.account_parser_factory import AccountParserFactory
-from core.formatters.account_formatter import AccountFormatter
-from core.formatters.swedbank_formatter import SwedbankFormatter
-from core.formatters.avanza_formatter import AvanzaFormatter
-from core.parsers.regex_parser import RegexParser
-from core.parsers.swedbank_parser import SwedbankParser
-from core.parsers.avanza_parser import AvanzaParser
-from core.config import readConfig
+from py_privatekonomi.core.factories.account_formatter_factory import AccountFormatterFactory
+from py_privatekonomi.core.factories.account_parser_factory import AccountParserFactory
+from py_privatekonomi.core.formatters.account_formatter import AccountFormatter
+from py_privatekonomi.core.formatters.swedbank_formatter import SwedbankFormatter
+from py_privatekonomi.core.formatters.avanza_formatter import AvanzaFormatter
+from py_privatekonomi.core.parsers.regex_parser import RegexParser
+from py_privatekonomi.core.parsers.swedbank_parser import SwedbankParser
+from py_privatekonomi.core.parsers.avanza_parser import AvanzaParser
+from py_privatekonomi.core.config import readConfig
 
 def __load_module(name, folder):
     safe_module_name = common.path_leaf(name)
-    if not safe_module_name.startswith("core.%s" % folder):
+    if not safe_module_name.startswith("py_privatekonomi.core.%s" % folder):
         safe_module_name.replace(".", "")
         safe_module_name = "%s.%s" % (folder, safe_module_name)
     safe_module = importlib.import_module("%s" % safe_module_name)
@@ -92,7 +92,7 @@ def load_models(model_names):
     models = {}
     model_collection = [common.camelcase_to_underscore(model) for model in model_names]
     for table_name in model_collection:
-        module = __load_module(table_name, "core.models")
+        module = __load_module(table_name, "py_privatekonomi.core.models")
         model_name = common.underscore_to_camelcase(table_name)
         type_ = getattr(module, model_name)
         models[table_name] = {

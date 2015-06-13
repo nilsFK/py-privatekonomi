@@ -55,8 +55,3 @@ target/
 
 # Customized gitignores
 configs/*.ini
-/apps/
-/factories/
-/formatters/
-/parsers/
-/models/
