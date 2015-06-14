@@ -23,6 +23,8 @@ else:
 class Struct:
     def __init__(self, **entries):
         self.__dict__.update(entries)
+    def __repr__(self):
+        return repr(self.__dict__)
 
 def as_obj(to_obj):
     return Struct(**to_obj)

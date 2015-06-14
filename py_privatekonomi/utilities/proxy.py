@@ -8,13 +8,13 @@ class ProxyMethodWrapper:
     """
     Wrapper object for a method to be called.
     """
-    def __init__( self, obj, func, name ):
+    def __init__(self, obj, func, name):
         self.obj, self.func, self.name = obj, func, name
         assert obj is not None
         assert func is not None
         assert name is not None
 
-    def __call__( self, *args, **kwargs ):
+    def __call__(self, *args, **kwargs):
         return self.obj._method_call(self.name, self.func, *args, **kwargs)
 
 # http://code.activestate.com/recipes/366254-generic-proxy-object-with-beforeafter-method-hooks/
@@ -54,17 +54,17 @@ class HookProxy(object):
         pmeth = ProxyMethodWrapper(self, attr, name)
         pmeth(key, value)
 
-    def _call_str( self, name, *args, **kwds ):
+    def _call_str(self, name, *args, **kwargs):
         """
         Returns a printable version of the call.
         This can be used for tracing.
         """
         pargs = [pformat(x) for x in args]
-        for k, v in kwds.iteritems():
+        for k, v in kwargs.iteritems():
             pargs.append('%s=%s' % (k, pformat(v)))
         return '%s.%s(%s)' % (self._objname, name, ', '.join(pargs))
 
-    def _method_call(self, name, func, *args, **kwds):
+    def _method_call(self, name, func, *args, **kwargs):
         """
         This method gets called before a method is called.
         """
@@ -74,7 +74,7 @@ class HookProxy(object):
         except AttributeError:
             pass
         else:
-            prefunc(name, *args, **kwds)
+            prefunc(name, *args, **kwargs)
 
         # pre-call hook for specific method.
         try:
@@ -82,10 +82,10 @@ class HookProxy(object):
         except AttributeError:
             pass
         else:
-            prefunc(*args, **kwds)
+            prefunc(*args, **kwargs)
 
         # get real method to call and call it
-        rval = func(*args, **kwds)
+        rval = func(*args, **kwargs)
 
         # post-call hook for specific method.
         try:
@@ -93,7 +93,7 @@ class HookProxy(object):
         except AttributeError:
             pass
         else:
-            postfunc(*args, **kwds)
+            postfunc(*args, **kwargs)
 
         # post-call hook for all calls.
         try:
@@ -101,5 +101,5 @@ class HookProxy(object):
         except AttributeError:
             pass
         else:
-            postfunc(name, *args, **kwds)
+            postfunc(name, *args, **kwargs)
         return rval

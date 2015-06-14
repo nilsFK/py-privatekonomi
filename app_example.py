@@ -1,26 +1,42 @@
-import privatekonomi as pe
-from core import config
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+    A sample app which parses and formats Swedbank transactions
+    and prints resulting contents
+"""
+from py_privatekonomi.core.app import (App, AppProxy)
+from py_privatekonomi.utilities import helper
+from py_privatekonomi.core.persisters.economy_persist import EconomyPersist
+from py_privatekonomi.utilities.models import rebuild_tables, create_tables
+from py_privatekonomi.core.mappers.economy_mapper import EconomyMapper
+import loader
 
-# Config
-institution = "swedbank"
-source = "samples/swedbank/sample2"
-persist = True
+def get_default_config():
+    return {
+        # Log output from persisting?
+        "use_logging" : False,
+        # Log to file? Set to full path name to enable, otherwise set to False
+        "log_to_file" : False,
+        # How many rows to batch insert at a time (might affect performance)
+        "insert_rows" : 100,
+        # database settings
+        "database" : {}
+    }
 
-# Config app
-app = pe.App()
-app.setFormatter(institution)
-app.setParser(institution)
-app.setSource(source)
-db_config = config.readConfig("db", "Database")
-app.persistWith(db_config)
-default_config = pe.get_default_config()
-default_config['use_logging'] = True
-default_config['log_to_file'] = False
-default_config['insert_rows'] = 100
-app.config(default_config)
-print(repr(app))
-# Build and run app
-app.build()
-data = app.run()
+class MyApp(App):
+    def execute(self, sources, parser, formatter, configs):
+        contents = helper.execute(sources, parser, formatter, False)
+        return contents
 
-print(data)
+if __name__ == '__main__':
+    app = AppProxy('name_of_my_app', MyApp())
+    app.setFormatter("swedbank")
+    app.setParser("swedbank")
+    app.addSources(["samples/swedbank/sample1", "samples/swedbank/sample2"])
+    conf = get_default_config()
+    conf['use_logging'] = True
+    app.config(conf)
+    app.build()
+    print(repr(app))
+    content = app.run()
+    print(content)
