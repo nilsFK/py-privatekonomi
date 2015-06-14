@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from py_privatekonomi.core.persist import Persist
-from utilities import common
+from py_privatekonomi.utilities import common
 import time
 
 class EconomyPersist(Persist):

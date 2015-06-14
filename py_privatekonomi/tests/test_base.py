@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 import unittest
-from utilities.common import format_time_struct, is_unicode, is_time_struct, as_obj
+from py_privatekonomi.utilities.common import format_time_struct, is_unicode, is_time_struct, as_obj
 from py_privatekonomi.utilities.models import get_models
 from py_privatekonomi.utilities import helper, common
 import loader

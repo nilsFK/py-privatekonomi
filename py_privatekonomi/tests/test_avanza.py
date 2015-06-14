@@ -3,8 +3,7 @@
 
 import unittest
 import loader
-import utilities.common
-from utilities.common import format_time_struct, is_unicode
+from py_privatekonomi.utilities.common import format_time_struct, is_unicode
 from py_privatekonomi.utilities import helper
 from py_privatekonomi.core.error import FormatterError, ParserError
 from test_base import TestBase

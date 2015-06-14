@@ -22,7 +22,7 @@ class AppProxy(HookProxy):
         if super(AppProxy, self).getObj().isBuilt() and len(self.__called) > 0:
             if len(self.__called) == 1 and self.__called[0] == 'run':
                 return
-            raise Exception("Following methods called without building: %s" % (repr(self.__called)))
+            raise Exception("Following methods called without building first: %s" % (repr(self.__called)))
 
     def _post_run(self, *args, **kwargs):
         self.__called = []
@@ -41,6 +41,7 @@ class App:
         self.__persist = False
         self.__config =  {}
         self.__db = {}
+        self.__output = None
         self.app = None
 
     def setFormatter(self, formatter_name):
@@ -59,40 +60,59 @@ class App:
         self.__persist = True
         self.__db = database_settings
 
+    def setOutput(self, output):
+        """ Setting the output will avoid calling execute, but
+        may still trigger a call to persist.
+        If output is set, the building process will not consider
+        formatter, parser, or source(s) """
+        self.__output = output
+
     def config(self, conf):
         self.__config.update(conf)
 
     def isBuilt(self):
         return self.app is not None
 
-    def build(self):
-        if self.__formatter is None:
-            raise Exception("Formatter has not been specified")
-        if self.__parser is None:
-            raise Exception("Parser has not been specified")
-        if len(self.__sources) == 0:
-            raise Exception("Sources have not been specified")
-        if len(self.__db) > 0:
-            self.__config['database'] = self.__db
+    def __set_parser(self, core):
+        self.app['parser'] = None
+        if self.__parser is not None:
+            self.app['parser'] = loader.load_parser(self.__parser, core['factories']['parsers']['account_parser_factory'])
 
+    def __set_formatter(self, core):
+        self.app['formatter'] = None
+        if self.__formatter is not None:
+            self.app['formatter'] = loader.load_formatter(self.__formatter, core['factories']['formatters']['account_formatter_factory'])
+
+    def build(self):
         self.app = {}
         core = loader.load_core()
-        self.app['parser'] = loader.load_parser(self.__parser, core['factories']['parsers']['account_parser_factory'])
-        self.app['formatter'] = loader.load_formatter(self.__formatter, core['factories']['formatters']['account_formatter_factory'])
+        if len(self.__db) > 0:
+            self.__config['database'] = self.__db
+        if self.__output is None:
+            if self.__formatter is None:
+                raise Exception("Formatter has not been specified, please call setFormatter or setOutput")
+            if self.__parser is None:
+                raise Exception("Parser has not been specified, please call setParser or setOutput")
+            if len(self.__sources) == 0:
+                raise Exception("Sources have not been specified, please call addSource or setOutput")
         self.app['core'] = core
+        self.__set_parser(self.app['core'])
+        self.__set_formatter(self.app['core'])
         return self
 
     def run(self):
-        output = None
         if self.app is None:
             raise Exception("Build app using app.build before running.")
-        if 'execute' not in dir(self):
-            raise MissingAppFunctionError(capture_data={
-                'fun_name' : 'execute',
-                'app' : self.app
-            })
-
-        output = self.execute(self.__sources, self.app['parser'], self.app['formatter'], as_obj(self.__config))
+        output = None
+        if self.__output is not None:
+            output = self.__output
+        else:
+            if 'execute' not in dir(self):
+                raise MissingAppFunctionError(capture_data={
+                    'fun_name' : 'execute',
+                    'app' : self.app
+                })
+            output = self.execute(self.__sources, self.app['parser'], self.app['formatter'], as_obj(self.__config))
 
         if self.__persist is True:
             if 'persist' not in dir(self):

@@ -12,7 +12,7 @@ from sqlalchemy.schema import (
 )
 import re
 from py_privatekonomi.core import db
-from utilities import common
+from py_privatekonomi.utilities import common
 from py_privatekonomi.utilities.models import get_model_name
 
 class Model(object):
