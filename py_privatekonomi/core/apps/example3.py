@@ -6,7 +6,7 @@ from py_privatekonomi.core.mappers.economy_mapper import EconomyMapper
 from py_privatekonomi.utilities import helper
 from py_privatekonomi.utilities.models import rebuild_tables, create_tables
 from py_privatekonomi.core.persisters.economy_persist import EconomyPersist
-import loader
+from py_privatekonomi.core import loader
 import sys
 from utilities.common import as_obj
 
@@ -17,16 +17,6 @@ from utilities.common import as_obj
     for saving data to the database since it enables automatization
     using the core.persist.Persist class.
 """
-
-# Configurations
-# configs = as_obj({
-#     # Log output from persisting?
-#     "use_logging" : False,
-#     # Log to file? Set to full path name to enable, otherwise set to False
-#     "log_to_file" : False,
-#     # How many rows to batch insert at a time (might affect performance)
-#     "insert_rows" : 100
-# })
 
 def execute(sources, parser, formatter, configs):
     contents = helper.execute(sources, parser, formatter, True) # <--

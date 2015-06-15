@@ -6,9 +6,9 @@ from core.mappers.economy_mapper import EconomyMapper
 from utilities import helper
 from utilities.models import rebuild_tables, create_tables
 from core.persisters.economy_persist import EconomyPersist
-import loader
-import sys
+from py_privatekonomi.core import loader
 from utilities.common import as_obj
+import sys
 
 """
     An extension of example3.py that does not rebuild tables, but
@@ -80,6 +80,13 @@ def __persist(content, models, configs):
     transaction_type = models.TransactionType.get()
     economy_persist.fillDataGap(models.TransactionType,
         models.TransactionType.getResults(transaction_type, ['id', 'name']))
+
+    #########################################
+    # SECURITY RATE
+    # =======================================
+    security_rate = models.SecurityRate.get()
+    economy_persist.fillDataGap(models.SecurityRate,
+        models.SecurityRate.getResults(security_rate, ['id']))
 
     if save_output_to_file is not False:
         orig_stdout = sys.stdout

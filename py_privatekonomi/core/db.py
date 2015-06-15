@@ -10,7 +10,6 @@ from utilities.common import singleton
 @singleton
 class DB(object):
     def connect(self, db_config):
-        # db_config = config.readConfig(file_config, "Database")
         db_config = common.as_obj(db_config)
         self.__engine = sqlalchemy.create_engine("%(engine)s://%(username)s:%(password)s@%(host)s:%(port)s/%(database)s" % {
             'engine' : db_config.engine,
@@ -22,6 +21,7 @@ class DB(object):
         })
         self.__connection = self.__engine.connect()
         self.__config = db_config
+        self.__connected = True
 
     def getEngine(self):
         return self.__engine
@@ -37,6 +37,13 @@ class DB(object):
 
     def hasConfig(self, config_name):
         return hasattr(self.__config, config_name)
+
+    def isConnected(self):
+        try:
+            is_connected = self.__connected
+        except AttributeError:
+            return False
+        return is_connected
 
 
 if __name__ == '__main__':

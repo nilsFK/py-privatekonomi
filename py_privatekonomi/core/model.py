@@ -19,6 +19,9 @@ class Model(object):
     def __init__(self, context):
             self.context = context
 
+    def isConnected(self):
+        return db.DB().isConnected()
+
     def getRef(self):
         return self.ref
 

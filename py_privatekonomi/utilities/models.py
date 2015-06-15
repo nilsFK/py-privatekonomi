@@ -18,6 +18,8 @@ from py_privatekonomi.core.model_context import ModelContext
             _models.Transaction.insert(...)
         where Transaction is the model struct within the _models object
         can be converted back to dict using common.as_dict(models)
+    model context: an sqlalchemy context
+    model_context: the combination of a model and a model context
 """
 
 def get_model_name(table_name):
@@ -61,7 +63,9 @@ def destroy_tables(models):
     obliteration_order = resolver.resolveObliteration(model_deps)
     for obliterate in obliteration_order:
         model = model_type_mappings[obliterate]
-        model(context).obliterate()
+        model_context = model(context)
+        check_connection(model_context)
+        model_context.obliterate()
 
 def create_tables(models):
     context = ModelContext()
@@ -71,7 +75,9 @@ def create_tables(models):
     ret_models = {}
     for generate in generation_order:
         model = model_type_mappings[generate]
-        ret_models[get_model_name(generate)] = model(context).generate()
+        model_context = model(context)
+        check_connection(model_context)
+        ret_models[get_model_name(generate)] = model_context.generate()
     return common.as_obj(ret_models)
 
 def rebuild_tables(models):
@@ -89,3 +95,7 @@ def get_models(models, to_obj = True):
         return common.as_obj(ret_models)
     else:
         return ret_models
+
+def check_connection(model_context):
+    if not model_context.isConnected():
+        raise Exception("Model %s could not connect to database. Please check your database settings." % (model_context))

@@ -8,7 +8,7 @@ from utilities.common import decode
 from utilities import resolver
 from utilities.models import rebuild_tables
 from utilities import helper, common
-import loader
+from py_privatekonomi.core import loader
 
 """
     This app extends the functionality of example1.py
