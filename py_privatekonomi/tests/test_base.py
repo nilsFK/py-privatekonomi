@@ -5,9 +5,8 @@ import unittest
 from py_privatekonomi.utilities.common import format_time_struct, is_unicode, is_time_struct, as_obj
 from py_privatekonomi.utilities.models import get_models
 from py_privatekonomi.utilities import helper, common
-import loader
 from py_privatekonomi.core.mappers.economy_mapper import EconomyMapper
-from py_privatekonomi.core import config
+from py_privatekonomi.core import config, loader
 try:
     # 2.x.x
     import ConfigParser

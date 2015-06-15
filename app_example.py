@@ -11,7 +11,6 @@ from py_privatekonomi.utilities.models import rebuild_tables, create_tables
 from py_privatekonomi.core.mappers.economy_mapper import EconomyMapper
 from py_privatekonomi.tests.dataset.swedbank.sample1 import test_data as test_data_1
 from py_privatekonomi.core.config import readConfig
-import loader
 
 def get_default_config():
     return {

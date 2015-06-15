@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import loader
 from py_privatekonomi.utilities import helper
 from py_privatekonomi.utilities.common import as_obj
 from py_privatekonomi.utilities.proxy import HookProxy
+from py_privatekonomi.core import loader
 from py_privatekonomi.core.error import MissingAppFunctionError
 import py_privatekonomi.core.db
 

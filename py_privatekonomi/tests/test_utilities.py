@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import loader
 from py_privatekonomi.utilities import common, helper, resolver
+from py_privatekonomi.core import loader
 from py_privatekonomi.core.node import Node
 from py_privatekonomi.core.models.account import Account
 from py_privatekonomi.core.models.account_category import AccountCategory

@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import loader
 from py_privatekonomi.utilities.common import format_time_struct, is_unicode
 from py_privatekonomi.utilities import helper
+from py_privatekonomi.core import loader
 from py_privatekonomi.core.error import FormatterError, ParserError
 from test_base import TestBase
 from py_privatekonomi.tests.dataset.avanza.sample1 import test_data as test_data_1
