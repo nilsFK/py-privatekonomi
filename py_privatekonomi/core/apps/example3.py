@@ -131,6 +131,12 @@ def __persist(content, models, configs):
             transaction_type, ['id', 'name']
     )[0])
 
+    #########################################
+    # SECURITY RATE
+    # =======================================
+    security_rate = models.SecurityRate.get()
+    economy_persist.fillDataGap(models.SecurityRate,
+        models.SecurityRate.getResults(security_rate, ['id']))
 
     if save_output_to_file is not False:
         orig_stdout = sys.stdout

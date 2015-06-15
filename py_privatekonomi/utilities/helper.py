@@ -24,7 +24,7 @@ def execute_app(app, config = None):
         })
     if app['persist']:
         if hasattr(app['module'], 'persist'):
-            py_privatekonomi.core.db.DB().connect(config.database)
+            connect_db(config.database)
             app['module'].persist(content, config)
         else:
             raise MissingAppFunctionError(capture_data={
@@ -41,3 +41,6 @@ def execute(sources, parser, formatter, format_as_mapper = False):
         content = formatter.format(parsed, subformatters, format_as_mapper)
         contents.append(content)
     return contents
+
+def connect_db(db_config):
+    py_privatekonomi.core.db.DB().connect(db_config)
