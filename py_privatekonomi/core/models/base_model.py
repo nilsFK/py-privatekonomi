@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import py_privatekonomi.core.model
+import py_privatekonomi.utilities.common
 class BaseModel(py_privatekonomi.core.model.Model):
     def __init__(self, ref, context):
         super(BaseModel, self).__init__(context)
@@ -38,7 +39,7 @@ class BaseModel(py_privatekonomi.core.model.Model):
             for col in cols:
                 result[col] = rs[self.col(col)]
                 if decode is True:
-                    result[col] = self.decode(result[col])
+                    result[col] = py_privatekonomi.utilities.common.decode(result[col])
             results.append(result)
         return results
 

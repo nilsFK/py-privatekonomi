@@ -72,7 +72,7 @@ class SwedbankParser(py_privatekonomi.core.parser.Parser):
 
     def __parse_simple(self, contents):
         regex_parser = RegexParser()
-        parsed = regex_parser.parse(contents, r'\t+')
+        parsed = regex_parser.parse(contents, r'\s*\t+\s*')
         subformatters = [
             "transaction_accounting_date",
             "transaction_transaction_date",
