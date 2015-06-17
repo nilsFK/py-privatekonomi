@@ -38,11 +38,6 @@ def execute(sources, parser, formatter, format_as_mapper = False):
     for source in sources:
         content = common.read_file(source)
         parsed, subformatters = parser.parse(content)
-        count = 0
-        for p in parsed:
-            count += 1
-            if len(p) != len(subformatters):
-                raise Exception("Incompatible lengths detected for transaction #%s after parsing sources: parsed content=%s and subformatters=%s for (content=%s, subformatters=%s)" % (count, len(p), len(subformatters), repr(p), repr(subformatters)))
         content = formatter.format(parsed, subformatters, format_as_mapper)
         contents.append(content)
     return contents

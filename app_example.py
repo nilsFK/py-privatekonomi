@@ -6,7 +6,6 @@
 """
 from py_privatekonomi.core.app import (App, AppProxy)
 from py_privatekonomi.utilities import helper
-from py_privatekonomi.core.persisters.economy_persist import EconomyPersist
 from py_privatekonomi.utilities.models import rebuild_tables, create_tables
 from py_privatekonomi.core.mappers.economy_mapper import EconomyMapper
 from py_privatekonomi.tests.dataset.swedbank.sample1 import test_data as test_data_1

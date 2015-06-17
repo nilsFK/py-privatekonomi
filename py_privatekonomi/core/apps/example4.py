@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import core.db
-from core.mappers.economy_mapper import EconomyMapper
-from utilities import helper
-from utilities.models import rebuild_tables, create_tables
-from core.persisters.economy_persist import EconomyPersist
+import py_privatekonomi.core.db
+from py_privatekonomi.core.mappers.economy_mapper import EconomyMapper
+from py_privatekonomi.utilities import helper
+from py_privatekonomi.utilities.models import rebuild_tables, create_tables
 from py_privatekonomi.core import loader
-from utilities.common import as_obj
+from py_privatekonomi.utilities.common import as_obj
 import sys
 
 """
@@ -31,69 +30,12 @@ def __persist(content, models, configs):
     economy_persist.useLogging(configs.use_logging)
     save_output_to_file = configs.log_to_file
 
-    #########################################
-    # PROVIDER
-    # =======================================
-    provider = models.Provider.get()
-    economy_persist.fillDataGap(models.Provider,
-        models.Provider.getResults(provider, ['id', 'name']))
-
-    #########################################
-    # ACCOUNT CATEGORY
-    # =======================================
-    account_category = models.AccountCategory.get()
-    economy_persist.fillDataGap(models.AccountCategory,
-        models.AccountCategory.getResults(account_category, ['id', 'name']))
-
-    #########################################
-    # ORGANIZATION
-    # =======================================
-    organization = models.Organization.get()
-    economy_persist.fillDataGap(models.Organization,
-        models.Organization.getResults(organization, ['id', 'name']))
-
-    #########################################
-    # ACCOUNT
-    # =======================================
-    account = models.Account.get()
-    economy_persist.fillDataGap(models.Account,
-        models.Account.getResults(account, ['id', 'name']))
-
-    #########################################
-    # TRANSACTION CATEGORY
-    # =======================================
-    transaction_category = models.TransactionCategory.get()
-    economy_persist.fillDataGap(models.TransactionCategory,
-        models.TransactionCategory.getResults(transaction_category, ['id', 'name']))
-
-    #########################################
-    # CURRENCY
-    # =======================================
-    currency = models.Currency.get()
-    economy_persist.fillDataGap(models.Currency,
-        models.Currency.getResults(currency, ['id', 'code', 'symbol', 'country']))
-
-
-    #########################################
-    # TRANSACTION TYPE
-    # =======================================
-    transaction_type = models.TransactionType.get()
-    economy_persist.fillDataGap(models.TransactionType,
-        models.TransactionType.getResults(transaction_type, ['id', 'name']))
-
-    #########################################
-    # SECURITY RATE
-    # =======================================
-    security_rate = models.SecurityRate.get()
-    economy_persist.fillDataGap(models.SecurityRate,
-        models.SecurityRate.getResults(security_rate, ['id']))
-
     if save_output_to_file is not False:
         orig_stdout = sys.stdout
         f = file(save_output_to_file, "w")
         sys.stdout = f
 
-    economy_persist.persist(content)
+    # TODO: persist data...
 
     if save_output_to_file is not False:
         sys.stdout = orig_stdout

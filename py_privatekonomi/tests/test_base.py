@@ -58,7 +58,7 @@ class TestBase(unittest.TestCase):
     def get_default_config(self):
         db_config = config.readConfig("db_test", "Database")
         __config = {
-            'insert_rows' : False,
+            'insert_rows' : 1,
             'use_logging' : False,
             'log_to_file' : False,
             'database' : db_config
@@ -90,8 +90,11 @@ class TestBase(unittest.TestCase):
                         if model_name not in next_expected:
                             raise Exception("Missing model: %s in (%s)" % (model_name, next_expected))
                         for col in next_expected[model_name].keys():
-                            val = next_expected[model_name][col]
-                            self.assertEqual(val, data[model_name][col], "%s.%s %s is not equal to %s.%s %s in index %s (comparing subdata %s with %s)" % (model_name, col, val, model_name, col, data[model_name][col], idx, next_expected, data[model_name]))
+                            val1 = next_expected[model_name][col]
+                            val2 = data[model_name][col]
+                            if is_time_struct(val2):
+                                val2 = format_time_struct(val2)
+                            self.assertEqual(val1, val2, "%s.%s %s is not equal to %s.%s %s in index %s (comparing subdata %s with %s)" % (model_name, col, val1, model_name, col, data[model_name][col], idx, next_expected, data[model_name]))
                 else:
                     for model_name in next_expected:
                         for col in next_expected[model_name].keys():

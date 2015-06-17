@@ -11,6 +11,7 @@ import codecs
 import re
 import sys
 import decimal
+import time
 
 if sys.version < '3':
     import codecs
@@ -82,6 +83,9 @@ def is_datetime(data):
 
 def is_decimal(data):
     return isinstance(data, decimal.Decimal)
+
+def time_now(format_="%Y-%m-%d %H:%M:%S"):
+    return time.strftime(format_)
 
 def is_unicode(s):
     if sys.version < '3':
