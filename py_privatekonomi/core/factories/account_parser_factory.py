@@ -11,4 +11,4 @@ class AccountParserFactory(Factory):
         if parser:
             return parser()
         else:
-            assert 0, ("Invalid acc_type: ", acc_type)
+            return None

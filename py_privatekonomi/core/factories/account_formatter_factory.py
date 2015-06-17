@@ -11,4 +11,4 @@ class AccountFormatterFactory(Factory):
         if formatter:
             return formatter()
         else:
-            assert 0, ("Invalid acc_type: ", acc_type)
+            return None

@@ -25,7 +25,6 @@ def get_default_config():
 
 class MyApp(App):
     def execute(self, sources, parser, formatter, configs):
-        print("Calling execute")
         contents = helper.execute(sources, parser, formatter, False)
         return contents
 
@@ -34,6 +33,7 @@ class MyApp(App):
 
 def app_1():
     """ An app which formats and parses two samples """
+    print("="*80)
     print("Running app 1")
     print("="*80)
     app = AppProxy('name_of_my_app', MyApp())
@@ -51,6 +51,7 @@ def app_1():
 def app_2():
     """ An app which sets the output directly without going through the process
         of parsing and formatting """
+    print("="*80)
     print("Running app 2")
     print("="*80)
     app = AppProxy('name_of_my_app', MyApp())
@@ -63,6 +64,50 @@ def app_2():
     content = app.run()
     print(content)
 
+def app_3():
+    """ An app which guesses the formatter and parser by calling
+        autodiscover() """
+    print("="*80)
+    print("Running app 3")
+    print("="*80)
+    app = AppProxy('name_of_my_app', MyApp())
+    app.autodiscover([
+        {
+            'formatter' : 'avanza',
+            'parser' : 'avanza'
+        },
+        {
+            'formatter' : 'some_unknown_formatter',
+            'parser' : 'some_unknown_parser'
+        },
+        {
+            'formatter' : 'swedbank',
+            'parser' : 'swedbank'
+        }
+    ])
+    conf = get_default_config()
+    conf['use_logging'] = True
+    app.config(conf)
+
+    print("-"*80)
+    print("Swedbank samples")
+    print("-"*80)
+    app.addSources(["samples/swedbank/sample1","samples/swedbank/sample2"])
+    app.build()
+    print(repr(app))
+    content = app.run()
+    print(content)
+
+    print("-"*80)
+    print("Avanza samples")
+    print("-"*80)
+    app.clearSources()
+    app.addSources(["samples/avanza/sample1"])
+    app.build()
+    content = app.run()
+    print(content)
+
 if __name__ == '__main__':
-    app_1()
-    app_2()
+    apps = [app_1, app_2, app_3]
+    for app in apps:
+        app()

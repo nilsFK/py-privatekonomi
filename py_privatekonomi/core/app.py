@@ -4,7 +4,7 @@ from py_privatekonomi.utilities import helper
 from py_privatekonomi.utilities.common import as_obj
 from py_privatekonomi.utilities.proxy import HookProxy
 from py_privatekonomi.core import loader
-from py_privatekonomi.core.error import MissingAppFunctionError
+from py_privatekonomi.core.error import (MissingAppFunctionError, FormatterError, ParserError)
 import py_privatekonomi.core.db
 
 class AppProxy(HookProxy):
@@ -33,7 +33,7 @@ class AppProxy(HookProxy):
     def __repr__(self):
         return super(AppProxy, self).getObj().__repr__()
 
-class App:
+class App(object):
     def __init__(self):
         self.__formatter = None
         self.__parser = None
@@ -42,6 +42,8 @@ class App:
         self.__config =  {}
         self.__db = {}
         self.__output = None
+        self.__auto_discover = False
+        self.__discover_from = None
         self.app = None
 
     def setFormatter(self, formatter_name):
@@ -56,6 +58,9 @@ class App:
     def addSources(self, source_names):
         self.__sources.extend(source_names)
 
+    def clearSources(self):
+        self.__sources = []
+
     def persistWith(self, database_settings):
         self.__persist = True
         self.__db = database_settings
@@ -67,6 +72,23 @@ class App:
         formatter, parser, or source(s) """
         self.__output = output
 
+    def autodiscover(self, discover_from):
+        """ This will attempt to guess the formatter
+            and parser given a list of parsers and formatters of format:
+            discover_from = [
+                {
+                    'formatter' : 'swedbank',
+                    'parser' : 'swedbank'
+                }, { ... }
+            ]
+        """
+        if self.__formatter is not None:
+            raise Exception("Unable to autodiscover; Formatter is already set to: %s" % (self.__formatter))
+        if self.__parser is not None:
+            raise Exception("Unable to autodiscover; Parser is already set to: %s" % (self.__parser))
+        self.__auto_discover = True
+        self.__discover_from = discover_from
+
     def config(self, conf):
         self.__config.update(conf)
 
@@ -76,33 +98,86 @@ class App:
     def __set_parser(self, core):
         self.app['parser'] = None
         if self.__parser is not None:
-            self.app['parser'] = loader.load_parser(self.__parser, core['factories']['parsers']['account_parser_factory'])
+            self.app['parser'] = self.__load_parser(self.__parser, core)
 
     def __set_formatter(self, core):
         self.app['formatter'] = None
         if self.__formatter is not None:
-            self.app['formatter'] = loader.load_formatter(self.__formatter, core['factories']['formatters']['account_formatter_factory'])
+            self.app['formatter'] = self.__load_formatter(self.__formatter, core)
+
+    def __load_formatter(self, formatter_name, core):
+        return loader.load_formatter(formatter_name, core['factories']['formatters']['account_formatter_factory'])
+
+    def __load_parser(self, parser_name, core):
+        return loader.load_parser(parser_name, core['factories']['parsers']['account_parser_factory'])
+
+    def __autodiscover(self, core):
+        self.app['formatter'] = None
+        self.app['parser'] = None
+        for discover in self.__discover_from:
+            formatter = self.__load_formatter(discover['formatter'], core)
+            if formatter is not None:
+                parser = self.__load_parser(discover['parser'], core)
+                if parser is not None:
+                    self.app['formatter'] = formatter
+                    self.app['parser'] = parser
+                    return True
+        return False
+
 
     def build(self):
         self.app = {}
         core = loader.load_core()
+        self.app['core'] = core
         if len(self.__db) > 0:
             self.__config['database'] = self.__db
-        if self.__output is None:
+        if self.__output is None and self.__auto_discover is False:
             if self.__formatter is None:
-                raise Exception("Formatter has not been specified, please call setFormatter or setOutput")
+                raise Exception("Formatter has not been specified, please call setFormatter, setOutput, or autodiscover")
             if self.__parser is None:
-                raise Exception("Parser has not been specified, please call setParser or setOutput")
+                raise Exception("Parser has not been specified, please call setParser, setOutput, or autodiscover")
             if len(self.__sources) == 0:
-                raise Exception("Sources have not been specified, please call addSource or setOutput")
-        self.app['core'] = core
-        self.__set_parser(self.app['core'])
-        self.__set_formatter(self.app['core'])
+                raise Exception("Sources have not been specified, please call addSource, setOutput, or autodiscover")
+            self.__set_parser(self.app['core'])
+            self.__set_formatter(self.app['core'])
+        elif self.__auto_discover is True:
+            found = self.__autodiscover(self.app['core'])
+            if not found:
+                raise Exception("Unable to find parser/formatter from %s" % (repr(self.__discover_from)))
+
         return self
 
     def run(self):
+        def __execute():
+            if self.__auto_discover is True:
+                found = False
+                for discover in self.__discover_from:
+                    try:
+                        parser = self.__load_parser(discover['parser'], self.app['core'])
+                        formatter = self.__load_formatter(discover['formatter'],  self.app['core'])
+                        if parser is None or formatter is None:
+                            continue
+                        output = self.execute(
+                            sources=self.__sources,
+                            parser=parser,
+                            formatter=formatter,
+                            configs=as_obj(self.__config))
+                        self.app['parser'] = discover['parser']
+                        self.app['formatter'] = discover['formatter']
+                        found = True
+                        break
+                    except FormatterError as e:
+                        continue
+                    except ParserError as e:
+                        continue
+                if found is False:
+                    raise Exception("Unable to parse/format using parsers and formatters from %s" % (repr(self.__discover_from)))
+            else:
+                output = self.execute(self.__sources, self.app['parser'], self.app['formatter'], as_obj(self.__config))
+            return output
+
         if self.app is None:
-            raise Exception("Build app using app.build before running.")
+            raise Exception("Build app using app.build() before running.")
         output = None
         if self.__output is not None:
             output = self.__output
@@ -112,8 +187,7 @@ class App:
                     'fun_name' : 'execute',
                     'app' : self.app
                 })
-            output = self.execute(self.__sources, self.app['parser'], self.app['formatter'], as_obj(self.__config))
-
+            output = __execute()
         if self.__persist is True:
             if 'persist' not in dir(self):
                 raise MissingAppFunctionError(capture_data={
