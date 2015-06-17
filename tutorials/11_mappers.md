@@ -21,4 +21,4 @@ En mapper definierar även upp en uppsättning av modeller som den känner till 
 EconomyMapper.getModelnames()
 ```
 
-Inbyggda mappers finns sparade i core/mappers/, medan användardefinierade mappers finns i /mappers/.
+Inbyggda mappers finns sparade i core/mappers/.

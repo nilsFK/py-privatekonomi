@@ -1,4 +1,4 @@
-Allting som underlättar livet finns i katalogen utilities/.
+Allting som underlättar livet finns i katalogen py_privatekonomi/utilities/.
 
 common.py innehåller spridd funktionalitet vars huvudsakliga syfte är att underlätta programmering på låg nivå, t.ex. att göra en viss klass till en singleton eller att konvertera mellan datastrukturer, osv.
 

@@ -13,7 +13,7 @@ För att hämta transaktionsloggar, följ dessa steg:
 5. På nästa sida: välj Oformaterad text och klicka på Exportera
 6. Notera var på filsystemet filen finns och kör privatekonomi.py enligt:
 ```bash
-python privatekonomi.py sökväg/till/transaktionslogg -p swedbank -f swedbank -a core.apps.example1
+python privatekonomi.py sökväg/till/transaktionslogg -p swedbank -f swedbank -a py_privatekonomi.core.apps.example1
 ```
 
 Avanza
@@ -27,7 +27,7 @@ För att hämta transaktionsloggar från Avanza, följ dessa steg:
 5. Klicka på Exportera transaktioner till Excel
 6. Notera var på filsystemet filen finns och kör privatekonomi.py enligt:
 ```bash
-python privatekonomi.py sökväg/till/transaktionslogg -p avanza -f avanza -a core.apps.example1
+python privatekonomi.py sökväg/till/transaktionslogg -p avanza -f avanza -a py_privatekonomi.core.apps.example1
 ```
 
 ini-filer
@@ -59,6 +59,6 @@ För att använda ini-filer, gör följande:
 2. Konfigurera my_source.ini med ovanstående alternativ
 3.  Kör följande:
 ```bash
-python py-privatekonomi.py my_source.ini -p swedbank -f swedbank -a core.apps.example1
+python py-privatekonomi.py my_source.ini -p swedbank -f swedbank -a py_privatekonomi.core.apps.example1
 ```
 
