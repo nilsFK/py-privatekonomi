@@ -84,14 +84,20 @@ def is_datetime(data):
 def is_decimal(data):
     return isinstance(data, decimal.Decimal)
 
-def time_now(format_="%Y-%m-%d %H:%M:%S"):
-    return time.strftime(format_)
+def is_dict(data):
+    return isinstance(data, dict)
+
+def is_Struct(data):
+    return isinstance(data, Struct)
 
 def is_unicode(s):
     if sys.version < '3':
         return isinstance(s, unicode)
     else:
         return isinstance(s, str)
+
+def time_now(format_="%Y-%m-%d %H:%M:%S"):
+    return time.strftime(format_)
 
 def decode(val):
     """Since we in most cases are not aware of

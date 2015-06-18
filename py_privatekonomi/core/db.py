@@ -4,12 +4,17 @@ import sqlalchemy
 from sqlalchemy import __version__
 from sqlalchemy import create_engine
 # from core import config
-from utilities import common
-from utilities.common import singleton
+from py_privatekonomi.utilities import common
+from py_privatekonomi.utilities.common import (singleton, is_dict, is_Struct, as_obj)
 
 @singleton
 class DB(object):
     def connect(self, db_config):
+        if is_dict(db_config):
+            db_config = as_obj(db_config)
+        else:
+            if not is_Struct(db_config):
+                raise Exception("db_config must be either dict or common.Struct: %s" % (repr(db_config)))
         self.__engine = sqlalchemy.create_engine("%(engine)s://%(username)s:%(password)s@%(host)s:%(port)s/%(database)s" % {
             'engine' : db_config.engine,
             'username' : db_config.username,
