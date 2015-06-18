@@ -110,6 +110,12 @@ class Model(object):
     def col(self, val):
         return self.ref.c[val]
 
+    def cols(self, vals):
+        ret_cols = []
+        for val in vals:
+            ret_cols.append(self.col(val))
+        return ret_cols
+
     def execute(self, stmt):
         return db.DB().getConnection().execute(stmt)
 
@@ -140,10 +146,17 @@ class Model(object):
         result = self.execute(stmt)
         return result
 
+    def getSelectStatement(self, columns=None, whereclause=None):
+        stmt = select(columns=columns, whereclause=whereclause)
+        return stmt
+
     def selectAll(self):
         stmt = select([self.ref])
         result = self.execute(stmt)
         return result
+
+    def c(self):
+        return self.ref.c
 
     def selectValue(self, column, whereclause=None):
         result = self.selectOne([self.col(column)], whereclause)

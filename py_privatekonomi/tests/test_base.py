@@ -61,8 +61,10 @@ class TestBase(unittest.TestCase):
             'insert_rows' : 1,
             'use_logging' : False,
             'log_to_file' : False,
-            'database' : db_config
+            'database' : {}
         }
+        __config = as_obj(__config)
+        __config.database = as_obj(db_config)
         return __config
 
     def executeApp(self, app_name, sources, parser_name, formatter_name, config = {}, persist = False):
@@ -73,7 +75,7 @@ class TestBase(unittest.TestCase):
                 parser_name=parser_name,
                 formatter_name=formatter_name,
                 persist=persist)
-            results = helper.execute_app(app, as_obj(config))
+            results = helper.execute_app(app, config)
         except ConfigParser.NoSectionError:
             results = False
         return results

@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import core.db
-from core.mappers.economy_mapper import EconomyMapper
-from utilities import helper
-from utilities.common import decode
-from utilities import resolver
-from utilities.models import rebuild_tables
-from utilities import helper, common
+from py_privatekonomi.core.mappers.economy_mapper import EconomyMapper
+from py_privatekonomi.utilities import helper
+from py_privatekonomi.utilities.common import decode
+from py_privatekonomi.utilities import resolver
+from py_privatekonomi.utilities.models import rebuild_tables
+from py_privatekonomi.utilities import helper, common
 from py_privatekonomi.core import loader
+from sqlalchemy import desc, asc
 
 """
     This app extends the functionality of example1.py
@@ -27,7 +27,7 @@ def execute(sources, parser, formatter, configs):
     return content
 
 def persist(output, configs):
-    models = rebuild_tables(EconomyMapper.getModelNames())
+    models = rebuild_tables(loader.load_models(EconomyMapper.getModelNames()))
 
     # Insert all items
     models.Organization.insert([
@@ -190,3 +190,18 @@ def persist(output, configs):
         print("transaction_type_id:", t[models.Transaction.col('transaction_type_id')])
         print("currency_id:", t[models.Transaction.col('currency_id')])
         print("-"*80)
+
+    # Get some items and order them descending/ascending
+    stmt = models.Transaction.getSelectStatement(models.Transaction.cols(['id', 'accounting_date'])).order_by(desc(models.Transaction.c().accounting_date))
+    transactions = models.Transaction.execute(stmt)
+    print("transactions ordered by accounting date descending")
+    for t in transactions:
+        print("id:", t[models.Transaction.col('id')])
+        print("accounting date:", t[models.Transaction.col('accounting_date')])
+    print("-"*80)
+    stmt = models.Transaction.getSelectStatement(models.Transaction.cols(['id', 'accounting_date'])).order_by(asc(models.Transaction.c().accounting_date))
+    transactions = models.Transaction.execute(stmt)
+    print("transactions ordered by accounting date ascending")
+    for t in transactions:
+        print("id:", t[models.Transaction.col('id')])
+        print("accounting date:", t[models.Transaction.col('accounting_date')])

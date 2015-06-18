@@ -58,7 +58,7 @@ class TestUtilities(TestBase):
         self.assertEqual(resolved[6].name, "a")
 
     def test_model_resolver_resolveObliteration(self):
-        py_privatekonomi.core.db.DB().connect(common.as_obj(self.get_default_config()).database)
+        py_privatekonomi.core.db.DB().connect(self.get_default_config().database)
 
         deps = resolver.getModelDependencies(self.model_types)
         obliteration_order = resolver.resolveObliteration(deps)
@@ -70,7 +70,7 @@ class TestUtilities(TestBase):
         """
 
     def test_model_resolver_resolveGeneration(self):
-        py_privatekonomi.core.db.DB().connect(common.as_obj(self.get_default_config()).database)
+        py_privatekonomi.core.db.DB().connect(self.get_default_config().database)
 
         deps = resolver.getModelDependencies(self.model_types)
         generation_order = resolver.resolveGeneration(deps)
