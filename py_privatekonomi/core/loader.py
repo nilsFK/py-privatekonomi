@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import importlib
 import os, os.path
-from utilities import common
+from py_privatekonomi.utilities import common
 from py_privatekonomi.core.factories.account_formatter_factory import AccountFormatterFactory
 from py_privatekonomi.core.factories.account_parser_factory import AccountParserFactory
 from py_privatekonomi.core.formatters.account_formatter import AccountFormatter
@@ -70,6 +70,8 @@ def load_parser(name, factory):
     return factory.create(name)
 
 def load_sources(source_name):
+    if common.is_list(source_name):
+        return source_name
     if source_name.endswith(".ini"):
         source_name = source_name.replace(".ini", "")
         source = common.as_obj(readConfig(source_name, "Source"))

@@ -15,11 +15,19 @@ class FormatterError(BaseError):
         super(FormatterError, self).__init__(message)
         self.capture_data = capture_data
     def __str__(self):
-        return "Unable to correctly format input for token=%(token)s and subformatter=%(subformatter)s: %(input)s)" % {
-            'input' : repr(self.message),
-            'token' : repr(self.capture_data['token']),
-            'subformatter' : repr(self.capture_data['subformatter'])
-        }
+        if 'token' in self.capture_data:
+            return "Unable to correctly format input for token=%(token)s and subformatter=%(subformatter)s: %(input)s)" % {
+                'input' : repr(self.message),
+                'token' : repr(self.capture_data['token']),
+                'subformatter' : repr(self.capture_data['subformatter'])
+            }
+        if 'inconsistent_length' in self.capture_data:
+            return "Subformatters did not match the produced tokens. tokens length=%(tokens_length)s, subformatters length=%(subformatters_length)s, tokens=%(tokens)s, subformatters=%(subformatters)s" % {
+                'tokens_length' : len(self.capture_data['tokens']),
+                'subformatters_length' : len(self.capture_data['subformatters']),
+                'tokens' : self.capture_data['tokens'],
+                'subformatters' : self.capture_data['subformatters']
+            }
 
 class MapperError(BaseError):
     def __init__(self, message="", capture_data = {}):

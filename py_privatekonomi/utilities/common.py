@@ -90,6 +90,9 @@ def is_dict(data):
 def is_Struct(data):
     return isinstance(data, Struct)
 
+def is_list(data):
+    return isinstance(data, list)
+
 def is_unicode(s):
     if sys.version < '3':
         return isinstance(s, unicode)

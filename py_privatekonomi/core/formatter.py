@@ -35,6 +35,12 @@ class Formatter(object):
 
     def __process_row(self, row):
         tokens = {}
+        if len(row) != len(self.subformatters):
+            raise FormatterError(Exception, {
+                'inconsistent_length' : True,
+                'subformatters' : self.subformatters,
+                'tokens' : row
+            })
         subformatter_deq = deque(self.subformatters)
         for token in row:
             token = token.strip()

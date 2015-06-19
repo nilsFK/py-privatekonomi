@@ -20,12 +20,21 @@ def get_default_config():
         # How many rows to batch insert at a time (might affect performance)
         "insert_rows" : 100,
         # database settings
-        "database" : {}
+        "database" : {},
+        # Is sourced passed a list of raw textual transactions rather than
+        # a list of files where the raw transactions reside?
+        "sources_is_content" : False
     }
 
 class MyApp(App):
     def execute(self, sources, parser, formatter, configs):
-        contents = helper.execute(sources, parser, formatter, False)
+        contents = helper.execute(
+            sources=sources,
+            parser=parser,
+            formatter=formatter,
+            format_as_mapper=False,
+            sources_is_content=configs.sources_is_content
+            )
         return contents
 
     def persist(self, output, configs):

@@ -5,7 +5,7 @@ from py_privatekonomi.core.factories.account_formatter_factory import AccountFor
 from py_privatekonomi.core.factories.account_parser_factory import AccountParserFactory
 import py_privatekonomi.core.db
 from py_privatekonomi.core.error import MissingAppFunctionError
-from utilities import common
+from py_privatekonomi.utilities import common
 import sys
 
 def get_parser(acc_type):
@@ -33,10 +33,16 @@ def execute_app(app, config = None):
             })
     return content
 
-def execute(sources, parser, formatter, format_as_mapper = False):
+def execute(sources, parser, formatter, format_as_mapper = False, sources_is_content=False):
     contents = []
+
     for source in sources:
-        content = common.read_file(source)
+        if sources_is_content:
+            if not common.is_list(source):
+                source = [s.strip() for s in source.splitlines()]
+            content = source
+        else:
+            content = common.read_file(source)
         parsed, subformatters = parser.parse(content)
         content = formatter.format(parsed, subformatters, format_as_mapper)
         contents.append(content)
