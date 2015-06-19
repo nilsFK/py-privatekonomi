@@ -44,7 +44,7 @@ För ytterligare instruktioner, kör:
 
 Exempel
 -------
-> python privatekonomi.py samples/swedbank/sample1 -f swedbank -p swedbank -a core.apps.example1
+> python privatekonomi.py samples/swedbank/sample1 -f swedbank -p swedbank -a py_privatekonomi.core.apps.example1
 
 Projektstatus
 -------------
