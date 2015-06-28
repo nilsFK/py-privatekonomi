@@ -3,8 +3,8 @@
 
 import unittest
 import inspect
-from utilities import common
-from test_base import TestBase
+from py_privatekonomi.utilities import common
+from py_privatekonomi.tests.test_base import TestBase
 from py_privatekonomi.tests.dataset.swedbank.sample1 import test_data as test_data_1
 from py_privatekonomi.tests.dataset.swedbank.sample2 import test_data as test_data_2
 from py_privatekonomi.tests.dataset.swedbank.sample3 import test_data as test_data_3

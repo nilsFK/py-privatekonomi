@@ -3,7 +3,7 @@
 
 import unittest
 import inspect
-from test_base import TestBase
+from py_privatekonomi.tests.test_base import TestBase
 from py_privatekonomi.tests.dataset.avanza.sample1 import test_data as test_data_1
 class TestAvanzaDB(TestBase):
     def setUp(self):

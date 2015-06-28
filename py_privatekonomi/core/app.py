@@ -178,16 +178,16 @@ class App(object):
 
         if self.app is None:
             raise Exception("Build app using app.build() before running.")
-        output = None
+        ret = {}
         if self.__output is not None:
-            output = self.__output
+            ret['execute'] = self.__output
         else:
             if 'execute' not in dir(self):
                 raise MissingAppFunctionError(capture_data={
                     'fun_name' : 'execute',
                     'app' : self.app
                 })
-            output = __execute()
+            ret['execute'] = __execute()
         if self.__persist is True:
             if 'persist' not in dir(self):
                 raise MissingAppFunctionError(capture_data={
@@ -198,8 +198,8 @@ class App(object):
                 py_privatekonomi.core.db.DB().connect(self.__config['database'])
             except AttributeError as e:
                 raise Exception("Unable to connect to database: inaccurate database settings.", e)
-            self.persist(output, as_obj(self.__config))
-        return output
+            ret['persist'] = self.persist(ret['execute'], as_obj(self.__config))
+        return ret
 
     def __repr__(self):
         return "App %s" % (repr(self.__config))
