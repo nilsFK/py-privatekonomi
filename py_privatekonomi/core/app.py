@@ -190,7 +190,6 @@ class App(object):
                     'app' : self.app
                 })
             ret['execute'] = __execute()
-            print(repr(self.app['formatter']))
             if not is_string(self.app['formatter']):
                 ret['formatter'] = self.app['formatter'].getName()
             if not is_string(self.app['parser']):
