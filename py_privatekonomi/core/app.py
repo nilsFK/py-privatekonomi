@@ -192,8 +192,12 @@ class App(object):
             ret['execute'] = __execute()
             if not is_string(self.app['formatter']):
                 ret['formatter'] = self.app['formatter'].getName()
+            else:
+                ret['formatter'] = self.app['formatter']
             if not is_string(self.app['parser']):
                 ret['parser'] = self.app['parser'].getName()
+            else:
+                ret['parser'] = self.app['parser']
         if self.__persist is True:
             if 'persist' not in dir(self):
                 raise MissingAppFunctionError(capture_data={
