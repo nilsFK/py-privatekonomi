@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from py_privatekonomi.utilities import helper
-from py_privatekonomi.utilities.common import as_obj
+from py_privatekonomi.utilities.common import as_obj, is_string
 from py_privatekonomi.utilities.proxy import HookProxy
 from py_privatekonomi.core import loader
 from py_privatekonomi.core.error import (MissingAppFunctionError, FormatterError, ParserError)
@@ -181,6 +181,8 @@ class App(object):
         ret = {}
         if self.__output is not None:
             ret['execute'] = self.__output
+            ret['formatter'] = 'unknown'
+            ret['parser'] = 'unknown'
         else:
             if 'execute' not in dir(self):
                 raise MissingAppFunctionError(capture_data={
@@ -188,6 +190,11 @@ class App(object):
                     'app' : self.app
                 })
             ret['execute'] = __execute()
+            print(repr(self.app['formatter']))
+            if not is_string(self.app['formatter']):
+                ret['formatter'] = self.app['formatter'].getName()
+            if not is_string(self.app['parser']):
+                ret['parser'] = self.app['parser'].getName()
         if self.__persist is True:
             if 'persist' not in dir(self):
                 raise MissingAppFunctionError(capture_data={

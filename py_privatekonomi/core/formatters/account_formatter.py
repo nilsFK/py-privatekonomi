@@ -3,8 +3,12 @@
 import py_privatekonomi.core.formatter
 from py_privatekonomi.core.formatter import Formatter
 class AccountFormatter(Formatter):
-    def __init__(self):
+    def __init__(self, name):
         super(AccountFormatter, self).__init__()
+        self.__name = name
+
+    def getName(self):
+        return self.__name
 
     @classmethod
     def _format_currency(self, content):

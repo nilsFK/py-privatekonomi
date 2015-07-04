@@ -7,7 +7,7 @@ import py_privatekonomi.core.formatter
 from py_privatekonomi.core.mappers.economy_mapper import EconomyMapper
 class AvanzaFormatter(AccountFormatter):
     def __init__(self):
-        super(AvanzaFormatter, self).__init__()
+        super(AvanzaFormatter, self).__init__("avanza")
 
     @EconomyMapper("Account", "name")
     def format_account_name(self, content, subformatter):

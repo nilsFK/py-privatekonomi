@@ -8,7 +8,7 @@ from py_privatekonomi.core.error import ParserError
 
 class SwedbankParser(py_privatekonomi.core.parser.Parser):
     def __init__(self):
-        pass
+        super(SwedbankParser, self).__init__("swedbank")
 
     def parse(self, contents):
         ret = []

@@ -9,7 +9,7 @@ from py_privatekonomi.core.formatter import Formatter
 from py_privatekonomi.core.mappers.economy_mapper import EconomyMapper
 class SwedbankFormatter(AccountFormatter):
     def __init__(self):
-        super(SwedbankFormatter, self).__init__()
+        super(SwedbankFormatter, self).__init__("swedbank")
 
     @EconomyMapper("Account", "account_code")
     def format_account_account_code(self, content, subformatter):
