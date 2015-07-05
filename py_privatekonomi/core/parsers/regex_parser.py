@@ -11,6 +11,7 @@ class RegexParser(py_privatekonomi.core.parser.Parser):
     def parse(self, content, re_splitter = None):
         parsed = []
         for c in content:
+            c = c.strip()
             if re_splitter is None:
                 parsed.append(c.split())
             else:
