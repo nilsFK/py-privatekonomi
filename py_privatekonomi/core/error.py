@@ -21,7 +21,7 @@ class FormatterError(BaseError):
                 'token' : repr(self.capture_data['token']),
                 'subformatter' : repr(self.capture_data['subformatter'])
             }
-        if 'inconsistent_length' in self.capture_data:
+        elif 'inconsistent_length' in self.capture_data:
             return "Subformatters did not match the produced tokens. tokens length=%(tokens_length)s, subformatters length=%(subformatters_length)s, tokens=%(tokens)s, subformatters=%(subformatters)s" % {
                 'tokens_length' : len(self.capture_data['tokens']),
                 'subformatters_length' : len(self.capture_data['subformatters']),
@@ -50,5 +50,17 @@ class MissingAppFunctionError(BaseError):
         super(MissingAppFunctionError, self).__init__(message)
         self.capture_data = capture_data
         self.message=message
+    def __str__(self):
+        return self.message
+
+class InvalidContentError(BaseError):
+    def __init__(self, message="", capture_data = {}):
+        message = "Attempting to parse invalid content %(content)s given source %(source)s" % {
+            'content' : repr(capture_data['content']),
+            'source' : repr(capture_data['source'])
+        }
+        super(InvalidContentError, self).__init__(message)
+        self.capture_data = capture_data
+        self.message = message
     def __str__(self):
         return self.message
