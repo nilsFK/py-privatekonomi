@@ -67,7 +67,7 @@ def destroy_tables(models):
         check_connection(model_context)
         model_context.obliterate()
 
-def create_tables(models):
+def create_tables(models, customizations={}):
     context = ModelContext()
     model_deps = get_model_dependencies(models)
     generation_order = resolver.resolveGeneration(model_deps)
@@ -75,14 +75,17 @@ def create_tables(models):
     ret_models = {}
     for generate in generation_order:
         model = model_type_mappings[generate]
-        model_context = model(context)
+        if model in customizations:
+            model_context = model(context, customizations[model])
+        else:
+            model_context = model(context)
         check_connection(model_context)
         ret_models[get_model_name(generate)] = model_context.generate()
     return common.as_obj(ret_models)
 
-def rebuild_tables(models):
+def rebuild_tables(models, customizations={}):
     destroy_tables(models)
-    models = create_tables(models)
+    models = create_tables(models, customizations)
     return models
 
 def get_models(models, to_obj = True):
