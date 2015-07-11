@@ -67,6 +67,9 @@ class SpecApp(App):
             # remove existing col, not really recommended
             'created' : None
         }
+        customizations[raw_models['account']['type']] = {
+            'custom_col' : Column('custom_col', Integer, nullable=True)
+        }
         models = rebuild_tables(raw_models, customizations)
         return "return something from persist"
 
