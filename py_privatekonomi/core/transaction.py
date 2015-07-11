@@ -50,6 +50,9 @@ class Transaction(object):
     def getFullTransaction(self):
         return self.transaction
 
+    def setTransactionField(self, field, value):
+        self.transaction['Transaction'][field] = value
+
     def __build(self, model_name, identifier_field, set_transaction_field):
         if model_name in self.transaction and identifier_field in self.transaction[model_name]:
             identifier = self.transaction[model_name][identifier_field]
