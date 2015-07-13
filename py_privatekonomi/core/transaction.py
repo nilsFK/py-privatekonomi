@@ -1,5 +1,4 @@
-from py_privatekonomi.utilities.common import as_dict
-from py_privatekonomi.utilities.common import time_now
+from py_privatekonomi.utilities.common import as_dict, as_obj, time_now
 import copy
 
 class TransactionManager(object):
@@ -68,6 +67,9 @@ class Transaction(object):
 
     def getFullTransaction(self):
         return self.transaction
+
+    def getModels(self):
+        return as_obj(self.models)
 
     def setTransactionField(self, field, value):
         """ This method should be used to set customized fields but could also be used
