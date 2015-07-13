@@ -3,8 +3,8 @@ from py_privatekonomi.utilities.common import time_now
 import copy
 
 class TransactionManager(object):
-    """ TransactionManager keeps track of pieces of Transactions and persists
-    to database when the time is right. """
+    """ TransactionManager keeps track of individual Transactions and persists
+    to database """
     def __init__(self, transaction_model, buffer_ = 100):
         self.buffer = buffer_
         self.transaction_model = transaction_model
@@ -32,8 +32,27 @@ class Transaction(object):
     whose main purpose is to build and validate the transaction.
     The Transaction in and of itself is pretty useless, it should be subclassed
     and have the subclass implement callback methods, valid callback methods are:
-    * on_missing_field
-    * on_entity_unknown
+
+    * on_missing_field(missing_field, model_name)
+        the transaction field does not exist in the transaction data. params includes:
+                * missing_field - the name of the field which is missing a value
+                * model_name - the name of the model whose field is missing
+        expected return: None
+    * on_entity_unknown(entity_unknown, model_name, model_identifier, transaction_field)
+        the field DOES EXIST in the transaction data, but not in the database however. params includes:
+                * entity_unknown - entity data as dict.
+                * model_name - name of the model which is associated with entity.
+                * model_identifier - the field which we attempted to identify the model with.
+                * transaction_field - the transaction field which we attempted to set.
+        expected return: None
+    * on_retrieve_id(model_name, identifier_field, identifier)
+        If callback is not defined the Transaction class will attempt to retrieve the ID by looking
+        at the identifier. Implementing this callback will override this behaviour and let the subclass
+        decide which ID should be picked. Params includes:
+                * model_name - name of the model which we want to retrieve the ID for
+                * identifier_field - The field name (column name) of the given model
+                * identifier - The string by which we want to retrieve the ID by
+        expected return: ID of the model by which we want to save by. If None or False is returned, Transaction will default by attempting to lookup the ID by itself.
     """
     def __init__(self, transaction, transaction_group, models):
         self.transaction = transaction
@@ -51,12 +70,24 @@ class Transaction(object):
         return self.transaction
 
     def setTransactionField(self, field, value):
+        """ This method should be used to set customized fields but could also be used
+        to set any fields on a particular Transaction
+        """
         self.transaction['Transaction'][field] = value
 
     def __build(self, model_name, identifier_field, set_transaction_field):
         if model_name in self.transaction and identifier_field in self.transaction[model_name]:
             identifier = self.transaction[model_name][identifier_field]
-            id_ = self.models[model_name].getValue("id", identifier_field, identifier)
+            id_ = None
+            if self.__has_callback("on_retrieve_id"):
+                id_ = self.__callback("on_retrieve_id", params={
+                    'model_name' : model_name,
+                    'identifier_field' : identifier_field,
+                    'identifier' : identifier
+                })
+            if id_ is None or id_ is False:
+                id_ = self.models[model_name].getValue("id", identifier_field, identifier)
+
             if id_ is False:
                 if self.__has_callback("on_entity_unknown"):
                     self.__callback("on_entity_unknown", params={
@@ -99,8 +130,13 @@ class Transaction(object):
         return getattr(self, method_name)(params)
 
 class CustomTransaction(Transaction):
-    """ A CustomTransaction implements callbacks that are called
-    during the building process of transactions """
+    """ A CustomTransaction implements the callbacks:
+            * on_missing_field
+            * on_entity_unknown
+        Note that it does NOT implement on_retrieve_id - this should be implemented
+        in subclasses of this class.
+        This class is specialized in setting default values when no values are available
+    """
     def __init__(self, transaction, transaction_group, models):
         self.defaults = {}
         super(CustomTransaction, self).__init__(transaction, transaction_group, models)
@@ -109,7 +145,6 @@ class CustomTransaction(Transaction):
         self.defaults[field] = id_val
 
     def on_missing_field(self, params):
-        """ the transaction field does not exist in the transaction data """
         if params['missing_field'] == 'transaction_category_id':
             self.transaction['Transaction']['transaction_category_id'] = self.defaults['transaction_category_id']
         elif params['missing_field'] == 'currency_id':
@@ -122,12 +157,6 @@ class CustomTransaction(Transaction):
             raise Exception("Untreated missing field: %s" % (params['missing_field']))
 
     def on_entity_unknown(self, params):
-        """ the field DOES EXIST in the transaction data, but not in the database however. params includes:
-                * entity_unknown - entity data as dict.
-                * model_name - name of the model which is associated with entity.
-                * model_identifier - the field which we attempted to identify the model with.
-                * transaction_field - the transaction field which we attempted to set.
-        """
         save_data = copy.deepcopy(params['entity_unknown'])
         if params['model_name'] == 'Account':
             save_data['account_category_id'] = self.defaults['account_category_id']
