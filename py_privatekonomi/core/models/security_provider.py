@@ -8,7 +8,7 @@ class SecurityProvider(BaseModel):
     def __init__(self, context, customizations={}):
         pre_cols = OrderedDict([
             ('id', Column('id', Integer, primary_key = True)),
-            ('name', Column('name', String(255), nullable=False, unique=True)),
+            ('name', Column('name', String(255), nullable=False)),
             ('security_type', Column('security_type', String(64), nullable=True))
         ])
         # apply customizations
