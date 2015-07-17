@@ -10,12 +10,21 @@ class Security(BaseModel):
                 Column('id', Integer, primary_key=True),
                 Column('rate', Numeric(precision=16, scale=2), nullable=False),
                 Column('amount', Numeric(precision=16, scale=4), nullable=False),
-                Column('transaction_id', Integer, nullable=False),
+                # Column('transaction_id', Integer, nullable=False),
+                Column('security_provider_id', Integer, nullable=False),
+                # ForeignKeyConstraint(
+                #     ['transaction_id'],
+                #     ['transaction.id'],
+                #     use_alter=False,
+                #     name='fk_security_transaction',
+                #     onupdate='CASCADE',
+                #     ondelete='CASCADE'
+                # ),
                 ForeignKeyConstraint(
-                    ['transaction_id'],
-                    ['transaction.id'],
+                    ['security_provider_id'],
+                    ['security_provider.id'],
                     use_alter=False,
-                    name='fk_security_transaction',
+                    name='fk_security_security_provider',
                     onupdate='CASCADE',
                     ondelete='CASCADE'
                 )

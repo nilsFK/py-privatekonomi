@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-    A sample app which customizes tables
+    Sample apps that persists data and customizes tables
 """
 
 """
@@ -14,6 +14,7 @@ from py_privatekonomi.core.app import (App, AppProxy)
 from py_privatekonomi.core.config import readConfig
 from py_privatekonomi.core.mappers.economy_mapper import EconomyMapper
 from py_privatekonomi.tests.dataset.swedbank.sample1 import test_data as test_data_1
+from py_privatekonomi.core.transaction import (TransactionManager, Transaction, CustomTransaction, TransactionHelper)
 
 """
 sqlalchemy imports
@@ -36,6 +37,72 @@ def get_default_config():
         "sources_is_content" : False
     }
 
+class PersistApp(App):
+    def createDefaults(self):
+        self.account_category_id = self.models.AccountCategory.insert({
+            'name' : u'Lönekonto'
+        })
+        self.organization_id = self.models.Organization.insert({
+            'name' : 'Swedbank'
+        })
+        self.account_id = self.models.Account.insert({
+                'name' : u'Mitt Lönekonto',
+                'account_code' : '123-123',
+                'account_number' : '123456789',
+                'current_balance' : 12000.12,
+                'future_balance' : 13000.13,
+                'account_category_id' : self.account_category_id,
+                'organization_id' : self.organization_id,
+                'provider_id' : None
+        })
+        self.transaction_type_id = self.models.TransactionType.insert({
+                'name' : u'Default',
+        })
+        self.transaction_category_id = self.models.TransactionCategory.insert({
+                'name' : 'Default'
+        })
+
+    def execute(self, sources, parser, formatter, configs):
+        print("Calling MyApp.execute")
+        contents = helper.execute(
+            sources=sources,
+            parser=parser,
+            formatter=formatter,
+            format_as_mapper=True,
+            sources_is_content=configs.sources_is_content
+            )
+        return contents
+
+    def persist(self, output, configs):
+        print("Calling MyApp.persist")
+        self.models = rebuild_tables(loader.load_models(EconomyMapper.getModelNames()))
+        self.createDefaults()
+        transaction_groups = []
+        for content in output:
+            self.transaction_manager = TransactionManager(self.models.Transaction, configs.insert_rows)
+            transaction_group = self.__persist(content, configs)
+            transaction_groups.append(transaction_group)
+        return transaction_groups
+
+    def __persist(self, transactions, configs):
+        transaction_group = TransactionHelper.createTransactionGroup(self.models)
+        for transaction in transactions:
+            t = CustomTransaction(transaction, transaction_group, self.models)
+            t.setDefault('account_id', self.account_id)
+            t.setDefault('account_category_id', self.account_category_id)
+            t.setDefault('organization_id', self.organization_id)
+            t.setDefault('transaction_category_id', self.transaction_category_id)
+            # t.setDefault('transaction_category_id', self.__get_default("pype_transaction_category", "is_default", 1))
+            # t.setDefault('currency_id', self.__get_default("pype_currency", "code", "SEK"))
+            # t.setDefault('transaction_type_id', self.__get_default("pype_transaction_type", "is_default", 1))
+            # t.setDefault('account_category_id', self.__get_default("pype_account_category", "is_default", 1))
+
+            t.buildTransaction()
+            self.transaction_manager.addTransaction(t.getTransaction())
+            self.transaction_manager.debuffer()
+        self.transaction_manager.forceDebuffer()
+        return transaction_group
+
 class SpecApp(App):
     def execute(self, sources, parser, formatter, configs):
         print("Calling SpecApp.execute")
@@ -43,7 +110,7 @@ class SpecApp(App):
             sources=sources,
             parser=parser,
             formatter=formatter,
-            format_as_mapper=False,
+            format_as_mapper=True,
             sources_is_content=configs.sources_is_content
             )
         return contents
@@ -73,10 +140,10 @@ class SpecApp(App):
         models = rebuild_tables(raw_models, customizations)
         return "return something from persist"
 
-def app_1():
-    """ An app which persists data """
+def app_1(num):
+    """ An app which persists Swedbank data """
     print("="*80)
-    print("Running app")
+    print("Running app #" + str(num))
     print("="*80)
     db_config = readConfig("db_test", "Database")
     app = AppProxy('spec_app', SpecApp())
@@ -88,11 +155,26 @@ def app_1():
     conf['use_logging'] = True
     app.config(conf)
     app.build()
-    # print(repr(app))
     app_output = app.run()
-    # print(app_output)
+
+def app_2(num):
+    """ An app which persists Avanza data """
+    print("="*80)
+    print("Running app #" + str(num))
+    print("="*80)
+    db_config = readConfig("db_test", "Database")
+    app = AppProxy('persist_app', PersistApp())
+    app.setFormatter("avanza")
+    app.setParser("avanza")
+    app.addSources(["samples/avanza/sample1"])
+    app.persistWith(db_config)
+    conf = get_default_config()
+    conf['use_logging'] = True
+    app.config(conf)
+    app.build()
+    app_output = app.run()
 
 if __name__ == '__main__':
-    apps = [app_1]
-    for app in apps:
-        app()
+    apps = [app_1, app_2]
+    for num, app in enumerate(apps):
+        app(num+1)

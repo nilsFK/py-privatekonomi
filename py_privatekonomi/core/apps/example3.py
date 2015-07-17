@@ -71,6 +71,7 @@ def __persist(transactions, models, configs, ids):
         t.setDefault('currency_id', ids['currency_id'])
         t.setDefault('account_category_id', ids['account_category_id'])
         t.setDefault('organization_id', ids['organization_id'])
+        t.setDefault('security_provider_id', None)
         t.buildTransaction()
         transaction_manager.addTransaction(t.getTransaction())
         transaction_manager.debuffer()

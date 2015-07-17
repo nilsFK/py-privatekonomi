@@ -44,10 +44,10 @@ class MyApp(App):
         models = rebuild_tables(loader.load_models(EconomyMapper.getModelNames()))
         return "return something from persist"
 
-def app_1():
-    """ An app which formats and parses two samples """
+def app_1(num):
+    """ An app which formats and parses two Swedbank samples """
     print("="*80)
-    print("Running app 1")
+    print("Running app " + str(num))
     print("="*80)
     app = AppProxy('name_of_my_app', MyApp())
     app.setFormatter("swedbank")
@@ -61,11 +61,28 @@ def app_1():
     app_output = app.run()
     print(app_output)
 
-def app_2():
+def app_2(num):
+    """ An app which formats and parses two Avanza samples """
+    print("="*80)
+    print("Running app " + str(num))
+    print("="*80)
+    app = AppProxy('name_of_my_app', MyApp())
+    app.setFormatter("avanza")
+    app.setParser("avanza")
+    app.addSources(["samples/avanza/sample1"])
+    conf = get_default_config()
+    conf['use_logging'] = True
+    app.config(conf)
+    app.build()
+    print(repr(app))
+    app_output = app.run()
+    print(app_output)
+
+def app_3(num):
     """ An app which sets the output directly without going through the process
         of parsing and formatting """
     print("="*80)
-    print("Running app 2")
+    print("Running app " + str(num))
     print("="*80)
     app = AppProxy('name_of_my_app', MyApp())
     conf = get_default_config()
@@ -77,11 +94,11 @@ def app_2():
     app_output = app.run()
     print(app_output)
 
-def app_3():
+def app_4(num):
     """ An app which guesses the formatter and parser by calling
         autodiscover() """
     print("="*80)
-    print("Running app 3")
+    print("Running app #" + str(num))
     print("="*80)
     app = AppProxy('name_of_my_app', MyApp())
     app.autodiscover([
@@ -120,26 +137,7 @@ def app_3():
     app_output = app.run()
     print(app_output)
 
-def app_4():
-    """ An app which persists data """
-    print("="*80)
-    print("Running app 4")
-    print("="*80)
-    db_config = readConfig("db_test", "Database")
-    app = AppProxy('name_of_my_app', MyApp())
-    app.setFormatter("swedbank")
-    app.setParser("swedbank")
-    app.addSources(["samples/swedbank/sample1", "samples/swedbank/sample2"])
-    app.persistWith(db_config)
-    conf = get_default_config()
-    conf['use_logging'] = True
-    app.config(conf)
-    app.build()
-    print(repr(app))
-    app_output = app.run()
-    print(app_output)
-
 if __name__ == '__main__':
     apps = [app_1, app_2, app_3, app_4]
-    for app in apps:
-        app()
+    for num, app in enumerate(apps):
+        app(num+1)

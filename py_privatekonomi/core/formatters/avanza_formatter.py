@@ -30,18 +30,18 @@ class AvanzaFormatter(AccountFormatter):
         """ Transaktion: typ """
         return content.strip()
 
-    @EconomyMapper("Security", "name")
-    def format_security_name(self, content, subformatter):
+    @EconomyMapper("SecurityProvider", "name")
+    def format_security_provider_name(self, content, subformatter):
         """ Värdepapper: namn """
         return content.strip()
 
-    @EconomyMapper("SecurityRate", "amount")
-    def format_security_rate_amount(self, content, subformatter):
+    @EconomyMapper("Transaction", "security_amount")
+    def format_transaction_security_amount(self, content, subformatter):
         """ Värdepapper: antalet """
         return super(AvanzaFormatter, self)._format_float(content)
 
-    @EconomyMapper("SecurityRate", "rate")
-    def format_security_rate_rate(self, content, subformatter):
+    @EconomyMapper("Transaction", "security_rate")
+    def format_transaction_security_rate(self, content, subformatter):
         """ Värdepapper: kurs """
         return super(AvanzaFormatter, self)._format_currency(content)
 

@@ -7,7 +7,7 @@ from py_privatekonomi.core.parsers.csv_parser import CsvParser
 
 class AvanzaParser(py_privatekonomi.core.parser.Parser):
     def __init__(self):
-        pass
+        super(AvanzaParser, self).__init__("avanza")
 
     def parse(self, contents):
         # skip headers
@@ -22,9 +22,9 @@ class AvanzaParser(py_privatekonomi.core.parser.Parser):
             "transaction_transaction_date",
             "account_name",
             "transaction_type_name",
-            "security_name",
-            "security_rate_amount",
-            "security_rate_rate",
+            "security_provider_name",
+            "transaction_security_amount",
+            "transaction_security_rate",
             "transaction_amount",
             "currency_code"
         ]

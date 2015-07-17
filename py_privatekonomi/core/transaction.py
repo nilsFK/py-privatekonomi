@@ -115,14 +115,14 @@ class Transaction(object):
         self.__build("Account", "name", "account_id")
         self.__build("TransactionCategory", "name", "transaction_category_id")
         self.__build("TransactionType", "name", "transaction_type_id")
+        self.__build("SecurityProvider", "name", "security_provider_id")
 
     def __validateTransaction(self):
         required_fields = ['account_id', 'transaction_category_id', 'transaction_type_id', 'currency_id']
         for rf in required_fields:
             if rf not in self.transaction['Transaction']:
                 raise Exception("Transaction is missing field: %s, detected during processing of transaction: %s" % (rf, repr(self.transaction)))
-            else:
-                if self.transaction['Transaction'][rf] is False:
+            elif self.transaction['Transaction'][rf] is False:
                     raise Exception("Transaction field %s is False" % (rf))
 
     def __has_callback(self, name):
@@ -155,6 +155,8 @@ class CustomTransaction(Transaction):
             self.transaction['Transaction']['account_id'] = self.defaults['account_id']
         elif params['missing_field'] == 'transaction_type_id':
             self.transaction['Transaction']['transaction_type_id'] = self.defaults['transaction_type_id']
+        elif params['missing_field'] == 'security_provider_id':
+            self.transaction['Transaction']['security_provider_id'] = self.defaults['security_provider_id']
         else:
             raise Exception("Untreated missing field: %s" % (params['missing_field']))
 

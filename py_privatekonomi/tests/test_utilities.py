@@ -14,7 +14,7 @@ from py_privatekonomi.core.models.transaction_type import TransactionType
 from py_privatekonomi.core.models.transaction_category import TransactionCategory
 from py_privatekonomi.core.models.transaction_group import TransactionGroup
 from py_privatekonomi.core.models.currency import Currency
-from py_privatekonomi.core.models.security import Security
+from py_privatekonomi.core.models.security_provider import SecurityProvider
 from py_privatekonomi.core.model_context import ModelContext
 from py_privatekonomi.tests.test_base import TestBase
 import py_privatekonomi.core.db
@@ -29,7 +29,7 @@ class TestUtilities(TestBase):
             AccountCategory,
             TransactionType,
             Transaction,
-            Security,
+            SecurityProvider,
             TransactionGroup
         ]
 
