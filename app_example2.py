@@ -92,10 +92,6 @@ class PersistApp(App):
             t.setDefault('account_category_id', self.account_category_id)
             t.setDefault('organization_id', self.organization_id)
             t.setDefault('transaction_category_id', self.transaction_category_id)
-            # t.setDefault('transaction_category_id', self.__get_default("pype_transaction_category", "is_default", 1))
-            # t.setDefault('currency_id', self.__get_default("pype_currency", "code", "SEK"))
-            # t.setDefault('transaction_type_id', self.__get_default("pype_transaction_type", "is_default", 1))
-            # t.setDefault('account_category_id', self.__get_default("pype_account_category", "is_default", 1))
 
             t.buildTransaction()
             self.transaction_manager.addTransaction(t.getTransaction())
@@ -136,6 +132,9 @@ class SpecApp(App):
         }
         customizations[raw_models['account']['type']] = {
             'custom_col' : Column('custom_col', Integer, nullable=True)
+        }
+        customizations[raw_models['account_category']['type']] = {
+            'ac_type' : Column('ac_type', String(128), nullable=True)
         }
         models = rebuild_tables(raw_models, customizations)
         return "return something from persist"
