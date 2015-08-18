@@ -28,8 +28,12 @@ class CsvParser(py_privatekonomi.core.parser.Parser):
             else:
                 reader = self.csv_reader(c, dialect=dialect, **options)
 
-            for r in reader:
-                rows.append(r)
+            for row in reader:
+                if self.is_empty_row(row):
+                    # empty rows are usually rows that have been deleted from within Excel
+                    # but still remains in the file as empty strings, ignore these for now
+                    continue
+                rows.append(row)
         return rows
 
     def csv_reader(self, data, dialect, **kwargs):
@@ -48,3 +52,9 @@ class CsvParser(py_privatekonomi.core.parser.Parser):
     def utf_8_encoder(self, unicode_csv_data):
         for line in unicode_csv_data:
             yield line.encode('utf-8')
+
+    def is_empty_row(self, row):
+        for col in row:
+            if len(col) > 0:
+                return False
+        return True

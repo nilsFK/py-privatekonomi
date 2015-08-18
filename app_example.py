@@ -69,7 +69,7 @@ def app_2(num):
     app = AppProxy('name_of_my_app', MyApp())
     app.setFormatter("avanza")
     app.setParser("avanza")
-    app.addSources(["samples/avanza/sample1"])
+    app.addSources(["samples/avanza/sample1", "samples/avanza/sample2"])
     conf = get_default_config()
     conf['use_logging'] = True
     app.config(conf)
@@ -138,6 +138,11 @@ def app_4(num):
     print(app_output)
 
 if __name__ == '__main__':
-    apps = [app_1, app_2, app_3, app_4]
+    apps = [
+        app_1,
+        app_2,
+        app_3,
+        app_4
+    ]
     for num, app in enumerate(apps):
         app(num+1)

@@ -20,7 +20,16 @@ class TestAvanza(TestBase):
             parser_name='avanza',
             formatter_name='avanza')
         results = helper.execute_app(app)
+        self.assertFormatted(results, test_data_1, format_as_mapper=False)
 
+    def test_sample2(self):
+        """ sample2 is a copy of sample1 containing three empty rows which should be ignored """
+        app = loader.load_app(
+            app_name='py_privatekonomi.core.apps.default',
+            sources='samples/avanza/sample2',
+            parser_name='avanza',
+            formatter_name='avanza')
+        results = helper.execute_app(app)
         self.assertFormatted(results, test_data_1, format_as_mapper=False)
 
     def test_invalid_sample1(self):
