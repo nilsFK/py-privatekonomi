@@ -136,6 +136,9 @@ class SpecApp(App):
         customizations[raw_models['account_category']['type']] = {
             'ac_type' : Column('ac_type', String(128), nullable=True)
         }
+        customizations[raw_models['transaction_type']['type']] = {
+            'is_public' : Column('is_public', Integer, nullable=False, server_default='0')
+        }
         models = rebuild_tables(raw_models, customizations)
         return "return something from persist"
 
