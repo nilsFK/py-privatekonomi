@@ -3,12 +3,15 @@
 class BaseError(Exception):
     def __init__(self, message):
         super(BaseError, self).__init__(message)
+        self.message = message
 
 class ParserError(BaseError):
     def __init__(self, message, capture_data = {}):
         super(ParserError, self).__init__(message)
+        self.capture_data = capture_data
     def __str__(self):
-        return repr(self.message)
+        return self.message + " " + str(self.capture_data['content'])
+        # return self.message + " " + self.capture_data['content']
 
 class FormatterError(BaseError):
     def __init__(self, message, capture_data = {}):

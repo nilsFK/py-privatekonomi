@@ -149,6 +149,7 @@ class App(object):
 
     def run(self):
         def __execute():
+            errors = []
             if self.__auto_discover is True:
                 found = False
                 for discover in self.__discover_from:
@@ -167,11 +168,17 @@ class App(object):
                         found = True
                         break
                     except FormatterError as e:
+                        e_ = repr(e)
+                        e_ += "(%s)" % (repr(self.__sources))
+                        errors.append(e_)
                         continue
                     except ParserError as e:
+                        e_ = repr(e)
+                        e_ += "(%s)" % (repr(self.__sources))
+                        errors.append(e_)
                         continue
                 if found is False:
-                    raise Exception("Unable to parse/format using parsers and formatters from %s" % (repr(self.__discover_from)))
+                    raise Exception("Unable to parse/format using available parsers and formatters from %s (errors=%s)" % (repr(self.__discover_from), repr(errors)))
             else:
                 output = self.execute(self.__sources, self.app['parser'], self.app['formatter'], as_obj(self.__config))
             return output

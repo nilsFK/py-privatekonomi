@@ -5,6 +5,7 @@ import py_privatekonomi.core.parser
 import re
 from py_privatekonomi.core.parsers.regex_parser import RegexParser
 from py_privatekonomi.core.error import ParserError
+from py_privatekonomi.utilities.common import is_string
 
 class SwedbankParser(py_privatekonomi.core.parser.Parser):
     def __init__(self):
@@ -14,6 +15,10 @@ class SwedbankParser(py_privatekonomi.core.parser.Parser):
         ret = []
         p = re.compile(r'^\d{2}-\d{2}-\d{2}')
         for idx, content in enumerate(contents):
+            if isinstance(content, list):
+                raise ParserError("Invalid transaction text content. Expected string content, instead got:", capture_data={
+                    'content' : content
+                })
             content = content.strip()
             if content == '':
                 continue

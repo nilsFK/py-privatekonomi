@@ -87,5 +87,14 @@ class TestSwedbank(TestBase):
             formatter_name='swedbank')
         self.assertRaises(ParserError, helper.execute_app, app)
 
+    def test_invalid_excel_file(self):
+        """ Test invalid excel file which throws ParserError """
+        app = loader.load_app(
+            app_name='py_privatekonomi.core.apps.default',
+            sources='samples/avanza/excel_sample.xlsx',
+            parser_name='swedbank',
+            formatter_name='swedbank')
+        self.assertRaises(ParserError, helper.execute_app, app)
+
 if __name__ == '__main__':
     unittest.main()
