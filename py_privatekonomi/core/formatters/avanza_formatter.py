@@ -17,7 +17,6 @@ class AvanzaFormatter(AccountFormatter):
     @EconomyMapper("Transaction", "transaction_date")
     def format_transaction_transaction_date(self, content, subformatter):
         """ Transaktion: transaktionsdatum """
-        content = content.strip()
         return super(AvanzaFormatter, self)._format_date(content, "%Y-%m-%d")
 
     @EconomyMapper("Transaction", "amount")
@@ -38,7 +37,7 @@ class AvanzaFormatter(AccountFormatter):
     @EconomyMapper("Transaction", "security_amount")
     def format_transaction_security_amount(self, content, subformatter):
         """ Värdepapper: antalet """
-        return super(AvanzaFormatter, self)._format_float(content)
+        return super(AvanzaFormatter, self)._format_currency(content)
 
     @EconomyMapper("Transaction", "security_rate")
     def format_transaction_security_rate(self, content, subformatter):

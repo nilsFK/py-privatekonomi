@@ -8,8 +8,8 @@ from py_privatekonomi.core.error import (
     MissingAppFunctionError,
     InvalidContentError
 )
-from py_privatekonomi.utilities import common
-import sys
+from py_privatekonomi.utilities import common, excel
+import sys, os
 
 def get_parser(acc_type):
     return AccountParserFactory().create(acc_type)
@@ -38,22 +38,43 @@ def execute_app(app, config = None):
 
 def execute(sources, parser, formatter, format_as_mapper = False, sources_is_content=False):
     contents = []
+    options = {}
     for source in sources:
         if sources_is_content:
             if not common.is_list(source):
                 source = [s.strip() for s in source.splitlines()]
             content = source
         else:
-            content = common.read_file(source)
-        if content is None or len(content) == 0:
+            filetype = identify_filetype(source)
+            options['filetype'] = filetype
+            if filetype == 'excel':
+                content = excel.get_content(source, 0)
+            else:
+                content = common.read_file(source)
+        if content is False or content is None or len(content) == 0:
             raise InvalidContentError(capture_data={
                 "content" : content,
                 "source": source
             })
-        parsed, subformatters = parser.parse(content)
+        parsed, subformatters = parser.parse(content, options)
         content = formatter.format(parsed, subformatters, format_as_mapper)
         contents.append(content)
     return contents
 
 def connect_db(db_config):
     py_privatekonomi.core.db.DB().connect(db_config)
+
+def identify_filetype(filepath):
+    """ supported subset of filetypes, unknown filetype returns None """
+    known_filetypes = {
+        'xls' : 'excel',
+        'xlsx' : 'excel',
+        'csv' : 'csv',
+        '' : 'empty'
+    }
+    filename, file_ext = os.path.splitext(filepath)
+    file_ext = file_ext.replace(".", "")
+    if file_ext in known_filetypes:
+        return known_filetypes[file_ext]
+    else:
+        return None

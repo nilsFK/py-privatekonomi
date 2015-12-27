@@ -2,6 +2,13 @@
 # -*- coding: utf-8 -*-
 import py_privatekonomi.core.formatter
 from py_privatekonomi.core.formatter import Formatter
+from py_privatekonomi.utilities.common import (
+    is_string,
+    is_date,
+    is_datetime,
+    format_date,
+    format_datetime
+)
 class AccountFormatter(Formatter):
     def __init__(self, name):
         super(AccountFormatter, self).__init__()
@@ -12,27 +19,36 @@ class AccountFormatter(Formatter):
 
     @classmethod
     def _format_currency(self, content):
-        try:
-            ret_content = content
-            ret_content = ret_content.strip()
-            ret_content = ret_content.replace(",", ".")
-            ret_content = ret_content.replace(" ", "")
-            val = float(ret_content)
-            return val
-        except ValueError:
-            return None
+        if is_string(content):
+            try:
+                ret_content = content
+                ret_content = ret_content.strip()
+                ret_content = ret_content.replace(",", ".")
+                ret_content = ret_content.replace(" ", "")
+                if ret_content == "-":
+                    return None
+                else:
+                    val = float(ret_content)
+                return val
+            except ValueError:
+                return None
+        else:
+            return content
 
     @classmethod
     def _format_float(self, content):
-        try:
-            ret_content = content
-            ret_content = ret_content.strip()
-            ret_content = ret_content.replace(",", ".")
-            ret_content = ret_content.replace(" ", "")
-            val = float(ret_content)
-            return val
-        except ValueError:
-            return None
+        if is_string(content):
+            try:
+                ret_content = content
+                ret_content = ret_content.strip()
+                ret_content = ret_content.replace(",", ".")
+                ret_content = ret_content.replace(" ", "")
+                val = float(ret_content)
+                return val
+            except ValueError:
+                return None
+        else:
+            return content
 
     @classmethod
     def _deformat_currency(self, content):

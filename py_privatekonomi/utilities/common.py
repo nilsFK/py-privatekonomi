@@ -72,6 +72,9 @@ def format_time_struct(time_struct, format='%Y-%m-%d'):
 def format_date(date, format='%Y-%m-%d'):
     return date.strftime(format)
 
+def format_datetime(datetime, format_='%Y-%m-%d %H:%M:%S'):
+    return datetime.strftime(format_)
+
 def is_time_struct(data):
     return isinstance(data, time.struct_time)
 
@@ -147,7 +150,7 @@ def is_string(string):
     if isinstance(string, str):
         is_string_ = True
     try:
-        if isinstance(s, basestring):
+        if isinstance(string, basestring):
             is_string_ = True
     except NameError:
         pass

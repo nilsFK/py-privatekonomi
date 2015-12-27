@@ -10,7 +10,7 @@ class SwedbankParser(py_privatekonomi.core.parser.Parser):
     def __init__(self):
         super(SwedbankParser, self).__init__("swedbank")
 
-    def parse(self, contents):
+    def parse(self, contents, options):
         ret = []
         p = re.compile(r'^\d{2}-\d{2}-\d{2}')
         for idx, content in enumerate(contents):

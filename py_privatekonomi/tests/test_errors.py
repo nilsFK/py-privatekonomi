@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import utilities.common
 from py_privatekonomi.utilities.common import format_time_struct, is_unicode
 from py_privatekonomi.utilities import helper
 from py_privatekonomi.core import loader

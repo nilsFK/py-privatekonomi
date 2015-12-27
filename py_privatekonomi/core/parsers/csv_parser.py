@@ -6,7 +6,7 @@ try:
     from StringIO import StringIO
 except ImportError:
     from io import StringIO
-from utilities import common
+from py_privatekonomi.utilities import common
 import sys
 class CsvParser(py_privatekonomi.core.parser.Parser):
     def __init__(self):

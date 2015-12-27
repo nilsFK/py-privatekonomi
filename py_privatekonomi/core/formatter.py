@@ -3,6 +3,13 @@
 from collections import deque
 import time
 from py_privatekonomi.core.error import FormatterError
+from py_privatekonomi.utilities.common import (
+    is_string,
+    is_date,
+    is_datetime,
+    format_date,
+    format_datetime
+)
 
 class Formatter(object):
     def __init__(self):
@@ -43,7 +50,8 @@ class Formatter(object):
             })
         subformatter_deq = deque(self.subformatters)
         for token in row:
-            token = token.strip()
+            if is_string(token):
+                token = token.strip()
             token = self.__callback("before_process_token", token)
             subformatter = subformatter_deq.popleft()
             try:
@@ -75,4 +83,11 @@ class Formatter(object):
 
     @classmethod
     def _format_date(self, date_string, date_format):
-        return time.strptime(date_string, date_format)
+        if is_string(date_string):
+            return time.strptime(date_string, date_format)
+        elif is_date(date_string):
+            return format_date(date_string)
+        elif is_datetime(date_string):
+            return format_datetime(date_string)
+        else:
+            return date_string

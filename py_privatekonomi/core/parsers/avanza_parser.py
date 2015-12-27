@@ -9,15 +9,9 @@ class AvanzaParser(py_privatekonomi.core.parser.Parser):
     def __init__(self):
         super(AvanzaParser, self).__init__("avanza")
 
-    def parse(self, contents):
+    def parse(self, contents, options):
         # skip headers
         contents = contents[1:]
-
-        opts = {
-            'delimiter' : ';',
-            'quoting' : csv.QUOTE_NONE
-        }
-        rows = CsvParser().parse(contents, opts=opts)
         subformatters = [
             "transaction_transaction_date",
             "account_name",
@@ -28,4 +22,13 @@ class AvanzaParser(py_privatekonomi.core.parser.Parser):
             "transaction_amount",
             "currency_code"
         ]
-        return (rows, subformatters)
+        if options['filetype'] in ['csv', 'empty']:
+            opts = {
+                'delimiter' : ';',
+                'quoting' : csv.QUOTE_NONE
+            }
+            rows = CsvParser().parse(contents, opts=opts)
+            return (rows, subformatters)
+        else:
+            return (contents, subformatters)
+

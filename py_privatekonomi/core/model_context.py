@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from sqlalchemy import MetaData
-from utilities import common
+from py_privatekonomi.utilities import common
 class ModelContext(object):
     def __init__(self, context = {}):
         self.__context = common.as_obj(context)

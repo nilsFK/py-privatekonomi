@@ -8,6 +8,7 @@ from py_privatekonomi.core import loader
 from py_privatekonomi.core.error import FormatterError, ParserError
 from py_privatekonomi.tests.test_base import TestBase
 from py_privatekonomi.tests.dataset.avanza.sample1 import test_data as test_data_1
+from py_privatekonomi.tests.dataset.avanza.excel_sample import test_data as test_data_excel
 
 class TestAvanza(TestBase):
     def setUp(self):
@@ -49,6 +50,16 @@ class TestAvanza(TestBase):
             parser_name='avanza',
             formatter_name='avanza')
         self.assertRaises(FormatterError, helper.execute_app, app)
+
+    def test_excel(self):
+        """ Test valid excel file """
+        app = loader.load_app(
+            app_name='py_privatekonomi.core.apps.default',
+            sources='samples/avanza/excel_sample.xlsx',
+            parser_name='avanza',
+            formatter_name='avanza')
+        results = helper.execute_app(app)
+        self.assertFormatted(results, test_data_excel, format_as_mapper=False)
 
 if __name__ == '__main__':
     unittest.main()

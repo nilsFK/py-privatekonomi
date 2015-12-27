@@ -12,7 +12,7 @@ class Transaction(BaseModel):
             ('group', Column('group', Integer, nullable=False, index=True)),
             ('accounting_date', Column('accounting_date', Date, nullable=True)),
             ('transaction_date', Column('transaction_date', Date, nullable=False)),
-            ('amount', Column('amount', Numeric(precision=16, scale=2), nullable=False)),
+            ('amount', Column('amount', Numeric(precision=16, scale=2), nullable=True)),
             ('reference', Column('reference', String(512), nullable=False, server_default='')),
             ('created', Column('created', DateTime, nullable=False)),
             ('security_rate', Column('security_rate', Numeric(precision=16, scale=2), nullable=True)),

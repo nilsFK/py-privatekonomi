@@ -4,9 +4,19 @@ py-privatekonomi håller reda på din privatekonomi genom att läsa in transakti
 
 Installation
 ------------
-Ingen installation är nödvändig utom i det fall där slutresultatet skall ner i databasen. För att kunna spara undan resultat till databas, kör följande:
+> pip install -r requirements.txt
+
+eller
+
+> python -m pip install -r requirements.txt
+
+Om resultatet skall sparas till databas kör följande:
 
 > pip install -r persist_requirements.txt
+
+eller
+
+> python -m pip install persist_requirements.txt
 
 För att persista data, skapa en fil med namnet db.ini i katalogen configs med innehållet:
 
@@ -49,7 +59,7 @@ Exempel
 Projektstatus
 -------------
 * Stöd för Swedbank (ordinarie textexporter)
-* Stöd för Avanza (ordinarie csv-filer)
+* Stöd för Avanza (ordinarie csv-filer, excel-filer)
 
 Stöd
 ----
