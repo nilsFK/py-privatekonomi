@@ -1,0 +1,3 @@
+Id;Bokföringsdag;Affärsdag;Likviddag;Transaktionstyp;Värdepapper;Instrumenttyp;ISIN;Antal;Kurs;Ränta;Avgifter;Belopp;Valuta;Inköpsvärde;Resultat;Totalt antal;Saldo;Växlingskurs;Transaktionstext;Makuleringsdatum;Verifikations-/Notanummer
+306246150;2016-03-02;2016-03-02;2016-03-04;KÖPT;BETS B;Aktie;SE0006993986;34;123,1;0;39;-4 224,00;SEK;4 224,00;0;34;102;1;;;532740700
+305477335;2016-02-29;2016-02-29;2016-02-29;INSÄTTNING;;;;0;0;0;0;4 326,00;SEK;0;0;0;4 326,00;1;SPARA;;213067130

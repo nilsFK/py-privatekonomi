@@ -8,6 +8,7 @@ from py_privatekonomi.core.error import (
     MissingAppFunctionError,
     InvalidContentError
 )
+from py_privatekonomi.core import loader
 from py_privatekonomi.utilities import common, excel
 import sys, os
 
@@ -16,6 +17,10 @@ def get_parser(acc_type):
 
 def get_formatter(acc_type):
     return AccountFormatterFactory().create(acc_type)
+
+def get_customizations(org_name, raw_models):
+    customizations = loader.load_customizations(org_name, raw_models)
+    return customizations
 
 def execute_app(app, config = None):
     if hasattr(app['module'], 'execute'):
@@ -65,7 +70,9 @@ def connect_db(db_config):
     py_privatekonomi.core.db.DB().connect(db_config)
 
 def identify_filetype(filepath):
-    """ supported subset of filetypes, unknown filetype returns None """
+    """ supported subset of filetypes, unknown filetype returns None
+    not very smart, just checks file name to decide, could be improved
+    by peeking at the file """
     known_filetypes = {
         'xls' : 'excel',
         'xlsx' : 'excel',

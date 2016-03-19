@@ -22,7 +22,8 @@ class EconomyMapper(object):
             "Transaction",
             "TransactionCategory",
             "TransactionGroup",
-            "TransactionType"
+            "TransactionType",
+            "TransactionData",
         ]
 
     def __call__(self, formatter_func):

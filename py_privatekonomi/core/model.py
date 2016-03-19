@@ -124,7 +124,7 @@ class Model(object):
         return result.inserted_primary_key
 
     def insertMany(self, values):
-        db.DB().getConnection().execute(self.ref.insert(), values)
+        return db.DB().getConnection().execute(self.ref.insert(), values)
 
     # http://docs.sqlalchemy.org/en/rel_0_9/core/tutorial.html
     # http://docs.sqlalchemy.org/en/latest/core/sqlelement.html#sqlalchemy.sql.expression.ColumnElement

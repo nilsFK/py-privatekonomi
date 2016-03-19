@@ -107,6 +107,7 @@ class TestBase(unittest.TestCase):
                                 self.assertEqual(val, data[col_name])
 
     def assertPersisted(self, expected):
+        # TODO assert that other models have been persisted as well
         models = get_models(loader.load_models(["Transaction"]), False)
         transaction_model = models["Transaction"]
         col_names = [col_name for col_name in expected[0]["Transaction"]]

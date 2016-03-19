@@ -2,29 +2,38 @@ from py_privatekonomi.utilities.common import as_dict, as_obj, time_now
 import copy
 
 class TransactionManager(object):
-    """ TransactionManager keeps track of individual Transactions and persists
-    to database """
-    def __init__(self, transaction_model, buffer_ = 100):
+    """ TransactionManager keeps track of individual Transactions and persists to database """
+    def __init__(self, models, buffer_ = 100):
         self.buffer = buffer_
-        self.transaction_model = transaction_model
+        self.models = models
         self.transactions = []
 
     def addTransaction(self, transaction):
-        self.transactions.append(transaction)
+        self.transactions.append(transaction.getFullTransaction())
 
     def debuffer(self):
         """ persist transactions once the allowed buffer is exceeded """
         if len(self.transactions) >= self.buffer:
-            self.__persist()
+            return self.__persist()
+        return False
 
     def forceDebuffer(self):
         """ force persist transactions independent of the buffer """
-        self.__persist()
+        return self.__persist()
 
     def __persist(self):
         if len(self.transactions) > 0:
-            self.transaction_model.createMany(self.transactions)
+            base_transactions = []
+            for transaction in self.transactions:
+                if 'TransactionData' in transaction:
+                    transaction_data_id = self.models.TransactionData.create(transaction['TransactionData'])
+                    transaction['Transaction']['transaction_data_id'] = transaction_data_id
+                base_transactions.append(transaction['Transaction'])
+            self.models.Transaction.createMany(base_transactions)
             self.transactions = []
+            return True
+        else:
+            return False
 
 class Transaction(object):
     """ Transaction represents a single transaction in the database and
@@ -63,17 +72,18 @@ class Transaction(object):
         self.__validateTransaction()
 
     def getTransaction(self):
+        """ Retrieves only the transaction model associated with the transaction """
         return self.transaction['Transaction']
 
     def getFullTransaction(self):
+        """ Retrieves all models associated with transaction """
         return self.transaction
 
     def getModels(self):
         return as_obj(self.models)
 
     def setTransactionField(self, field, value):
-        """ This method should be used to set customized fields but could also be used
-        to set any fields on a particular Transaction
+        """ This method should be used to set customized fields but could also be used to set any fields on a particular Transaction
         """
         self.transaction['Transaction'][field] = value
 
@@ -144,6 +154,8 @@ class CustomTransaction(Transaction):
         super(CustomTransaction, self).__init__(transaction, transaction_group, models)
 
     def setDefault(self, field, id_val):
+        if field == 'transaction_data_id':
+            raise Exception("Invalid default: unable to set default for field %s" % (field))
         self.defaults[field] = id_val
 
     def on_missing_field(self, params):

@@ -18,13 +18,19 @@ from py_privatekonomi.core.transaction import (TransactionManager, Transaction, 
     using core.transaction
 """
 
+g_parser = None
+
 def execute(sources, parser, formatter, configs):
-    contents = helper.execute(sources, parser, formatter, True) # <--
-    # print(contents)
+    global g_parser
+    g_parser = parser
+    contents = helper.execute(sources, parser, formatter, True)
     return contents
 
 def persist(output, configs):
-    models = rebuild_tables(loader.load_models(EconomyMapper.getModelNames()))
+    global g_parser
+    raw_models = loader.load_models(EconomyMapper.getModelNames())
+    customizations = loader.load_customizations(g_parser.getName(), safe=True)
+    models = rebuild_tables(raw_models, customizations)
     ids = {}
     ids['account_category_id'] = models.AccountCategory.create({
         'name' : 'Unknown account category'
@@ -54,7 +60,7 @@ def persist(output, configs):
         __persist(content, models, configs, ids)
 
 def __persist(transactions, models, configs, ids):
-    transaction_manager = TransactionManager(models.Transaction, configs.insert_rows)
+    transaction_manager = TransactionManager(models, configs.insert_rows)
     transaction_group = TransactionHelper.createTransactionGroup(models)
     save_output_to_file = configs.log_to_file
 
@@ -73,7 +79,7 @@ def __persist(transactions, models, configs, ids):
         t.setDefault('organization_id', ids['organization_id'])
         t.setDefault('security_provider_id', None)
         t.buildTransaction()
-        transaction_manager.addTransaction(t.getTransaction())
+        transaction_manager.addTransaction(t)
         transaction_manager.debuffer()
     transaction_manager.forceDebuffer()
     if save_output_to_file is not False:

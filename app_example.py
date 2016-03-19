@@ -46,10 +46,11 @@ class MyApp(App):
 
 def app_1(num):
     """ An app which formats and parses two Swedbank samples """
+    app_name = 'swedbank_app'
     print("="*80)
-    print("Running app " + str(num))
+    print("Running app #%s (%s)" % (num, app_name))
     print("="*80)
-    app = AppProxy('name_of_my_app', MyApp())
+    app = AppProxy(app_name, MyApp())
     app.setFormatter("swedbank")
     app.setParser("swedbank")
     app.addSources(["samples/swedbank/sample1", "samples/swedbank/sample2"])
@@ -63,10 +64,11 @@ def app_1(num):
 
 def app_2(num):
     """ An app which formats and parses two Avanza samples """
+    app_name = 'avanza_app'
     print("="*80)
-    print("Running app " + str(num))
+    print("Running app #%s (%s)" % (num, app_name))
     print("="*80)
-    app = AppProxy('name_of_my_app', MyApp())
+    app = AppProxy(app_name, MyApp())
     app.setFormatter("avanza")
     app.setParser("avanza")
     app.addSources(["samples/avanza/sample1", "samples/avanza/sample2"])
@@ -81,10 +83,11 @@ def app_2(num):
 def app_3(num):
     """ An app which sets the output directly without going through the process
         of parsing and formatting """
+    app_name = 'set_output_app'
     print("="*80)
-    print("Running app " + str(num))
+    print("Running app #%s (%s)" % (num, app_name))
     print("="*80)
-    app = AppProxy('name_of_my_app', MyApp())
+    app = AppProxy(app_name, MyApp())
     conf = get_default_config()
     conf['use_logging'] = True
     app.config(conf)
@@ -97,10 +100,11 @@ def app_3(num):
 def app_4(num):
     """ An app which guesses the formatter and parser by calling
         autodiscover() """
+    app_name = 'autodiscover_app'
     print("="*80)
-    print("Running app #" + str(num))
+    print("Running app #%s (%s)" % (num, app_name))
     print("="*80)
-    app = AppProxy('name_of_my_app', MyApp())
+    app = AppProxy(app_name, MyApp())
     app.autodiscover([
         {
             'formatter' : 'avanza',
@@ -113,6 +117,10 @@ def app_4(num):
         {
             'formatter' : 'swedbank',
             'parser' : 'swedbank'
+        },
+        {
+            'formatter' : 'nordnet',
+            'parser' : 'nordnet'
         }
     ])
     conf = get_default_config()
@@ -137,12 +145,40 @@ def app_4(num):
     app_output = app.run()
     print(app_output)
 
+    print("-"*80)
+    print("Nordnet samples")
+    print("-"*80)
+    app.clearSources()
+    app.addSources(["samples/nordnet/sample1.csv"])
+    app.build()
+    app_output = app.run()
+    print(app_output)
+
+def app_5(num):
+    """ An app which formats and parses a Nordnet sample """
+    app_name = 'nordnet_app'
+    print("="*80)
+    print("Running app #%s (%s)" % (num, app_name))
+    print("="*80)
+    app = AppProxy(app_name, MyApp())
+    app.setFormatter("nordnet")
+    app.setParser("nordnet")
+    app.addSources(["samples/nordnet/sample1.csv"])
+    conf = get_default_config()
+    conf['use_logging'] = True
+    app.config(conf)
+    app.build()
+    app_output = app.run()
+    print(app_output)
+
+
 if __name__ == '__main__':
     apps = [
         app_1,
         app_2,
         app_3,
-        app_4
+        app_4,
+        app_5
     ]
     for num, app in enumerate(apps):
         app(num+1)

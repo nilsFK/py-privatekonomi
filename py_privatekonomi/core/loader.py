@@ -8,10 +8,13 @@ from py_privatekonomi.core.factories.account_parser_factory import AccountParser
 from py_privatekonomi.core.formatters.account_formatter import AccountFormatter
 from py_privatekonomi.core.formatters.swedbank_formatter import SwedbankFormatter
 from py_privatekonomi.core.formatters.avanza_formatter import AvanzaFormatter
+from py_privatekonomi.core.formatters.nordnet_formatter import NordnetFormatter
 from py_privatekonomi.core.parsers.regex_parser import RegexParser
 from py_privatekonomi.core.parsers.swedbank_parser import SwedbankParser
 from py_privatekonomi.core.parsers.avanza_parser import AvanzaParser
+from py_privatekonomi.core.parsers.nordnet_parser import NordnetParser
 from py_privatekonomi.core.config import readConfig
+from py_privatekonomi.core.mappers.economy_mapper import EconomyMapper
 
 def __load_module(name, folder):
     safe_module_name = common.path_leaf(name)
@@ -37,12 +40,14 @@ def load_app(app_name, sources, parser_name = None, formatter_name = None, persi
 def load_core():
     account_formatter_factories = load_factory({
         'swedbank' : SwedbankFormatter,
-        'avanza' : AvanzaFormatter
+        'avanza' : AvanzaFormatter,
+        'nordnet' : NordnetFormatter
     }, AccountFormatterFactory)
 
     account_parser_factories = load_factory({
         'swedbank' : SwedbankParser,
-        'avanza' : AvanzaParser
+        'avanza' : AvanzaParser,
+        'nordnet' : NordnetParser
     }, AccountParserFactory)
 
     core = {
@@ -103,3 +108,18 @@ def load_models(model_names):
             'model_name' : model_name
         }
     return models
+
+def load_customizations(org_name, raw_models = None, safe=False):
+    path = "py_privatekonomi.core.customizations"
+    module = None
+    if safe is True:
+        try:
+            module = __load_module(org_name, path)
+        except ImportError:
+            return {}
+    if module is None:
+        module = __load_module(org_name, path)
+    if raw_models is None:
+        raw_models = load_models(EconomyMapper.getModelNames())
+    customizations = module.getCustomizations(raw_models)
+    return customizations

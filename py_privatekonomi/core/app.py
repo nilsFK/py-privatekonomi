@@ -3,9 +3,11 @@
 from py_privatekonomi.utilities import helper
 from py_privatekonomi.utilities.common import as_obj, is_string
 from py_privatekonomi.utilities.proxy import HookProxy
+from py_privatekonomi.utilities.models import rebuild_tables, create_tables
 from py_privatekonomi.core import loader
 from py_privatekonomi.core.error import (MissingAppFunctionError, FormatterError, ParserError)
 import py_privatekonomi.core.db
+from py_privatekonomi.core.mappers.economy_mapper import EconomyMapper
 
 class AppProxy(HookProxy):
     def __init__(self, objname, obj):
@@ -124,6 +126,25 @@ class App(object):
                     return True
         return False
 
+    def _rebuildTables(self, raw_models=None, customizations={}):
+        _customizations = {}
+        if 'customizations' in self.__config:
+            _customizations = self.__config['customizations']
+        apply_customizations = _customizations.copy()
+        apply_customizations.update(customizations)
+        if raw_models is None:
+            raw_models = loader.load_models(EconomyMapper.getModelNames())
+        return rebuild_tables(raw_models, apply_customizations)
+
+    def _createTables(self, raw_models=None, customizations={}):
+        _customizations = {}
+        if 'customizations' in self.__config:
+            _customizations = self.__config['customizations']
+        apply_customizations = _customizations.copy()
+        apply_customizations.update(customizations)
+        if raw_models is None:
+            raw_models = loader.load_models(EconomyMapper.getModelNames())
+        return create_tables(raw_models, customizations)
 
     def build(self):
         self.app = {}
@@ -144,7 +165,14 @@ class App(object):
             found = self.__autodiscover(self.app['core'])
             if not found:
                 raise Exception("Unable to find parser/formatter from %s" % (repr(self.__discover_from)))
-
+        if self.__persist is True:
+            try:
+                customizations = loader.load_customizations(self.__parser)
+                self.config({
+                    'customizations' : customizations
+                })
+            except ImportError as e:
+                pass
         return self
 
     def run(self):

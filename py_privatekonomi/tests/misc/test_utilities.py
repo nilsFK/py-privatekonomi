@@ -15,6 +15,7 @@ from py_privatekonomi.core.models.transaction_category import TransactionCategor
 from py_privatekonomi.core.models.transaction_group import TransactionGroup
 from py_privatekonomi.core.models.currency import Currency
 from py_privatekonomi.core.models.security_provider import SecurityProvider
+from py_privatekonomi.core.models.transaction_data import TransactionData
 from py_privatekonomi.core.model_context import ModelContext
 from py_privatekonomi.tests.test_base import TestBase
 import py_privatekonomi.core.db
@@ -30,7 +31,8 @@ class TestUtilities(TestBase):
             TransactionType,
             Transaction,
             SecurityProvider,
-            TransactionGroup
+            TransactionGroup,
+            TransactionData
         ]
 
     def test_resolver_resolve_dependecy_graph(self):
@@ -62,6 +64,7 @@ class TestUtilities(TestBase):
 
         deps = resolver.getModelDependencies(self.model_types)
         obliteration_order = resolver.resolveObliteration(deps)
+        # print(repr(obliteration_order))
         self.assertEqual(len(self.model_types), len(obliteration_order))
         """
         obliteration order can variate between models, i.e. it's not
@@ -74,6 +77,7 @@ class TestUtilities(TestBase):
 
         deps = resolver.getModelDependencies(self.model_types)
         generation_order = resolver.resolveGeneration(deps)
+        print(repr(generation_order))
         self.assertEqual(len(self.model_types), len(generation_order))
         """
         generation order can variate between models, i.e. it's not

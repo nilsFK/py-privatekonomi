@@ -63,7 +63,7 @@ class PersistApp(App):
         })
 
     def execute(self, sources, parser, formatter, configs):
-        print("Calling MyApp.execute")
+        print("Calling PersistApp.execute")
         contents = helper.execute(
             sources=sources,
             parser=parser,
@@ -74,12 +74,12 @@ class PersistApp(App):
         return contents
 
     def persist(self, output, configs):
-        print("Calling MyApp.persist")
-        self.models = rebuild_tables(loader.load_models(EconomyMapper.getModelNames()))
+        print("Calling PersistApp.persist")
+        self.models = self._rebuildTables()
         self.createDefaults()
         transaction_groups = []
         for content in output:
-            self.transaction_manager = TransactionManager(self.models.Transaction, configs.insert_rows)
+            self.transaction_manager = TransactionManager(self.models, configs.insert_rows)
             transaction_group = self.__persist(content, configs)
             transaction_groups.append(transaction_group)
         return transaction_groups
@@ -94,7 +94,7 @@ class PersistApp(App):
             t.setDefault('transaction_category_id', self.transaction_category_id)
 
             t.buildTransaction()
-            self.transaction_manager.addTransaction(t.getTransaction())
+            self.transaction_manager.addTransaction(t)
             self.transaction_manager.debuffer()
         self.transaction_manager.forceDebuffer()
         return transaction_group
@@ -139,7 +139,7 @@ class SpecApp(App):
         customizations[raw_models['transaction_type']['type']] = {
             'is_public' : Column('is_public', Integer, nullable=False, server_default='0')
         }
-        models = rebuild_tables(raw_models, customizations)
+        self._rebuildTables(customizations=customizations)
         return "return something from persist"
 
 def app_1(num):
@@ -165,7 +165,7 @@ def app_2(num):
     print("Running app #" + str(num))
     print("="*80)
     db_config = readConfig("db_test", "Database")
-    app = AppProxy('persist_app', PersistApp())
+    app = AppProxy('persist_app', SpecApp())
     app.setFormatter("avanza")
     app.setParser("avanza")
     app.addSources(["samples/avanza/sample1"])
@@ -176,7 +176,24 @@ def app_2(num):
     app.build()
     app_output = app.run()
 
+def app_3(num):
+    """ An app which persists Nordnet data """
+    print("="*80)
+    print("Running app #" + str(num))
+    print("="*80)
+    db_config = readConfig("db_test", "Database")
+    app = AppProxy('nordnet_app', PersistApp())
+    app.setFormatter("nordnet")
+    app.setParser("nordnet")
+    app.addSources(["samples/nordnet/sample1.csv"])
+    app.persistWith(db_config)
+    conf = get_default_config()
+    conf['use_logging'] = True
+    app.config(conf)
+    app.build()
+    app_output = app.run()
+
 if __name__ == '__main__':
-    apps = [app_1, app_2]
+    apps = [app_1, app_2, app_3]
     for num, app in enumerate(apps):
         app(num+1)

@@ -6,6 +6,8 @@ from sqlalchemy.types import Date, Numeric, DateTime
 from collections import OrderedDict
 
 class Transaction(BaseModel):
+    """ contains the bare essentials to make up a transaction. any additional
+    transaction data should be stored in the transaction_data model """
     def __init__(self, context, customizations={}):
         pre_cols = OrderedDict([
             ('id', Column('id', Integer, primary_key=True)),
@@ -22,6 +24,7 @@ class Transaction(BaseModel):
             ('transaction_type_id', Column('transaction_type_id', Integer, nullable=False)),
             ('currency_id', Column('currency_id', Integer, nullable=False)),
             ('security_provider_id', Column('security_provider_id', Integer, nullable=True)),
+            ('transaction_data_id', Column('transaction_data_id', Integer, nullable=True)),
             ('fk_transaction_account', ForeignKeyConstraint(
                 ['account_id'],
                 ['account.id'],
@@ -59,6 +62,14 @@ class Transaction(BaseModel):
                     ['security_provider.id'],
                     use_alter=False,
                     name='fk_transaction_security_provider',
+                    onupdate='CASCADE',
+                    ondelete='CASCADE'
+                )),
+            ('fk_transaction_transaction_data', ForeignKeyConstraint(
+                    ['transaction_data_id'],
+                    ['transaction_data.id'],
+                    use_alter=False,
+                    name='fk_transaction_transaction_data',
                     onupdate='CASCADE',
                     ondelete='CASCADE'
                 ))

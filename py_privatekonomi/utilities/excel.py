@@ -19,6 +19,5 @@ def get_content(fname, sheet_num):
                     cell_value = datetime.datetime(year, month, day, hour, minute, second)
                 except xlrd.XLDateError as e:
                     return False
-            # content[rowx][colx] = cell_value
             content[rowx].append(cell_value)
     return content
