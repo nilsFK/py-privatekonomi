@@ -13,7 +13,7 @@ from py_privatekonomi.core import loader
 from py_privatekonomi.core.app import (App, AppProxy)
 from py_privatekonomi.core.config import readConfig
 from py_privatekonomi.core.mappers.economy_mapper import EconomyMapper
-from py_privatekonomi.tests.dataset.swedbank.sample1 import test_data as test_data_1
+from py_privatekonomi.tests.dataset.nordnet.sample1 import test_data as nordnet_test_data_1
 from py_privatekonomi.core.transaction import (TransactionManager, Transaction, CustomTransaction, TransactionHelper)
 
 """
@@ -193,7 +193,29 @@ def app_3(num):
     app.build()
     app_output = app.run()
 
+def app_4(num):
+    """ An app which persists Nordnet data by calling setOutput """
+    print("="*80)
+    print("Running app #" + str(num))
+    print("="*80)
+    db_config = readConfig("db_test", "Database")
+    app = AppProxy('nordnet_output_app', PersistApp())
+    app.persistWith(db_config)
+    conf = get_default_config()
+    conf['use_logging'] = True
+    app.config(conf)
+    app.setFormatter("nordnet")
+    app.setParser("nordnet")
+    app.setOutput([nordnet_test_data_1])
+    app.build()
+    app_output = app.run()
+
 if __name__ == '__main__':
-    apps = [app_1, app_2, app_3]
+    apps = [
+        app_1,
+        app_2,
+        app_3,
+        app_4
+    ]
     for num, app in enumerate(apps):
         app(num+1)
