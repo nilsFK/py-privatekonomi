@@ -167,7 +167,7 @@ class App(object):
                 raise Exception("Unable to find parser/formatter from %s" % (repr(self.__discover_from)))
         if self.__persist is True:
             try:
-                customizations = loader.load_customizations(self.__parser)
+                customizations = loader.load_customizations(self.app['parser'].getName())
                 self.config({
                     'customizations' : customizations
                 })
