@@ -35,13 +35,13 @@ class SwedbankFormatter(AccountFormatter):
     def format_transaction_accounting_date(self, content, subformatter):
         """ Bokföringsdatum """
         content = content.strip()
-        return super(SwedbankFormatter, self)._format_date(content, "%y-%m-%d")
+        return super(SwedbankFormatter, self)._format_date(content, None)
 
     @EconomyMapper("Transaction", "transaction_date")
     def format_transaction_transaction_date(self, content, subformatter):
         """ Transaktionsdatum """
         content = content.strip()
-        return super(SwedbankFormatter, self)._format_date(content, "%y-%m-%d")
+        return super(SwedbankFormatter, self)._format_date(content, None)
 
     @EconomyMapper("Transaction", "reference")
     def format_transaction_reference(self, content, subformatter):

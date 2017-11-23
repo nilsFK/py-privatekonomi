@@ -84,6 +84,11 @@ class Formatter(object):
     @classmethod
     def _format_date(self, date_string, date_format):
         if is_string(date_string):
+            if date_format is None:
+                if len(date_string) == 10:
+                    date_format = '%Y-%m-%d'
+                elif len(date_string) == 8:
+                    date_format = '%y-%m-%d'
             return time.strptime(date_string, date_format)
         elif is_date(date_string):
             return format_date(date_string)

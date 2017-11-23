@@ -1,9 +1,8 @@
-Katalogen tests/ innehåller enhetstester och försäkrar om att koden är fullt fungerande. Exempel:
+Katalogen tests/ innehåller enhetstester och försäkrar om att koden är fullt fungerande. För att köra ett test gå till root-katalogen för projektet och kör:
 
 ```bash
-cd py_privatekonomi
 export PYTHONPATH=.
-python tests/test_swedbank.py
+python -m unittest py_privatekonomi.tests.swedbank.test_swedbank
 ```
 
 för att köra igenom hela testsviten:

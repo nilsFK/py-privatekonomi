@@ -9,6 +9,7 @@ from py_privatekonomi.core.error import FormatterError, ParserError
 from py_privatekonomi.tests.test_base import TestBase
 from py_privatekonomi.tests.dataset.swedbank.sample1 import test_data as test_data_1
 from py_privatekonomi.tests.dataset.swedbank.sample2 import test_data as test_data_2
+from py_privatekonomi.tests.dataset.swedbank.sample5 import test_data as test_data_5
 
 class TestSwedbank(TestBase):
     def setUp(self):
@@ -43,6 +44,16 @@ class TestSwedbank(TestBase):
             formatter_name='swedbank')
         results = helper.execute_app(app)
         self.assertFormatted(results, test_data_1, format_as_mapper=False)
+
+    def test_sample5(self):
+        """ test sample5 """
+        app = loader.load_app(
+            app_name='py_privatekonomi.core.apps.default',
+            sources='samples/swedbank/sample5',
+            parser_name='swedbank',
+            formatter_name='swedbank')
+        results = helper.execute_app(app)
+        self.assertFormatted(results, test_data_5, format_as_mapper=False)
 
     def test_text_sample(self):
         sources = []

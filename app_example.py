@@ -44,11 +44,11 @@ class MyApp(App):
         models = rebuild_tables(loader.load_models(EconomyMapper.getModelNames()))
         return "return something from persist"
 
-def app_1(num):
+def app_1():
     """ An app which formats and parses two Swedbank samples """
     app_name = 'swedbank_app'
     print("="*80)
-    print("Running app #%s (%s)" % (num, app_name))
+    print("Running app #1 (%s)" % (app_name))
     print("="*80)
     app = AppProxy(app_name, MyApp())
     app.setFormatter("swedbank")
@@ -58,15 +58,14 @@ def app_1(num):
     conf['use_logging'] = True
     app.config(conf)
     app.build()
-    print(repr(app))
     app_output = app.run()
-    print(app_output)
+    return app_output
 
-def app_2(num):
+def app_2():
     """ An app which formats and parses two Avanza samples """
     app_name = 'avanza_app'
     print("="*80)
-    print("Running app #%s (%s)" % (num, app_name))
+    print("Running app #2 (%s)" % (app_name))
     print("="*80)
     app = AppProxy(app_name, MyApp())
     app.setFormatter("avanza")
@@ -76,16 +75,15 @@ def app_2(num):
     conf['use_logging'] = True
     app.config(conf)
     app.build()
-    print(repr(app))
     app_output = app.run()
-    print(app_output)
+    return app_output
 
-def app_3(num):
+def app_3():
     """ An app which sets the output directly without going through the process
         of parsing and formatting """
     app_name = 'set_output_app'
     print("="*80)
-    print("Running app #%s (%s)" % (num, app_name))
+    print("Running app #3 (%s)" % (app_name))
     print("="*80)
     app = AppProxy(app_name, MyApp())
     conf = get_default_config()
@@ -93,16 +91,15 @@ def app_3(num):
     app.config(conf)
     app.setOutput([test_data_1])
     app.build()
-    print(repr(app))
     app_output = app.run()
-    print(app_output)
+    return app_output
 
-def app_4(num):
+def app_4():
     """ An app which guesses the formatter and parser by calling
         autodiscover() """
     app_name = 'autodiscover_app'
     print("="*80)
-    print("Running app #%s (%s)" % (num, app_name))
+    print("Running app #4 (%s)" % (app_name))
     print("="*80)
     app = AppProxy(app_name, MyApp())
     app.autodiscover([
@@ -132,9 +129,7 @@ def app_4(num):
     print("-"*80)
     app.addSources(["samples/swedbank/sample1","samples/swedbank/sample2"])
     app.build()
-    print(repr(app))
     app_output = app.run()
-    print(app_output)
 
     print("-"*80)
     print("Avanza samples")
@@ -143,7 +138,6 @@ def app_4(num):
     app.addSources(["samples/avanza/sample1"])
     app.build()
     app_output = app.run()
-    print(app_output)
 
     print("-"*80)
     print("Nordnet samples")
@@ -152,13 +146,13 @@ def app_4(num):
     app.addSources(["samples/nordnet/sample1.csv"])
     app.build()
     app_output = app.run()
-    print(app_output)
+    return app_output
 
-def app_5(num):
+def app_5():
     """ An app which formats and parses a Nordnet sample """
     app_name = 'nordnet_app'
     print("="*80)
-    print("Running app #%s (%s)" % (num, app_name))
+    print("Running app #5 (%s)" % (app_name))
     print("="*80)
     app = AppProxy(app_name, MyApp())
     app.setFormatter("nordnet")
@@ -169,7 +163,24 @@ def app_5(num):
     app.config(conf)
     app.build()
     app_output = app.run()
-    print(app_output)
+    return app_output
+
+def app_6():
+    """ An app which formats and parses a Swedbank csv file """
+    app_name = 'swedbank_app'
+    print("="*80)
+    print("Running app #6 (%s)" % (app_name))
+    print("="*80)
+    app = AppProxy(app_name, MyApp())
+    app.setFormatter("swedbank")
+    app.setParser("swedbank")
+    app.addSources(["samples/swedbank/sample5"])
+    conf = get_default_config()
+    conf['use_logging'] = True
+    app.config(conf)
+    app.build()
+    app_output = app.run()
+    return app_output
 
 
 if __name__ == '__main__':
@@ -178,7 +189,14 @@ if __name__ == '__main__':
         app_2,
         app_3,
         app_4,
-        app_5
+        app_5,
+        app_6
     ]
     for num, app in enumerate(apps):
-        app(num+1)
+        app_output = app()
+        for idx, dataSet in enumerate(app_output['execute']):
+            print("Data length (set %s):" % (idx+1), len(dataSet))
+            #print(dataSet)
+
+        print("Formatter:", app_output['formatter'])
+        print("Parser:", app_output['parser'])

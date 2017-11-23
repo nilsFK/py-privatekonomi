@@ -2,26 +2,32 @@
 # -*- coding: utf-8 -*-
 
 import py_privatekonomi.core.parser
-import re
 from py_privatekonomi.core.parsers.regex_parser import RegexParser
 from py_privatekonomi.core.error import ParserError
 from py_privatekonomi.utilities.common import is_string
+from py_privatekonomi.core.parsers.csv_parser import CsvParser
+import re
+import csv
 
 class SwedbankParser(py_privatekonomi.core.parser.Parser):
     def __init__(self):
         super(SwedbankParser, self).__init__("swedbank")
 
     def parse(self, contents, options):
+        self.options = options
         ret = []
         p = re.compile(r'^\d{2}-\d{2}-\d{2}')
         for idx, content in enumerate(contents):
-            if isinstance(content, list):
+            if not isinstance(content, basestring):
                 raise ParserError("Invalid transaction text content. Expected string content, instead got:", capture_data={
                     'content' : content
                 })
             content = content.strip()
             if content == '':
                 continue
+            elif ";" in content: # assume csv
+                ret = self.__parse_csv(contents[idx:])
+                break
             elif content.startswith('Clnr'):
                 ret = self.__parse_clnr(contents[idx], contents[idx+1:])
                 break
@@ -34,8 +40,32 @@ class SwedbankParser(py_privatekonomi.core.parser.Parser):
             raise ParserError("Invalid transaction text content: no transactions found for text ending with: %s" % content[0:100].strip() + "...")
         return ret
 
+    def __parse_csv(self, contents):
+        """
+            This parser triggers when new csv export is used.
+        """
+        subformatters = [
+            "transaction_reference",
+            "transaction_transaction_date",
+            "transaction_amount",
+            "account_current_balance"
+        ]
+        if self.options['filetype'] in ['csv', 'empty']:
+            opts = {
+                'delimiter' : ';',
+                'quoting' : csv.QUOTE_NONE
+            }
+            rows = CsvParser().parse(contents, opts=opts)
+            return (rows, subformatters)
+        else:
+            return (contents, subformatters)
+
+
     def __parse_clnr(self, headers, contents):
-        """Note that we have to find all the UNICODE characters, not just the regular
+        """
+        Notice: this applies to the old version of Swedbank.
+        This parser triggers when old text export
+        Note that we have to find all the UNICODE characters, not just the regular
         A-Z0-9, so make sure to pass re.UNICODE to fetch these. Also, we try to decode
         from utf-8 if in that format, in case of fail we just pass it as is.
         """
@@ -76,6 +106,10 @@ class SwedbankParser(py_privatekonomi.core.parser.Parser):
         return (results, subformatters)
 
     def __parse_simple(self, contents):
+        """
+            Notice: this applies to the old version of Swedbank.
+            This parser triggers on manual copy and paste from old website.
+        """
         regex_parser = RegexParser()
         parsed = regex_parser.parse(contents, r'\s{2,}|\t+')
         subformatters = [

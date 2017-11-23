@@ -142,27 +142,28 @@ class SpecApp(App):
         self._rebuildTables(customizations=customizations)
         return "return something from persist"
 
-def app_1(num):
+def app_1():
     """ An app which persists Swedbank data """
     print("="*80)
-    print("Running app #" + str(num))
+    print("Running app #1")
     print("="*80)
     db_config = readConfig("db_test", "Database")
     app = AppProxy('spec_app', SpecApp())
     app.setFormatter("swedbank")
     app.setParser("swedbank")
-    app.addSources(["samples/swedbank/sample1", "samples/swedbank/sample2"])
+    app.addSources(["samples/swedbank/sample1", "samples/swedbank/sample2", "samples/swedbank/sample5"])
     app.persistWith(db_config)
     conf = get_default_config()
     conf['use_logging'] = True
     app.config(conf)
     app.build()
     app_output = app.run()
+    return app_output
 
-def app_2(num):
+def app_2():
     """ An app which persists Avanza data """
     print("="*80)
-    print("Running app #" + str(num))
+    print("Running app #2")
     print("="*80)
     db_config = readConfig("db_test", "Database")
     app = AppProxy('persist_app', SpecApp())
@@ -175,11 +176,12 @@ def app_2(num):
     app.config(conf)
     app.build()
     app_output = app.run()
+    return app_output
 
-def app_3(num):
+def app_3():
     """ An app which persists Nordnet data """
     print("="*80)
-    print("Running app #" + str(num))
+    print("Running app #3")
     print("="*80)
     db_config = readConfig("db_test", "Database")
     app = AppProxy('nordnet_app', PersistApp())
@@ -192,11 +194,12 @@ def app_3(num):
     app.config(conf)
     app.build()
     app_output = app.run()
+    return app_output
 
-def app_4(num):
+def app_4():
     """ An app which persists Nordnet data by calling setOutput """
     print("="*80)
-    print("Running app #" + str(num))
+    print("Running app #4")
     print("="*80)
     db_config = readConfig("db_test", "Database")
     app = AppProxy('nordnet_output_app', PersistApp())
@@ -209,6 +212,7 @@ def app_4(num):
     app.setOutput([nordnet_test_data_1])
     app.build()
     app_output = app.run()
+    return app_output
 
 if __name__ == '__main__':
     apps = [
@@ -218,4 +222,10 @@ if __name__ == '__main__':
         app_4
     ]
     for num, app in enumerate(apps):
-        app(num+1)
+        app_output = app()
+        for idx, dataSet in enumerate(app_output['execute']):
+            print("Data length (set %s):" % (idx+1), len(dataSet))
+            #print(dataSet)
+
+        print("Formatter:", app_output['formatter'])
+        print("Parser:", app_output['parser'])
