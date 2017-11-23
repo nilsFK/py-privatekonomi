@@ -58,7 +58,8 @@ Exempel
 
 Projektstatus
 -------------
-* Stöd för Swedbank (textexporter)
+* Stöd för gamla Swedbank (textexport, manuell export)
+* Stöd för nya Swedbank (csv-filer)
 * Stöd för Avanza (csv-filer, excel-filer)
 * Stöd för Nordnet (csv-filer, excel-filer)
 
