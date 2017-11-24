@@ -3,6 +3,7 @@
 import sqlalchemy
 from sqlalchemy import __version__
 from sqlalchemy import create_engine
+import sqlalchemy.engine.url as url
 # from core import config
 from py_privatekonomi.utilities import common
 from py_privatekonomi.utilities.common import (singleton, is_dict, is_Struct, as_obj)
@@ -15,14 +16,16 @@ class DB(object):
         else:
             if not is_Struct(db_config):
                 raise Exception("db_config must be either dict or common.Struct: %s" % (repr(db_config)))
-        self.__engine = sqlalchemy.create_engine("%(engine)s://%(username)s:%(password)s@%(host)s:%(port)s/%(database)s" % {
-            'engine' : db_config.engine,
-            'username' : db_config.username,
-            'password' : db_config.password,
-            'host' : db_config.host,
-            'port' : db_config.port,
-            'database' : db_config.database
-        })
+        engine_url = url.URL(
+            drivername=db_config.engine,
+            host=db_config.host,
+            port=db_config.port,
+            username=db_config.username,
+            password=db_config.password,
+            database=db_config.database,
+            query={ 'charset' : 'utf8' }
+        )
+        self.__engine = create_engine(engine_url, encoding='utf-8')
         self.__connection = self.__engine.connect()
         self.__config = db_config
         self.__connected = True
