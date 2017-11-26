@@ -4,37 +4,39 @@ import sqlalchemy
 from sqlalchemy import __version__
 from sqlalchemy import create_engine
 import sqlalchemy.engine.url as url
-# from core import config
 from py_privatekonomi.utilities import common
-from py_privatekonomi.utilities.common import (singleton, is_dict, is_Struct, as_obj)
+from py_privatekonomi.utilities.common import (singleton, is_dict, is_Struct, as_obj, as_dict)
 
 @singleton
 class DB(object):
     def connect(self, db_config):
-        if is_dict(db_config):
-            if 'charset' not in db_config:
-                db_config['query'] = None
-            else:
-                db_config['query'] = {
-                    'charset' : db_config['charset']
-                }
-            if 'encoding' not in db_config:
-                db_config['encoding'] = 'utf-8'
-            else:
-                if db_config['encoding'] == 'utf8':
-                    db_config['encoding'] = 'utf-8'
-            db_config = as_obj(db_config)
-        elif not is_Struct(db_config):
+        if not is_dict(db_config) and not is_Struct(db_config):
             raise Exception("db_config must be either dict or common.Struct: %s" % (repr(db_config)))
+        if is_Struct(db_config):
+            db_config = as_dict(db_config)
+
+        query = None
+        if 'charset' in db_config:
+            if db_config['charset'] == 'utf-8': # SQLAlchemy won't accept 'utf-8'...
+                db_config['charset'] = 'utf8'
+            query = {
+                'charset' : db_config['charset']
+            }
+        if 'encoding' not in db_config:
+            db_config['encoding'] = 'utf-8'
+
+        db_config = as_obj(db_config)
+
         engine_url = url.URL(
             drivername=db_config.engine,
             host=db_config.host,
             port=db_config.port,
             username=db_config.username,
             password=db_config.password,
-            database=db_config.database
+            database=db_config.database,
+            query=query
         )
-        self.__engine = create_engine(engine_url)
+        self.__engine = create_engine(engine_url, encoding=db_config.encoding)
         self.__connection = self.__engine.connect()
         self.__config = db_config
         self.__connected = True
