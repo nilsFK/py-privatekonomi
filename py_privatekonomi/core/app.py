@@ -9,6 +9,8 @@ from py_privatekonomi.core.error import (MissingAppFunctionError, FormatterError
 import py_privatekonomi.core.db
 from py_privatekonomi.core.mappers.economy_mapper import EconomyMapper
 
+import copy
+
 class AppProxy(HookProxy):
     def __init__(self, objname, obj):
         super(AppProxy, self).__init__(objname, obj)
@@ -248,5 +250,16 @@ class App(object):
             ret['persist'] = self.persist(ret['execute'], as_obj(self.__config))
         return ret
 
+    def clear_password(self, v):
+        if isinstance(v, dict):
+            if "password" in v:
+                del v["password"]
+                v['password'] = '<censored>'
+            for ele in v.values():
+                self.clear_password(ele)
+
     def __repr__(self):
-        return "App %s" % (repr(self.__config))
+        config = self.__config
+        config = copy.deepcopy(config)
+        self.clear_password(config)
+        return "App %s" % (repr(config))
