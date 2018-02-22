@@ -48,3 +48,17 @@ class AvanzaFormatter(AccountFormatter):
     def format_currency_code(self, content, subformatter):
         """ Valuta: kod """
         return content.strip()
+
+    @EconomyMapper("TransactionData", "ISIN")
+    def format_transaction_data_ISIN(self, content, subformatter):
+        """ Transaktionsdata: ISIN """
+        if len(content) == 0:
+            return None
+        return content.strip()
+
+    @EconomyMapper("TransactionData", "courtage")
+    def format_transaction_data_courtage(self, content, subformatter):
+        """ Transaktionsdata: Courtage """
+        if content is None or content == '-':
+            return None
+        return super(AvanzaFormatter, self)._format_currency(content)

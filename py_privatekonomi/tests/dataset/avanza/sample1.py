@@ -19,6 +19,10 @@ test_data = [
         },
         "TransactionType" : {
             "name" : u"Sälj"
+        },
+        "TransactionData" : {
+            "ISIN" : "SE0000000001",
+            "courtage" : 10.50
         }
     },
     {
@@ -39,6 +43,10 @@ test_data = [
         },
         "TransactionType" : {
             "name" : u"Köp"
+        },
+        "TransactionData" : {
+            "ISIN" : "SE0000000002",
+            "courtage" : 20
         }
     },
     {
@@ -59,6 +67,10 @@ test_data = [
         },
         "TransactionType" : {
             "name" : u"Köp"
+        },
+        "TransactionData" : {
+            "ISIN" : "SE0000000003",
+            "courtage" : 30.50
         }
     },
     {
@@ -79,6 +91,10 @@ test_data = [
         },
         "TransactionType" : {
             "name" : u"Insättning"
+        },
+        "TransactionData" : {
+            "ISIN" : "SE0000000004",
+            "courtage" : 40
         }
     },
     {
@@ -99,6 +115,10 @@ test_data = [
         },
         "TransactionType" : {
             "name" : u"Köp"
+        },
+        "TransactionData" : {
+            "ISIN" : "SE0000000005",
+            "courtage" : 50.50
         }
     },
     {
@@ -119,6 +139,10 @@ test_data = [
         },
         "TransactionType" : {
             "name" : u"Insättning"
+        },
+        "TransactionData" : {
+            "ISIN" : "SE0000000006",
+            "courtage" : 60
         }
     },
     {
@@ -139,6 +163,10 @@ test_data = [
         },
         "TransactionType" : {
             "name" : u"Köp"
+        },
+        "TransactionData" : {
+            "ISIN" : "SE0000000007",
+            "courtage" : 70.50
         }
     },
     {
@@ -159,6 +187,10 @@ test_data = [
         },
         "TransactionType" : {
             "name" : u"Köp"
+        },
+        "TransactionData" : {
+            "ISIN" : "SE0000000008",
+            "courtage" : 80
         }
     },
     {
@@ -179,6 +211,10 @@ test_data = [
         },
         "TransactionType" : {
             "name" : u"Insättning"
+        },
+        "TransactionData" : {
+            "ISIN" : "SE0000000009",
+            "courtage" : 90.50
         }
     },
     {
@@ -199,6 +235,10 @@ test_data = [
         },
         "TransactionType" : {
             "name" : u"Köp"
+        },
+        "TransactionData" : {
+            "ISIN" : "SE00000000010",
+            "courtage" : 100
         }
     },
 ]

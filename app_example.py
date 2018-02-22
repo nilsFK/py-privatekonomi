@@ -62,7 +62,7 @@ def app_1():
     return app_output
 
 def app_2():
-    """ An app which formats and parses two Avanza samples """
+    """ An app which formats and parses Avanza samples """
     app_name = 'avanza_app'
     print("="*80)
     print("Running app #2 (%s)" % (app_name))
@@ -70,7 +70,7 @@ def app_2():
     app = AppProxy(app_name, MyApp())
     app.setFormatter("avanza")
     app.setParser("avanza")
-    app.addSources(["samples/avanza/sample1", "samples/avanza/sample2"])
+    app.addSources(["samples/avanza/sample1", "samples/avanza/sample2", "samples/avanza/excel_sample.xlsx"])
     conf = get_default_config()
     conf['use_logging'] = True
     app.config(conf)

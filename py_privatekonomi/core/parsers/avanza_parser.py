@@ -20,7 +20,9 @@ class AvanzaParser(py_privatekonomi.core.parser.Parser):
             "transaction_security_amount",
             "transaction_security_rate",
             "transaction_amount",
-            "currency_code"
+            "transaction_data_courtage",
+            "currency_code",
+            "transaction_data_ISIN"
         ]
         if options['filetype'] in ['csv', 'empty']:
             opts = {
