@@ -23,7 +23,7 @@ class Formatter(object):
 
     def format(self, rows, subformatters, format_as_mapper = False):
         self.subformatters = subformatters
-        rows  = self.__before_format(rows)
+        rows = self.__before_format(rows)
         output = self.__process_rows(rows)
         output = self.__after_format(output)
         return output if not format_as_mapper else self.__mappings
@@ -55,13 +55,17 @@ class Formatter(object):
             token = self.__callback("before_process_token", token)
             subformatter = subformatter_deq.popleft()
             try:
-                formatted_token = getattr(self, "format_%s" % subformatter)(token, subformatter)
+                if subformatter is not None:
+                    formatted_token = getattr(self, "format_%s" % subformatter)(token, subformatter)
+                else:
+                    formatted_token = token
             except Exception as e:
                 raise FormatterError(e, {
                     'token' : token,
                     'subformatter' : subformatter
                 })
-            tokens[subformatter] = formatted_token
+            if subformatter is not None:
+                tokens[subformatter] = formatted_token
             self.__callback("after_process_token", formatted_token)
         self.__mappings.append(self.__push_mappings)
         self.__push_mappings = {}

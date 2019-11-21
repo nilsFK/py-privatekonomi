@@ -18,7 +18,7 @@ class SwedbankFormatter(AccountFormatter):
 
     @EconomyMapper("Account", "account_number")
     def format_account_account_number(self, content, subformatter):
-        """ Kontonr """
+        """ Kontonummer / Kontonr """
         return content.strip()
 
     @EconomyMapper("Account", "name")

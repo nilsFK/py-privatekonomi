@@ -25,8 +25,11 @@ class SwedbankParser(py_privatekonomi.core.parser.Parser):
             content = content.strip()
             if content == '':
                 continue
+            elif content.startswith('* Transaktioner') and contents[idx+1].startswith("Radnummer"):
+                ret = self.__parse_csv(contents[idx+2:])
+                break
             elif ";" in content: # assume csv
-                ret = self.__parse_csv(contents[idx:])
+                ret = self.__parse_legacy_csv(contents[idx:])
                 break
             elif content.startswith('Clnr'):
                 ret = self.__parse_clnr(contents[idx], contents[idx+1:])
@@ -37,12 +40,44 @@ class SwedbankParser(py_privatekonomi.core.parser.Parser):
             else:
                 continue
         if len(ret) == 0:
-            raise ParserError("Invalid transaction text content: no transactions found for text ending with: %s" % content[0:100].strip() + "...")
+            error_msg = "Invalid transaction text content: no transactions found for text ending with: ...{suffix}".format(**{
+                    'suffix' : content[-100:].strip()
+                })
+            raise ParserError(error_msg, capture_data={'content': content})
         return ret
 
     def __parse_csv(self, contents):
         """
-            This parser triggers when new csv export is used.
+            This applies to the new csv export of Swedbank.
+        """
+        subformatters = [
+            None, # Radnummer
+            "account_account_code",
+            "account_account_number",
+            None, # Produkt
+            "currency_code",
+            "transaction_accounting_date",
+            "transaction_transaction_date",
+            None, # Valutadag
+            "transaction_reference",
+            None, # Beskrivning
+            "transaction_amount",
+            "account_current_balance"
+        ]
+        print("Filetype:", self.options['filetype'])
+        if self.options['filetype'] in ['csv', 'empty']:
+            opts = {
+                'delimiter' : ',',
+                'quoting' : csv.QUOTE_NONE
+            }
+            rows = CsvParser().parse(contents, opts=opts)
+            return (rows, subformatters)
+        else:
+            return (contents, subformatters)
+
+    def __parse_legacy_csv(self, contents):
+        """
+            This parser triggers when old csv export is used.
         """
         subformatters = [
             "transaction_reference",

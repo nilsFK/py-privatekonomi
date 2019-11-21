@@ -174,7 +174,7 @@ def app_6():
     app = AppProxy(app_name, MyApp())
     app.setFormatter("swedbank")
     app.setParser("swedbank")
-    app.addSources(["samples/swedbank/sample5"])
+    app.addSources(["samples/swedbank/sample6"])
     conf = get_default_config()
     conf['use_logging'] = True
     app.config(conf)
@@ -196,7 +196,7 @@ if __name__ == '__main__':
         app_output = app()
         for idx, dataSet in enumerate(app_output['execute']):
             print("Data length (set %s):" % (idx+1), len(dataSet))
-            #print(dataSet)
+            # print(dataSet)
 
         print("Formatter:", app_output['formatter'])
         print("Parser:", app_output['parser'])
