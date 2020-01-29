@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 import unittest
 import inspect
 from py_privatekonomi.tests.test_base import TestBase
@@ -18,9 +21,9 @@ class TestNordnetDB(TestBase):
             persist=True,
             config=self.get_default_config())
         if results is False:
-            print("Skipping:", inspect.stack()[0][3])
+            print(("Skipping:", inspect.stack()[0][3]))
         else:
-            print(repr(results))
+            print((repr(results)))
             self.assertFormatted(results, test_data_1, format_as_mapper=True)
             self.assertPersisted(test_data_1)
 

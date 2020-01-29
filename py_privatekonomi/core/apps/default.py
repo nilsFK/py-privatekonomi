@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import unicode_literals
 from py_privatekonomi.utilities import helper, common
 
 """ This is the simplest form of an app possible.

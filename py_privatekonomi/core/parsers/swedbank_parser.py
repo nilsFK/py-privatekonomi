@@ -1,13 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 import py_privatekonomi.core.parser
 from py_privatekonomi.core.parsers.regex_parser import RegexParser
 from py_privatekonomi.core.error import ParserError
-from py_privatekonomi.utilities.common import is_string
+from py_privatekonomi.utilities.common import is_string, unicode, decode
 from py_privatekonomi.core.parsers.csv_parser import CsvParser
 import re
 import csv
+import six
 
 class SwedbankParser(py_privatekonomi.core.parser.Parser):
     def __init__(self):
@@ -18,12 +22,13 @@ class SwedbankParser(py_privatekonomi.core.parser.Parser):
         ret = []
         p = re.compile(r'^\d{2}-\d{2}-\d{2}')
         for idx, content in enumerate(contents):
-            if not isinstance(content, basestring):
+            if not isinstance(content, six.string_types):
                 raise ParserError("Invalid transaction text content. Expected string content, instead got:", capture_data={
                     'content' : content
                 })
             content = content.strip()
-            if content == '':
+            content = decode(content)
+            if is_string(content) and len == 0:
                 continue
             elif content.startswith('* Transaktioner') and contents[idx+1].startswith("Radnummer"):
                 ret = self.__parse_csv(contents[idx+2:])
@@ -64,10 +69,10 @@ class SwedbankParser(py_privatekonomi.core.parser.Parser):
             "transaction_amount",
             "account_current_balance"
         ]
-        print("Filetype:", self.options['filetype'])
+        print(("Filetype:", self.options['filetype']))
         if self.options['filetype'] in ['csv', 'empty']:
             opts = {
-                'delimiter' : ',',
+                'delimiter' : str(','),
                 'quoting' : csv.QUOTE_NONE
             }
             rows = CsvParser().parse(contents, opts=opts)
@@ -87,7 +92,7 @@ class SwedbankParser(py_privatekonomi.core.parser.Parser):
         ]
         if self.options['filetype'] in ['csv', 'empty']:
             opts = {
-                'delimiter' : ';',
+                'delimiter' : str(';'),
                 'quoting' : csv.QUOTE_NONE
             }
             rows = CsvParser().parse(contents, opts=opts)

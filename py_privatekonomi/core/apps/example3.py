@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+from __future__ import unicode_literals
 import py_privatekonomi.core.db
 from py_privatekonomi.core.mappers.economy_mapper import EconomyMapper
 from py_privatekonomi.utilities import helper
@@ -66,7 +68,7 @@ def __persist(transactions, models, configs, ids):
 
     if save_output_to_file is not False:
         orig_stdout = sys.stdout
-        f = file(save_output_to_file, "w")
+        f = open(save_output_to_file, "w")
         sys.stdout = f
 
     for transaction in transactions:

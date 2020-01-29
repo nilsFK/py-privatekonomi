@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
 from py_privatekonomi.utilities.common import as_dict, as_obj, time_now
 import copy
 

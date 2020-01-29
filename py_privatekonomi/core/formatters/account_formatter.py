@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import unicode_literals
 import py_privatekonomi.core.formatter
 from py_privatekonomi.core.formatter import Formatter
 from py_privatekonomi.utilities.common import (

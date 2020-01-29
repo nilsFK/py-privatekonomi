@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import unicode_literals
 from py_privatekonomi.utilities import helper
 from py_privatekonomi.utilities.common import as_obj, is_string
 from py_privatekonomi.utilities.proxy import HookProxy

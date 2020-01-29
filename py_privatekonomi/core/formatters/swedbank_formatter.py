@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+from __future__ import unicode_literals
 import sys
 import re
 from py_privatekonomi.core.formatters.account_formatter import AccountFormatter

@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 test_data = [
     {
         "Transaction" : {
             "transaction_date" : "2017-11-16",
-            "reference" : u"PRESSBYRÅN",
+            "reference" : "PRESSBYRÅN",
             "amount" : -512.00
         },
         "Account" : {
@@ -14,7 +15,7 @@ test_data = [
     {
         "Transaction" : {
             "transaction_date" : "2017-11-16",
-            "reference" : u"PRESSBYRÅN",
+            "reference" : "PRESSBYRÅN",
             "amount" : -17
         },
         "Account" : {
@@ -24,7 +25,7 @@ test_data = [
     {
         "Transaction" : {
             "transaction_date" : "2017-11-14",
-            "reference" : u"HEMKÖP",
+            "reference" : "HEMKÖP",
             "amount" : -279.60
         },
         "Account" : {
@@ -34,7 +35,7 @@ test_data = [
     {
         "Transaction" : {
             "transaction_date" : "2017-11-13",
-            "reference" : u"COOP",
+            "reference" : "COOP",
             "amount" : -314.58
         },
         "Account" : {
@@ -44,7 +45,7 @@ test_data = [
     {
         "Transaction" : {
             "transaction_date" : "2017-11-12",
-            "reference" : u"ICA",
+            "reference" : "ICA",
             "amount" : -222.25
         },
         "Account" : {
@@ -54,7 +55,7 @@ test_data = [
     {
         "Transaction" : {
             "transaction_date" : "2017-11-11",
-            "reference" : u"ASIAN RESTAUR",
+            "reference" : "ASIAN RESTAUR",
             "amount" : -80.00
         },
         "Account" : {
@@ -64,7 +65,7 @@ test_data = [
     {
         "Transaction" : {
             "transaction_date" : "2017-11-11",
-            "reference" : u"HEMKÖP",
+            "reference" : "HEMKÖP",
             "amount" : -170.65
         },
         "Account" : {
@@ -74,7 +75,7 @@ test_data = [
     {
         "Transaction" : {
             "transaction_date" : "2017-11-10",
-            "reference" : u"Kebabhaket",
+            "reference" : "Kebabhaket",
             "amount" : -79.00
         },
         "Account" : {
@@ -84,7 +85,7 @@ test_data = [
     {
         "Transaction" : {
             "transaction_date" : "2017-11-10",
-            "reference" : u"ASIAN RESTAUR",
+            "reference" : "ASIAN RESTAUR",
             "amount" : -80
         },
         "Account" : {
@@ -94,7 +95,7 @@ test_data = [
     {
         "Transaction" : {
             "transaction_date" : "2017-11-10",
-            "reference" : u"HEMKÖP",
+            "reference" : "HEMKÖP",
             "amount" : -133.25
         },
         "Account" : {

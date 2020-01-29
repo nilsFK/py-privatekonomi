@@ -4,6 +4,9 @@
     A sample app which parses and formats Swedbank transactions
     and prints resulting contents
 """
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from py_privatekonomi.utilities import helper
 from py_privatekonomi.utilities.models import rebuild_tables, create_tables
 from py_privatekonomi.core import loader
@@ -47,9 +50,9 @@ class MyApp(App):
 def app_1():
     """ An app which formats and parses two Swedbank samples """
     app_name = 'swedbank_app'
-    print("="*80)
-    print("Running app #1 (%s)" % (app_name))
-    print("="*80)
+    print(("="*80))
+    print(("Running app #1 (%s)" % (app_name)))
+    print(("="*80))
     app = AppProxy(app_name, MyApp())
     app.setFormatter("swedbank")
     app.setParser("swedbank")
@@ -64,9 +67,9 @@ def app_1():
 def app_2():
     """ An app which formats and parses Avanza samples """
     app_name = 'avanza_app'
-    print("="*80)
-    print("Running app #2 (%s)" % (app_name))
-    print("="*80)
+    print(("="*80))
+    print(("Running app #2 (%s)" % (app_name)))
+    print(("="*80))
     app = AppProxy(app_name, MyApp())
     app.setFormatter("avanza")
     app.setParser("avanza")
@@ -82,9 +85,9 @@ def app_3():
     """ An app which sets the output directly without going through the process
         of parsing and formatting """
     app_name = 'set_output_app'
-    print("="*80)
-    print("Running app #3 (%s)" % (app_name))
-    print("="*80)
+    print(("="*80))
+    print(("Running app #3 (%s)" % (app_name)))
+    print(("="*80))
     app = AppProxy(app_name, MyApp())
     conf = get_default_config()
     conf['use_logging'] = True
@@ -98,9 +101,9 @@ def app_4():
     """ An app which guesses the formatter and parser by calling
         autodiscover() """
     app_name = 'autodiscover_app'
-    print("="*80)
-    print("Running app #4 (%s)" % (app_name))
-    print("="*80)
+    print(("="*80))
+    print(("Running app #4 (%s)" % (app_name)))
+    print(("="*80))
     app = AppProxy(app_name, MyApp())
     app.autodiscover([
         {
@@ -124,24 +127,24 @@ def app_4():
     conf['use_logging'] = True
     app.config(conf)
 
-    print("-"*80)
+    print(("-"*80))
     print("Swedbank samples")
-    print("-"*80)
+    print(("-"*80))
     app.addSources(["samples/swedbank/sample1","samples/swedbank/sample2"])
     app.build()
     app_output = app.run()
 
-    print("-"*80)
+    print(("-"*80))
     print("Avanza samples")
-    print("-"*80)
+    print(("-"*80))
     app.clearSources()
     app.addSources(["samples/avanza/sample1"])
     app.build()
     app_output = app.run()
 
-    print("-"*80)
+    print(("-"*80))
     print("Nordnet samples")
-    print("-"*80)
+    print(("-"*80))
     app.clearSources()
     app.addSources(["samples/nordnet/sample1.csv"])
     app.build()
@@ -151,9 +154,9 @@ def app_4():
 def app_5():
     """ An app which formats and parses a Nordnet sample """
     app_name = 'nordnet_app'
-    print("="*80)
-    print("Running app #5 (%s)" % (app_name))
-    print("="*80)
+    print(("="*80))
+    print(("Running app #5 (%s)" % (app_name)))
+    print(("="*80))
     app = AppProxy(app_name, MyApp())
     app.setFormatter("nordnet")
     app.setParser("nordnet")
@@ -168,9 +171,9 @@ def app_5():
 def app_6():
     """ An app which formats and parses a Swedbank csv file """
     app_name = 'swedbank_app'
-    print("="*80)
-    print("Running app #6 (%s)" % (app_name))
-    print("="*80)
+    print(("="*80))
+    print(("Running app #6 (%s)" % (app_name)))
+    print(("="*80))
     app = AppProxy(app_name, MyApp())
     app.setFormatter("swedbank")
     app.setParser("swedbank")
@@ -195,8 +198,8 @@ if __name__ == '__main__':
     for num, app in enumerate(apps):
         app_output = app()
         for idx, dataSet in enumerate(app_output['execute']):
-            print("Data length (set %s):" % (idx+1), len(dataSet))
+            print(("Data length (set %s):" % (idx+1), len(dataSet)))
             # print(dataSet)
 
-        print("Formatter:", app_output['formatter'])
-        print("Parser:", app_output['parser'])
+        print(("Formatter:", app_output['formatter']))
+        print(("Parser:", app_output['parser']))

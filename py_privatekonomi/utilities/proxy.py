@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import unicode_literals
 import types
 from pprint import pformat
+import six
 
 # http://code.activestate.com/recipes/366254-generic-proxy-object-with-beforeafter-method-hooks/
 class ProxyMethodWrapper:
@@ -60,7 +63,7 @@ class HookProxy(object):
         This can be used for tracing.
         """
         pargs = [pformat(x) for x in args]
-        for k, v in kwargs.iteritems():
+        for k, v in six.iteritems(kwargs):
             pargs.append('%s=%s' % (k, pformat(v)))
         return '%s.%s(%s)' % (self._objname, name, ', '.join(pargs))
 

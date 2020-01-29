@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
 try:
     # 2.x.x
     from ConfigParser import SafeConfigParser as config_parser

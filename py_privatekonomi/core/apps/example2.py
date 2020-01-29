@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from py_privatekonomi.core.mappers.economy_mapper import EconomyMapper
 from py_privatekonomi.utilities import helper
 from py_privatekonomi.utilities.common import decode
@@ -63,7 +66,7 @@ def persist(output, configs):
 
     models.AccountCategory.insert([
         {
-        'name' : u'Lönekonto'
+        'name' : 'Lönekonto'
         },
         {
         'name' : 'Sparkonto'
@@ -72,7 +75,7 @@ def persist(output, configs):
 
     models.Account.insert([
         {
-            'name' : u'Mitt Lönekonto',
+            'name' : 'Mitt Lönekonto',
             'account_code' : '123-123',
             'account_number' : '123456789',
             'current_balance' : 12000.12,
@@ -82,7 +85,7 @@ def persist(output, configs):
             'provider_id' : None
         },
         {
-            'name' : u'Mitt Sparkonto',
+            'name' : 'Mitt Sparkonto',
             'account_code' : '123-123',
             'account_number' : '012345678',
             'current_balance' : 2000,
@@ -95,13 +98,13 @@ def persist(output, configs):
 
     models.TransactionType.insert([
         {
-            'name' : u'Insättning',
+            'name' : 'Insättning',
         },
         {
-            'name' : u'Intjänad ränta',
+            'name' : 'Intjänad ränta',
         },
         {
-            'name' : u'Kortköp/uttag'
+            'name' : 'Kortköp/uttag'
         }
     ])
 
@@ -113,10 +116,10 @@ def persist(output, configs):
             'name' : 'Matvaror'
         },
         {
-            'name' : u'Fondköp'
+            'name' : 'Fondköp'
         },
         {
-            'name' : u'Fondsälj'
+            'name' : 'Fondsälj'
         }
     ])
 
@@ -148,7 +151,7 @@ def persist(output, configs):
             'accounting_date' : '2015-01-20',
             'transaction_date' : '2015-01-20',
             'amount' : -100.00,
-            'reference' : u'Överföring sparkonto',
+            'reference' : 'Överföring sparkonto',
             'account_id' : 1,
             'transaction_category_id' : None,
             'transaction_type_id' : 3,
@@ -159,7 +162,7 @@ def persist(output, configs):
             'accounting_date' : '2015-01-20',
             'transaction_date' : '2015-01-20',
             'amount' : 100.00,
-            'reference' : u'Överföring sparkonto',
+            'reference' : 'Överföring sparkonto',
             'account_id' : 2,
             'transaction_category_id' : None,
             'transaction_type_id' : 1,
@@ -179,29 +182,29 @@ def persist(output, configs):
     # Get some items
     transactions = models.Transaction.selectAll()
     for t in transactions:
-        print("id:", t[models.Transaction.col('id')])
-        print("group:", t[models.Transaction.col('group')])
-        print("accounting_date:", t[models.Transaction.col('accounting_date')])
-        print("transaction_date:", t[models.Transaction.col('transaction_date')])
-        print("amount:", t[models.Transaction.col('amount')])
-        print("reference:", decode(t[models.Transaction.col('reference')]))
-        print("account_id:", t[models.Transaction.col('account_id')])
-        print("transaction_category_id:", t[models.Transaction.col('transaction_category_id')])
-        print("transaction_type_id:", t[models.Transaction.col('transaction_type_id')])
-        print("currency_id:", t[models.Transaction.col('currency_id')])
-        print("-"*80)
+        print(("id:", t[models.Transaction.col('id')]))
+        print(("group:", t[models.Transaction.col('group')]))
+        print(("accounting_date:", t[models.Transaction.col('accounting_date')]))
+        print(("transaction_date:", t[models.Transaction.col('transaction_date')]))
+        print(("amount:", t[models.Transaction.col('amount')]))
+        print(("reference:", decode(t[models.Transaction.col('reference')])))
+        print(("account_id:", t[models.Transaction.col('account_id')]))
+        print(("transaction_category_id:", t[models.Transaction.col('transaction_category_id')]))
+        print(("transaction_type_id:", t[models.Transaction.col('transaction_type_id')]))
+        print(("currency_id:", t[models.Transaction.col('currency_id')]))
+        print(("-"*80))
 
     # Get some items and order them descending/ascending
     stmt = models.Transaction.getSelectStatement(models.Transaction.cols(['id', 'accounting_date'])).order_by(desc(models.Transaction.c().accounting_date))
     transactions = models.Transaction.execute(stmt)
     print("transactions ordered by accounting date descending")
     for t in transactions:
-        print("id:", t[models.Transaction.col('id')])
-        print("accounting date:", t[models.Transaction.col('accounting_date')])
-    print("-"*80)
+        print(("id:", t[models.Transaction.col('id')]))
+        print(("accounting date:", t[models.Transaction.col('accounting_date')]))
+    print(("-"*80))
     stmt = models.Transaction.getSelectStatement(models.Transaction.cols(['id', 'accounting_date'])).order_by(asc(models.Transaction.c().accounting_date))
     transactions = models.Transaction.execute(stmt)
     print("transactions ordered by accounting date ascending")
     for t in transactions:
-        print("id:", t[models.Transaction.col('id')])
-        print("accounting date:", t[models.Transaction.col('accounting_date')])
+        print(("id:", t[models.Transaction.col('id')]))
+        print(("accounting date:", t[models.Transaction.col('accounting_date')]))

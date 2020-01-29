@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 import unittest
 from py_privatekonomi.utilities import common, helper, resolver
 from py_privatekonomi.core import loader
@@ -77,7 +80,7 @@ class TestUtilities(TestBase):
 
         deps = resolver.getModelDependencies(self.model_types)
         generation_order = resolver.resolveGeneration(deps)
-        print(repr(generation_order))
+        print((repr(generation_order)))
         self.assertEqual(len(self.model_types), len(generation_order))
         """
         generation order can variate between models, i.e. it's not

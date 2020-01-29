@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import unicode_literals
 import py_privatekonomi.core.parser
 import re
 import csv
@@ -26,7 +28,7 @@ class AvanzaParser(py_privatekonomi.core.parser.Parser):
         ]
         if options['filetype'] in ['csv', 'empty']:
             opts = {
-                'delimiter' : ';',
+                'delimiter' : str(';'),
                 'quoting' : csv.QUOTE_NONE
             }
             rows = CsvParser().parse(contents, opts=opts)

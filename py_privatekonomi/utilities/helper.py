@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+from __future__ import unicode_literals
 from py_privatekonomi.core.factories.account_formatter_factory import AccountFormatterFactory
 from py_privatekonomi.core.factories.account_parser_factory import AccountParserFactory
 import py_privatekonomi.core.db

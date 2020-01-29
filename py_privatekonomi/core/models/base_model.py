@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 import py_privatekonomi.core.model
 import py_privatekonomi.utilities.common
 class BaseModel(py_privatekonomi.core.model.Model):

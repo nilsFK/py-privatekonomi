@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 import sqlalchemy
 from sqlalchemy import __version__
 from sqlalchemy import create_engine
@@ -66,6 +69,6 @@ class DB(object):
 
 if __name__ == '__main__':
     db = DB()
-    print(sqlalchemy.__version__)
+    print((sqlalchemy.__version__))
     db.connect()
     db.getEngine()

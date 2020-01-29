@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 test_data = [
     {
         "Transaction" : {
@@ -10,10 +11,10 @@ test_data = [
             "amount" : -4224.0
         },
         "TransactionData" : {
-            "identifier" : u"306246150",
+            "identifier" : "306246150",
             "liquidity_date" : "2016-03-04",
-            "type" : u"Aktie",
-            "ISIN" : u"SE0006993986",
+            "type" : "Aktie",
+            "ISIN" : "SE0006993986",
             "interest" : 0,
             "fee" : 39.0,
             "purchase_value" : 4224.0,
@@ -22,19 +23,19 @@ test_data = [
             "exchange_rate" : 1.0,
             "transaction_text" : None,
             "cancellation_date" : None,
-            "verification_no" : u"532740700"
+            "verification_no" : "532740700"
         },
         "Account" : {
             "current_balance" : 102.0
         },
         "Currency" : {
-            "code" : u"SEK"
+            "code" : "SEK"
         },
         "TransactionType" : {
-            "name" : u"KÖPT"
+            "name" : "KÖPT"
         },
         "SecurityProvider" : {
-            "name" : u"BETS B"
+            "name" : "BETS B"
         }
     },
     {
@@ -46,7 +47,7 @@ test_data = [
             "amount" : 4326.0
         },
         "TransactionData" : {
-            "identifier" : u"305477335",
+            "identifier" : "305477335",
             "liquidity_date" : "2016-02-29",
             "type" : None,
             "ISIN" : None,
@@ -56,21 +57,21 @@ test_data = [
             "results" : 0.0,
             "total_amount" : 0.0,
             "exchange_rate" : 1.0,
-            "transaction_text" : u"SPARA",
+            "transaction_text" : "SPARA",
             "cancellation_date" : None,
-            "verification_no" : u"213067130"
+            "verification_no" : "213067130"
         },
         "Account" : {
             "current_balance" : 4326.0
         },
         "Currency" : {
-            "code" : u"SEK"
+            "code" : "SEK"
         },
         "TransactionType" : {
-            "name" : u"INSÄTTNING"
+            "name" : "INSÄTTNING"
         },
         "SecurityProvider" : {
-            "name" : u""
+            "name" : ""
         }
     }
 ]

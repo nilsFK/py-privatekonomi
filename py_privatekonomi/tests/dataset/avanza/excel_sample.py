@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 test_data = [
     {
         "Transaction" : {
@@ -18,7 +19,7 @@ test_data = [
             "name" : "dec-jan"
         },
         "TransactionType" : {
-            "name" : u"Insättning"
+            "name" : "Insättning"
         }
     },
     {
@@ -38,7 +39,7 @@ test_data = [
             "name" : "dec-jan"
         },
         "TransactionType" : {
-            "name" : u"Insättning"
+            "name" : "Insättning"
         }
     },
     {
@@ -58,7 +59,7 @@ test_data = [
             "name" : "Privatekonomi software group AB"
         },
         "TransactionType" : {
-            "name" : u"Split"
+            "name" : "Split"
         }
     },
     {
@@ -75,10 +76,10 @@ test_data = [
             "code" : "SEK"
         },
         "SecurityProvider" : {
-            "name" : u"Privatekonomi software group AB"
+            "name" : "Privatekonomi software group AB"
         },
         "TransactionType" : {
-            "name" : u"Split"
+            "name" : "Split"
         }
     },
     {
@@ -98,7 +99,7 @@ test_data = [
             "name" : "Privatekonomi software group AB"
         },
         "TransactionType" : {
-            "name" : u"Köp"
+            "name" : "Köp"
         }
     },
     {
@@ -115,10 +116,10 @@ test_data = [
             "code" : "SEK"
         },
         "SecurityProvider" : {
-            "name" : u"Preliminär skatt, ränta"
+            "name" : "Preliminär skatt, ränta"
         },
         "TransactionType" : {
-            "name" : u"Räntor"
+            "name" : "Räntor"
         }
     },
     {
@@ -135,10 +136,10 @@ test_data = [
             "code" : "SEK"
         },
         "SecurityProvider" : {
-            "name" : u"Intjänad ränta"
+            "name" : "Intjänad ränta"
         },
         "TransactionType" : {
-            "name" : u"Räntor"
+            "name" : "Räntor"
         }
     },
     {
@@ -155,10 +156,10 @@ test_data = [
             "code" : "SEK"
         },
         "SecurityProvider" : {
-            "name" : u"nov-dec"
+            "name" : "nov-dec"
         },
         "TransactionType" : {
-            "name" : u"Insättning"
+            "name" : "Insättning"
         }
     },
     {
@@ -175,10 +176,10 @@ test_data = [
             "code" : "SEK"
         },
         "SecurityProvider" : {
-            "name" : u"nov-dec"
+            "name" : "nov-dec"
         },
         "TransactionType" : {
-            "name" : u"Insättning"
+            "name" : "Insättning"
         }
     }
 ]

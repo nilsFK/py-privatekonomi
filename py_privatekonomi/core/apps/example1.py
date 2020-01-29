@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import print_function
 from py_privatekonomi.utilities import helper, common
 
 def execute(sources, parser, formatter, configs):

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 test_data = [
     {
         "Transaction" : {
@@ -18,7 +19,7 @@ test_data = [
             "name" : "Aktiefond #1"
         },
         "TransactionType" : {
-            "name" : u"Sälj"
+            "name" : "Sälj"
         },
         "TransactionData" : {
             "ISIN" : "SE0000000001",
@@ -42,7 +43,7 @@ test_data = [
             "name" : "Aktiefond #2"
         },
         "TransactionType" : {
-            "name" : u"Köp"
+            "name" : "Köp"
         },
         "TransactionData" : {
             "ISIN" : "SE0000000002",
@@ -66,7 +67,7 @@ test_data = [
             "name" : "Aktiefond #3"
         },
         "TransactionType" : {
-            "name" : u"Köp"
+            "name" : "Köp"
         },
         "TransactionData" : {
             "ISIN" : "SE0000000003",
@@ -87,10 +88,10 @@ test_data = [
             "code" : "SEK"
         },
         "SecurityProvider" : {
-            "name" : u"Insättning Januari"
+            "name" : "Insättning Januari"
         },
         "TransactionType" : {
-            "name" : u"Insättning"
+            "name" : "Insättning"
         },
         "TransactionData" : {
             "ISIN" : "SE0000000004",
@@ -114,7 +115,7 @@ test_data = [
             "name" : "Aktiefond #2"
         },
         "TransactionType" : {
-            "name" : u"Köp"
+            "name" : "Köp"
         },
         "TransactionData" : {
             "ISIN" : "SE0000000005",
@@ -135,10 +136,10 @@ test_data = [
             "code" : "SEK"
         },
         "SecurityProvider" : {
-            "name" : u"Insättning November"
+            "name" : "Insättning November"
         },
         "TransactionType" : {
-            "name" : u"Insättning"
+            "name" : "Insättning"
         },
         "TransactionData" : {
             "ISIN" : "SE0000000006",
@@ -159,10 +160,10 @@ test_data = [
             "code" : "SEK"
         },
         "SecurityProvider" : {
-            "name" : u"Aktiefond #3"
+            "name" : "Aktiefond #3"
         },
         "TransactionType" : {
-            "name" : u"Köp"
+            "name" : "Köp"
         },
         "TransactionData" : {
             "ISIN" : "SE0000000007",
@@ -183,10 +184,10 @@ test_data = [
             "code" : "SEK"
         },
         "SecurityProvider" : {
-            "name" : u"Aktiefond #2"
+            "name" : "Aktiefond #2"
         },
         "TransactionType" : {
-            "name" : u"Köp"
+            "name" : "Köp"
         },
         "TransactionData" : {
             "ISIN" : "SE0000000008",
@@ -207,10 +208,10 @@ test_data = [
             "code" : "SEK"
         },
         "SecurityProvider" : {
-            "name" : u"Insättning Oktober"
+            "name" : "Insättning Oktober"
         },
         "TransactionType" : {
-            "name" : u"Insättning"
+            "name" : "Insättning"
         },
         "TransactionData" : {
             "ISIN" : "SE0000000009",
@@ -231,10 +232,10 @@ test_data = [
             "code" : "SEK"
         },
         "SecurityProvider" : {
-            "name" : u"Aktiefond #1"
+            "name" : "Aktiefond #1"
         },
         "TransactionType" : {
-            "name" : u"Köp"
+            "name" : "Köp"
         },
         "TransactionData" : {
             "ISIN" : "SE00000000010",

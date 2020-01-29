@@ -4,6 +4,7 @@
     A general purpose node containing edges
 """
 
+from __future__ import unicode_literals
 class Node(object):
     def __init__(self, name):
         self.name = name

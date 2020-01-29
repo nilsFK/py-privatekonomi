@@ -5,6 +5,8 @@ common.py is common low-level functionality
 and should not import anything except for
 built in packages.
 """
+from __future__ import absolute_import
+from __future__ import unicode_literals
 import ntpath
 import time, datetime
 import codecs
@@ -12,6 +14,7 @@ import re
 import sys
 import decimal
 import time
+import six
 
 if sys.version < '3':
     import codecs
@@ -50,7 +53,7 @@ def path_leaf(path):
 
 def read_file(file_path):
     try:
-        with codecs.open(file_path, 'r', 'utf-8') as f:
+        with codecs.open(file_path, 'r', encoding='utf-8') as f:
             content = f.readlines()
     except:
         with open(file_path, 'r') as f:
@@ -150,7 +153,7 @@ def is_string(string):
     if isinstance(string, str):
         is_string_ = True
     try:
-        if isinstance(string, basestring):
+        if isinstance(string, six.string_types):
             is_string_ = True
     except NameError:
         pass

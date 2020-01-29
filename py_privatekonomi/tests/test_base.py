@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
+from __future__ import absolute_import
+from __future__ import unicode_literals
 import unittest
 from py_privatekonomi.utilities.common import format_time_struct, is_unicode, is_time_struct, as_obj
 from py_privatekonomi.utilities.models import get_models

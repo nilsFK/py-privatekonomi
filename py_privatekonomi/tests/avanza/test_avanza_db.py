@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 import unittest
 import inspect
 from py_privatekonomi.tests.test_base import TestBase
@@ -18,7 +21,7 @@ class TestAvanzaDB(TestBase):
             persist=True,
             config=self.get_default_config())
         if results is False:
-            print("Skipping:", inspect.stack()[0][3])
+            print(("Skipping:", inspect.stack()[0][3]))
         else:
             self.assertFormatted(results, test_data_1, True)
             self.assertPersisted(test_data_1)

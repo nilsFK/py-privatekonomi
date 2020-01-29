@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import unicode_literals
 import py_privatekonomi.core.parser
 import csv
 try:
@@ -18,7 +20,7 @@ class CsvParser(py_privatekonomi.core.parser.Parser):
             content = common.decode(content)
             c = StringIO(content)
             options = {
-                'delimiter' : ',',
+                'delimiter' : str(','),
                 'quoting' : csv.QUOTE_ALL
             }
             options.update(opts)
@@ -42,7 +44,7 @@ class CsvParser(py_privatekonomi.core.parser.Parser):
             yield [cell for cell in row]
 
     def unicode_csv_reader(self, unicode_csv_data, dialect=csv.excel, **kwargs):
-        # csv.py doesn't do Unicode; encode temporarily as UTF-8:
+        # csv module doesn't do Unicode; encode temporarily as UTF-8:
         csv_reader = csv.reader(self.utf_8_encoder(unicode_csv_data),
                                 dialect=dialect, **kwargs)
         for row in csv_reader:

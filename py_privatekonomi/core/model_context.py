@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 from sqlalchemy import MetaData
 from py_privatekonomi.utilities import common
 class ModelContext(object):

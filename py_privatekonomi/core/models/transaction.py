@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import unicode_literals
 from py_privatekonomi.core.models.base_model import BaseModel
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, ForeignKeyConstraint
 from sqlalchemy.types import Date, Numeric, DateTime
@@ -78,6 +80,6 @@ class Transaction(BaseModel):
         for key in customizations:
             custom = customizations[key]
             pre_cols[key] = custom
-        cols = pre_cols.values()
+        cols = list(pre_cols.values())
         super(Transaction, self).__init__(
             Table('transaction', context.metadata, *cols), context)

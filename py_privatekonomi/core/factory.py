@@ -6,7 +6,7 @@ class Factory(object):
         self._obj = {}
 
     def get(self, key):
-        if key not in self._obj.keys():
+        if key not in list(self._obj.keys()):
             return False
         else:
             return self._obj[key]
@@ -15,7 +15,7 @@ class Factory(object):
         self._obj[key] = value
 
     def getKeys(self):
-        return self._obj.keys()
+        return list(self._obj.keys())
 
     def getValues(self):
-        return self._obj.values()
+        return list(self._obj.values())

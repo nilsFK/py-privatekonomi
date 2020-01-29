@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 test_data = [
     {
         "Transaction" : {
             "accounting_date" : "2015-01-05",
             "transaction_date" : "2015-01-03",
-            "reference" : u"PATREON.COM",
+            "reference" : "PATREON.COM",
             "amount" : -8.02
         },
         "Account" : {
@@ -16,7 +17,7 @@ test_data = [
         "Transaction" : {
             "accounting_date" : "2015-01-02",
             "transaction_date" : "2015-01-02",
-            "reference" : u"PATREON.COM",
+            "reference" : "PATREON.COM",
             "amount" : -7.96
         },
         "Account" : {
@@ -27,7 +28,7 @@ test_data = [
         "Transaction" : {
             "accounting_date" : "2015-01-02",
             "transaction_date" : "2015-01-02",
-            "reference" : u"BURGER KING",
+            "reference" : "BURGER KING",
             "amount" : -69.0
         },
         "Account" : {
@@ -38,7 +39,7 @@ test_data = [
         "Transaction" : {
             "accounting_date" : "2015-01-02",
             "transaction_date" : "2015-01-02",
-            "reference" : u"ICA SUPERMARKET",
+            "reference" : "ICA SUPERMARKET",
             "amount" : -93.97
         },
         "Account" : {
@@ -49,7 +50,7 @@ test_data = [
         "Transaction" : {
             "accounting_date" : "2015-01-02",
             "transaction_date" : "2015-01-01",
-            "reference" : u"ICA SUPERMARKET",
+            "reference" : "ICA SUPERMARKET",
             "amount" : -88.6
         },
         "Account" : {
@@ -60,7 +61,7 @@ test_data = [
         "Transaction" : {
             "accounting_date" : "2014-12-29",
             "transaction_date" : "2014-12-28",
-            "reference" : u"McDonalds",
+            "reference" : "McDonalds",
             "amount" : -75.0
         },
         "Account" : {
@@ -71,7 +72,7 @@ test_data = [
         "Transaction" : {
             "accounting_date" : "2014-12-29",
             "transaction_date" : "2014-12-27",
-            "reference" : u"SPOTIFY Spotify",
+            "reference" : "SPOTIFY Spotify",
             "amount" : -49.0
         },
         "Account" : {

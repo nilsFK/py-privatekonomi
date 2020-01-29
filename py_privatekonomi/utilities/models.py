@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import unicode_literals
 from py_privatekonomi.utilities import resolver
 from py_privatekonomi.utilities import common
 from py_privatekonomi.core.model_context import ModelContext
@@ -40,7 +42,7 @@ def get_model_type_mappings(models):
 
 def get_model_dependencies(models):
     model_type_mappings = get_model_type_mappings(models)
-    model_types = model_type_mappings.values()
+    model_types = list(model_type_mappings.values())
     model_deps = resolver.getModelDependencies(model_types)
     return model_deps
 

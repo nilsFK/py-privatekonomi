@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 class BaseError(Exception):
     def __init__(self, message):
         super(BaseError, self).__init__(message)

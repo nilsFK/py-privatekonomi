@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 from py_privatekonomi.core.factory import Factory
 
 class AccountFormatterFactory(Factory):
