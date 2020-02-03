@@ -3,7 +3,7 @@
 
 from __future__ import absolute_import
 from __future__ import print_function
-from __future__ import unicode_literals
+# from __future__ import unicode_literals
 import py_privatekonomi.core.parser
 from py_privatekonomi.core.parsers.regex_parser import RegexParser
 from py_privatekonomi.core.error import ParserError
@@ -45,7 +45,7 @@ class SwedbankParser(py_privatekonomi.core.parser.Parser):
             else:
                 continue
         if len(ret) == 0:
-            error_msg = "Invalid transaction text content: no transactions found for text ending with: ...{suffix}".format(**{
+            error_msg = decode("Invalid transaction text content: no transactions found for text ending with: ...{suffix}").format(**{
                     'suffix' : content[-100:].strip()
                 })
             raise ParserError(error_msg, capture_data={'content': content})

@@ -48,7 +48,7 @@ class MyApp(App):
         return "return something from persist"
 
 def app_1():
-    """ An app which formats and parses two Swedbank samples """
+    """ An app which formats and parses Swedbank samples """
     app_name = 'swedbank_app'
     print(("="*80))
     print(("Running app #1 (%s)" % (app_name)))
@@ -169,7 +169,7 @@ def app_5():
     return app_output
 
 def app_6():
-    """ An app which formats and parses a Swedbank csv file """
+    """ An app which formats and parses Swedbank csv file """
     app_name = 'swedbank_app'
     print(("="*80))
     print(("Running app #6 (%s)" % (app_name)))
@@ -178,6 +178,7 @@ def app_6():
     app.setFormatter("swedbank")
     app.setParser("swedbank")
     app.addSources(["samples/swedbank/sample6"])
+    app.addSources(["samples/swedbank/sample7"])
     conf = get_default_config()
     conf['use_logging'] = True
     app.config(conf)
