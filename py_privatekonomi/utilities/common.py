@@ -56,8 +56,12 @@ def read_file(file_path):
         with codecs.open(file_path, 'r', encoding='utf-8') as f:
             content = f.readlines()
     except:
-        with open(file_path, 'r') as f:
-            content = f.readlines()
+        try:
+            with open(file_path, 'r') as f:
+                content = f.readlines()
+        except:
+            with open(file_path, 'r', encoding='cp1252') as f:
+                content = f.readlines()
     return content
 
 def write_file(file_path, content, create_if_missing=False):
