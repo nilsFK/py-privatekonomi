@@ -13,4 +13,9 @@ class TransactionGroup(BaseModel):
         ), context)
 
     def allocate(self):
-        return self.insert(None)[0]
+        """ allocates and returns transaction_group id. """
+        try: # sqlalchemy 3.x
+            tg_id = self.insert(None)[0]
+        except Exception as e: # sqlalchemy 4.x
+            tg_id = self.insert({})[0]
+        return tg_id
